@@ -1,0 +1,70 @@
+\documentclass[10pt,twoside]{article}
+\usepackage{url}
+
+\newcommand{\doctitle}{%
+Sudoku Solver}
+\newcommand{\cmnt}[1]{}
+
+\pagestyle{myheadings}
+\markboth{\hfill\doctitle}{\doctitle\hfill}
+
+\bibliographystyle{siam}
+
+\addtolength{\textwidth}{1.00in}
+\addtolength{\textheight}{1.00in}
+\addtolength{\evensidemargin}{-1.00in}
+\addtolength{\oddsidemargin}{-0.00in}
+\addtolength{\topmargin}{-.50in}
+
+\hyphenation{in-de-pen-dent}
+
+%\title{\textbf{\doctitle}\\
+\title{\textbf{ CS598 Project Proposal: Parallel Sudoku Solver}}
+
+\author{Sandeep Dasgupta\thanks{Electronic address: \texttt{sdasgup3@illinois.edu}}
+\qquad Tanmay Gangwani\thanks{Electronic address: \texttt{gangwan2@illinois.edu}}
+\qquad  Mengjia Yan\thanks{Electronic address:
+\texttt{myan8@illinois.edu}}} 
+
+\begin{document}
+
+\thispagestyle{empty}
+
+\maketitle
+
+  Sudoku puzzles consists of partially filled matrix N×N. The algorithm needs
+  to fill the blank positions with values 1 through N such that no number is
+  repeated on each of the N rows, N columns or the squares of $\sqrt{N} \times
+  \sqrt{N} $ cells that split the original matrix.  The goal will be to solve
+  the grid using parallelization strategies provided by Charm++.
+
+  From a mathematical perspective, it has been proven that the total number of
+  valid Sudoku grids, for $N = 9$,  is $6,670,903,752,021,072,936,960$ or
+  approximately $6.671 \times 10^{21}$.  Trying to populate all these grids is
+  itself a difficult problem because of the huge number.  This large number
+  also directly eliminates the possibility of solving the puzzle with brute
+  force technique in a reasonable amount of time. Therefore, a method for
+  solving the puzzle quickly will be derived that takes advantage of some
+  "logical' properties of Sudoku to reduce the search space and optimize the
+  running time of the algorithm. Our goal off course, is to allow for that
+  algorithm to take advantage of the manycore architecture to further reduce
+  its running time.  
+
+\cmnt{
+  On many occasions the humanistic algorithm returns a board with unfilled cells
+  left, where they apply some brute force methods which involves some  heuristics
+  to choose a value for a cell and see if that helps to solve a puzzle and many a times 
+  that end up being wrong guess. To work around the problem, “backtracking” 
+  ( or simply, undoing the puzzle 
+      to a previous state just before the wrong guess is made and to  continue from there 
+      by taking a different guess). Checkpoint/Restart
+}
+  
+  
+
+
+
+%\nocite{*}
+%\bibliography{CS598_project_proposal}
+
+\end{document}
