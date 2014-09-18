@@ -36,19 +36,23 @@ Sudoku Solver}
   to fill the blank positions with values 1 through N such that no number is
   repeated on each of the N rows, N columns or the squares of $\sqrt{N} \times
   \sqrt{N} $ cells that split the original matrix.  The goal will be to solve
-  the grid using parallelization strategies provided by Charm++.
+  the grid in the least possible time using the parallelization model provided by Charm++.
 
-  From a mathematical perspective, it has been proven that the total number of
+  Sudoku is an NP-complete problem. The solution space rapidly explodes as we move to 
+  higher grid dimensions. For example, it has been proven that the total number of
   valid Sudoku grids, for $N = 9$,  is $6,670,903,752,021,072,936,960$ or
-  approximately $6.671 \times 10^{21}$.  Trying to populate all these grids is
-  itself a difficult problem because of the huge number.  This large number
-  also directly eliminates the possibility of solving the puzzle with brute
-  force technique in a reasonable amount of time. Therefore, a method for
-  solving the puzzle quickly will be derived that takes advantage of some
-  "logical' properties of Sudoku to reduce the search space and optimize the
-  running time of the algorithm. Our goal off course, is to allow for that
-  algorithm to take advantage of the manycore architecture to further reduce
-  its running time.  
+  approximately $6.671 \times 10^{21}$. This precludes using brute force techniques. We would 
+  investigate heuristics based on the "logical' properties of Sudoku to reduce the search space 
+  and optimize the running time of the algorithm. Sudoko solutions are achieved incrementally by 
+  solving instances of smaller problems. Updates to one part of the grid may significantly
+  impact other parts which leads to a high degree of communication between objects handling the 
+  grid. Load imbalance is inherent in the problem since some parts of the grid may be easier to
+  proceed with than other. We plan to leverage the Charm++ model to tackle these challenges. In later 
+  stages of the project, we may include the use of the Charm checkpointing support for a part of the
+  algorithm which guesstimates certain numbers, and backtracks if a dead end is found.
+  
+  <include picture here maybe ...  :) >
+
 
 \cmnt{
   On many occasions the humanistic algorithm returns a board with unfilled cells
