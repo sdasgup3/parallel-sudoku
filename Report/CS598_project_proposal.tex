@@ -1,4 +1,5 @@
 \documentclass[10pt,twoside]{article}
+\usepackage{graphicx}
 \usepackage{url}
 
 \newcommand{\doctitle}{%
@@ -32,7 +33,7 @@ Sudoku Solver}
 
 \maketitle
 
-  Sudoku puzzles consists of partially filled matrix N×N. The algorithm needs
+  Sudoku puzzles consists of partially filled matrix $N \times N$. The algorithm needs
   to fill the blank positions with values 1 through N such that no number is
   repeated on each of the N rows, N columns or the squares of $\sqrt{N} \times
   \sqrt{N} $ cells that split the original matrix.  The goal will be to solve
@@ -50,21 +51,15 @@ Sudoku Solver}
   proceed with than other. We plan to leverage the Charm++ model to tackle these challenges. In later 
   stages of the project, we may include the use of the Charm checkpointing support for a part of the
   algorithm which guesstimates certain numbers, and backtracks if a dead end is found.
-  
-  <include picture here maybe ...  :) >
 
+  \begin{figure}[h]
+  \centering
+    \includegraphics[scale=0.35]{sudoku} 
+  \caption{Sudoku Grid} 
+  \end{figure}
 
-\cmnt{
-  On many occasions the humanistic algorithm returns a board with unfilled cells
-  left, where they apply some brute force methods which involves some  heuristics
-  to choose a value for a cell and see if that helps to solve a puzzle and many a times 
-  that end up being wrong guess. To work around the problem, “backtracking” 
-  ( or simply, undoing the puzzle 
-      to a previous state just before the wrong guess is made and to  continue from there 
-      by taking a different guess). Checkpoint/Restart
-}
   
-  
+
 
 
 
