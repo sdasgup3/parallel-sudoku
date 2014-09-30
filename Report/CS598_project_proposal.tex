@@ -5,6 +5,7 @@
 \newcommand{\doctitle}{%
 Sudoku Solver}
 \newcommand{\cmnt}[1]{}
+\newcommand{\sps}{State Space Search}
 
 \pagestyle{myheadings}
 \markboth{\hfill\doctitle}{\doctitle\hfill}
@@ -32,6 +33,52 @@ Sudoku Solver}
 \thispagestyle{empty}
 
 \maketitle
+  \sps is vividly used in modelling problems in artificial intelligence, planning and optimization literature, where
+  the set of states forms a graph where two states are connected if there is an operation that can be performed to transform the first state into the second.
+  A typical \sps consists of many states to explore which imposes serious
+  contraints on the exploration time and memory. Given the exponential amount
+  of work that \sps problems entail, it is desirable to solve
+  them on large parallel machines with significant computational power. 
+
+  Challenges to parallel \sps \\
+  Parallel implementation of this search procedure requires the distribution of
+  work into discrete chunks or tasks. To ensure the efficient execution of
+  these tasks on processors, the inter-related issues of task creation,
+        grainsize control, and load balance must be considered. 
+  \begin{itemize}        
+    \item
+          Grainsize can
+          be defined roughly as the ratio of computation work to number of
+          messages sent. This can be decided by a careful formulation od a
+          metric correlated to the computation cost of a node. With a suitable
+          metric formulated, a threshold amount of work may be set, below which
+          new tasks are not created; such subtrees are explored sequentially.
+     \item  
+          Moreover there is a certain overhead in creating tasks, and a separate
+          overhead if the task description is moved to another processor. Thus,
+        it is important to keep the average grainsize above a certain threshold
+          to limit the impact of parallel overhead. At the same time, no single
+          task should be so large as to make all processors wait for its
+          completion.
+
+     \item
+  Variable Selection:
+  Given a particular node in the search tree, there is a choice of which branch to select when consid-
+ering new children. This is called variable selection.
+  A good heuristic is to select the most constrained variable at each step.
+  \end{itemize}
+
+Brief Ideas \\ 
+  1. In our project we will start with   parallelizing the graph coloring problem,  searching for any 
+  Feasible solution out of the corresponding \sps.  
+  One of the many challenges is ``Value ordering'' which is going to play an improtant role : given b children of a node, explore the subtree of that child next whose subtree is
+most likely to contain a solution. We will use problem-specific figures of merit   to order the children. 
+
+Also as we know the speculative nature of the methods in this context: regions of the tree that may not be visited in a sequential procedure are
+searched concurrently in the hope that a solution may be found quicker. This can lead to anomalies
+in parallel performance. We are planning to consistent speedps by adopting the prioritization strategy as emplyed by Kale[].
+
+
 
   Sudoku puzzles consists of partially filled matrix $N \times N$. The algorithm needs
   to fill the blank positions with values 1 through N such that no number is
