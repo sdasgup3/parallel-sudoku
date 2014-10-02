@@ -1,11 +1,18 @@
 \documentclass[10pt,twoside]{article}
 \usepackage{graphicx}
 \usepackage{url}
+\usepackage{hyperref}
+\hypersetup{
+	colorlinks=true,
+	citecolor=blue,%
+    filecolor=blue,%
+    linkcolor=blue,%
+    urlcolor=blue
+}
 
 \newcommand{\doctitle}{%
 Graph Coloring}
 \newcommand{\cmnt}[1]{}
-\newcommand{\sps}{State Space Search }
 
 \pagestyle{myheadings}
 \markboth{\hfill\doctitle}{\doctitle\hfill}
@@ -39,14 +46,28 @@ Graph Coloring}
   State space search is a technique where successive configurations (a.k.a states) are explored until the state with desired property is found. The different states form a tree where child nodes are produced from the parent node by changing some part of the parent state. In typical problems, exploring the entire state space graph is impractical due to execution time and memory constraints. Application of heuristics has been shown to be effective in pruning the search space.
 
 \section{Parallel Graph Coloring}
-Large-scale systems with distributed memory are a natural fit to solving the computationally complex graph coloring problem. There are two main parallelization strategies, namely domain decomposition and state space exploration. In domain decomposition, the graph is divided into sub-graphs, and each of these is assigned to a processor. The sub-graph is colored locally at each processor. The algorithm operates in time-steps, where at the end of each time-step, the processors exchange coloring information with each other to resolve the conflicts for the vertices on the sub-graph boundaries. Such an approach is outlined in [cite]. State space exploration takes a different approach to dividing work between processors. A \textit{state} in the state space tree is a partially colored input graph, and child states are produced from parent states by coloring one of the uncolored vertices. A solution is found if one of the leaves if a legitimately colored input graph. Each processor is responsible for exploration of a part of the state space tree. This idea has been used in [cite].
+Large-scale systems with distributed memory are a natural fit to solving the
+computationally complex graph coloring problem. There are two main
+parallelization strategies, namely domain decomposition and state space
+exploration. In domain decomposition, the graph is divided into sub-graphs, and
+each of these is assigned to a processor. The sub-graph is colored locally at
+each processor. The algorithm operates in time-steps, where at the end of each
+time-step, the processors exchange coloring information with each other to
+resolve the conflicts for the vertices on the sub-graph boundaries. Such an
+approach is outlined in \cite{EuroPar2005}. State space exploration takes a
+different approach to dividing work between processors. A \textit{state} in the
+state space tree is a partially colored input graph, and child states are
+produced from parent states by coloring one of the uncolored vertices. A
+solution is found if one of the leaves if a legitimately colored input graph.
+Each processor is responsible for exploration of a part of the state space
+tree. This idea has been used in \cite{ParSSSEPPL, SearchAAAI90, Kale1995}.
 
 \section{Project Goals}
    We plan to leverage the state space search model for implementing graph coloring in parallel in Charm++. Some of the challenges for efficient exploration of space by \textit{chares} include intelligent pruning of the state space, load balancing, grain-size control and low-overhead communication between chares. We plan to evaluate multiple options for each of these, and hopefully come up with design decisions which would work for a large category of real-life graph applications.
 	
 \section{References}
 
-%\nocite{*}
-%\bibliography{CS598_project_proposal}
+\nocite{*}
+\bibliography{CS598_project_proposal}
 
 \end{document}
