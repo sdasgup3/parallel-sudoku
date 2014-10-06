@@ -25,6 +25,7 @@ typedef std::shared_ptr<Vertex> VPtr;
 typedef std::list<VPtr> VList;
 typedef std::map<VPtr, VList> AdjList;
 typedef std::map<VPtr, int> DegreeMap;
+typedef std::map<int, VPtr> VextexMap;
 typedef std::vector<VPtr> STree;
 //-----------------------------------------------------------------------------
 
@@ -89,6 +90,7 @@ public:
     void   remove(const Edge& edge);
     STree  searchTree() const { return searchTree_; }
     int    vertices() { return vertices_; }
+    friend void insertEdgeHelper(Graph &,VextexMap&, std::string, std::string);
 
 private:
     void dfsVisit(const VPtr& u);

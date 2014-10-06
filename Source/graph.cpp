@@ -211,3 +211,49 @@ int Graph::degree(const VPtr& u)
         return 0;
 }
 
+void  insertEdgeHelper(Graph &g , VextexMap & i2vMap,  std::string u, std::string v)
+{
+  int int_u = atoi(u.c_str());
+  int int_v = atoi(v.c_str());
+
+  VPtr U, V;
+
+  if ( i2vMap.find(int_u) == i2vMap.end() ) {
+    U = VPtr(new Vertex(u));
+    i2vMap[int_u] = U;
+  } else {
+    U = i2vMap[int_u];
+  }
+
+  if ( i2vMap.find(int_v) == i2vMap.end() ) {
+    V = VPtr(new Vertex(v));
+    i2vMap[int_v] = V;
+  } else {
+    V = i2vMap[int_v];
+  }
+  g.insert(Edge(U,V));
+}
+
+/*
+int main()
+{
+ Graph graph;
+    VPtr v1(new Vertex("1"));
+    VPtr v2(new Vertex("2"));
+    VPtr v3(new Vertex("3"));
+    VPtr v4(new Vertex("4"));
+    VPtr v5(new Vertex("5"));
+
+    // Component 1
+    graph.insert(Edge(v1, v2));
+    graph.insert(Edge(v1, v3));
+    graph.insert(Edge(v2, v4));
+    graph.insert(Edge(v2, v5));
+    graph.insert(Edge(v1, v4));
+    graph.insert(Edge(v5, v3));
+
+    std::cout << graph;
+    return 0;
+    }
+
+*/

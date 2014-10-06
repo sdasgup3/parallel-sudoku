@@ -3,7 +3,10 @@
 
 #include <stdio.h>
 #include <math.h>
-#include "Module.decl.h" //based on module name
+#include  <string>
+#include "Module.decl.h" 
+#include "Utils.h"
+
 
 /*readonly*/ 
 extern CProxy_Main mainProxy;
@@ -17,6 +20,9 @@ class Main : public CBase_Main {
   Main(CkArgMsg* msg);
   Main(CkMigrateMessage* msg);
 
+  friend void parseCommandLine(char* );
+
+
   void done();
 };
 
@@ -27,5 +33,6 @@ class Node: public CBase_Node {
   Node() ;
   Node (CkMigrateMessage*);
 };
+
 
 #endif

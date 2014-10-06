@@ -7,12 +7,13 @@ CProxy_Node nodeProxy;
 Main::Main(CkArgMsg* msg) {
 
   if(msg->argc < 1) {
-    CkPrintf("\n\n\nUsage: <exec> chare_array_size min max\n");
-    CkPrintf("\twhere chare_array_size > 0 \n\n\n");
+    CkPrintf("\n\n\nUsage: <exec> filename\n");
     CkExit();
   }
 
-  CkPrintf("%d", atoi(msg->argv[1]));
+  /* Parse the file and populate the graph*/
+  parseCommandLine(msg->argv[1]);
+
 
   mainProxy= thisProxy;
   delete msg;
