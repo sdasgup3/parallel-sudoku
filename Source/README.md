@@ -3,10 +3,11 @@ COMMANDS
 
 make // To compile without run
 
-make run  // To compile and run; The Makefile is expecting an input file input.txt 
-          //in the current directory.
+make run  // To compile and run; 
+
+Note: The Makefile is expecting an input file input.txt in the current directory.
           
-FORMAT OF INPUT.TXT
+FORMAT OF input.txt
 =====================
 Each line dines an edge; Check out the sample in the repo
 
