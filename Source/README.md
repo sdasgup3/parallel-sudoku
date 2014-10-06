@@ -1,4 +1,4 @@
-COMANDS
+COMMANDS
 ========
 
 make // To compile without run
