@@ -6,11 +6,11 @@
 #include  <string>
 #include "Module.decl.h" 
 #include "Utils.h"
+#include "graph.h"
 
 
 /*readonly*/ 
 extern CProxy_Main mainProxy;
-extern CProxy_Node nodeProxy;
 
 class Main : public CBase_Main {
   private:
@@ -20,9 +20,7 @@ class Main : public CBase_Main {
   Main(CkArgMsg* msg);
   Main(CkMigrateMessage* msg);
 
-  friend void parseCommandLine(char* );
-
-
+  friend void parseCommandLine(char*,Graph&, VextexMap&);
   void done();
 };
 

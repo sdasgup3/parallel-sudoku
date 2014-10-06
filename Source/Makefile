@@ -1,4 +1,4 @@
-OPTS= -O3 
+OPTS= -O3 -std=c++11
 CHARMC=/home/acun2/charm/net-linux-x86_64/bin/charmc $(OPTS)
 TEST=graphColor
 
@@ -14,16 +14,16 @@ $(TARGET): $(OBJS)
 
 
 graph.o: graph.cpp 
-	g++ -std=c++11 -c graph.cpp
+	$(CHARMC)  -c graph.cpp
 
-Main.o: Main.cpp Module.decl.h graphColor.h
+Main.o: Main.cpp Module.decl.h graphColor.h State.h
 	$(CHARMC) -c Main.cpp
 
 Node.o: Node.cpp Module.decl.h graphColor.h
 	$(CHARMC) -c Node.cpp
 
 Utils.o: Utils.cpp Utils.h
-	g++ -std=c++11 -c  Utils.cpp
+	$(CHARMC)  -c  Utils.cpp
 
 Module.decl.h: graphColor.ci
 	$(CHARMC) -c graphColor.ci

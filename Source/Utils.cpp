@@ -10,7 +10,7 @@
 using namespace std;
 
 
-void parseCommandLine(char* filename)
+void parseCommandLine(char* filename, Graph& graph,  VextexMap&  i2vMap)
 {
   ifstream fin;
   fin.open(filename); // open a file
@@ -20,8 +20,6 @@ void parseCommandLine(char* filename)
   }
   
   string str(""); 
-  Graph graph;
-  VextexMap i2vMap;
 
   for (; std::getline(fin, str);) {
     stringstream ss(str); 
@@ -36,8 +34,11 @@ void parseCommandLine(char* filename)
 
     assert(startV != "" && endV != "" && "Error is File Format!!");
 
+#ifdef DEBUG
+    cout << startV << " " << endV << endl;
+#endif    
     insertEdgeHelper(graph, i2vMap, startV, endV);
+
   }
 
-  cout << graph;  
 }
