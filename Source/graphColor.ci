@@ -1,0 +1,13 @@
+mainmodule Module {
+  readonly  CProxy_Main mainProxy;
+  readonly  CProxy_Node nodeProxy;
+
+  mainchare Main {
+    entry Main(CkArgMsg*);
+    entry [reductiontarget] void done(void);
+  };
+  
+  chare Node { 
+    entry Node();
+  };
+};
