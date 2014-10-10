@@ -1,14 +1,9 @@
 #include "graphColor.h"
-#include "State.h"
-#include "graph.h"
 
 
-/*readonly*/ 
 CProxy_Main mainProxy;
-//TO DO: To Make  graph and i2vMap globally shared
-//Graph graph;
-//VextexMap i2vMap;
-
+AdjListType adjList_;
+int vertices_;
 
 Main::Main(CkArgMsg* msg) {
 
@@ -16,26 +11,34 @@ Main::Main(CkArgMsg* msg) {
     CkPrintf("\n\n\nUsage: <exec> filename\n");
     CkExit();
   }
+  char* filename = msg->argv[1];
+  delete msg;
 
-  Graph graph;
-  VextexMap i2vMap;
-
-  /* Parse the file and populate the graph*/
-  parseCommandLine(msg->argv[1],graph,i2vMap);
-
-  std::cout << graph;  
   mainProxy= thisProxy;
 
-  /* TO DO: Select a vertex and create K state nodes, where
-   * k is the possible colors and fire a chare on each one 
-   * of them
+
+  /* Parse the file and populate the graph*/
+  parseCommandLine(filename,  adjList_);
+  vertices_ = adjList_.size();
+  
+
+  CkPrintf("From Mainchare\n");
+  std::cout << adjList_;  
+  std::cout << vertices_;  
+
+
+  std::vector<State> iState(vertices_) ;
+  populateInitialState(iState);
+
+  std::vector<int> colorsPoss = getNextConstraintVertex(iState);
+  /* 1. Create |colorsPoss| copies of iState.
+   * 2. Update color and neighbr of each copy
+   * 3. Spawn new Node chare for each copy
    */
 
+  CProxy_Node n = CProxy_Node::ckNew();
+  n.testGraph(iState);
 
-
-
-  delete msg;
-  CkExit(); // TO BE DELETED
 }
 
 Main::Main(CkMigrateMessage* msg) {}
@@ -43,5 +46,15 @@ Main::Main(CkMigrateMessage* msg) {}
 void Main::done() { 
   CkExit();
 }
+
+
+/*If case the graph is partially colored,
+ *iState need to be modified in accordance with 
+ *adjList_
+ */
+void Main::populateInitialState(std::vector<State>& iState) {
+
+}
+
 
 #include "Module.def.h" 

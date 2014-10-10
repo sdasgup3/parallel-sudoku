@@ -1,32 +1,33 @@
 #ifndef _STATE_H
 #define _STATE_H
 
-#include <bitset>
+//#include <bitset>
+#include <vector>
+#include "pup_stl.h"
 
 const size_t bssz = size_t(9);
 
 
-class gNodeInfo {
-  private:
-    bool isColored;
-    std::bitset<bssz> colorsPossible;
-
+class State  {
   public:
-    gNodeInfo() {
+    State() {
+      vid = 0;  // Can be deleted
       isColored = false;
-      colorsPossible.set(true);
+      colorsPossible  = -1; //All ones
     }
     bool getIsColored() { return isColored;}
     void setIsColored(bool c) { isColored  = c;}
+    void pup(PUP::er &p){
+      p|vid;
+      p|isColored;
+      p|colorsPossible;
+    }
 
-    //TO DO: member functions for accessing various info from colorsPossible
-
-};
-
-class State  {
-  public:
-    int colored_vid;        // The id of the vertex whose color is fixed by this state.
-    std::vector<gNodeInfo> Info; 
+  private:
+    int vid;// The id of the vertex 
+    bool isColored;
+    //std::bitset<bssz> colorsPossible;
+    unsigned int  colorsPossible;
 };
 
 #endif

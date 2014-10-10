@@ -1,27 +1,26 @@
 #ifndef _GRAPHCOLOR_H
 #define _GRAPHCOLOR_H
 
-#include <stdio.h>
-#include <math.h>
-#include  <string>
-#include "Module.decl.h" 
 #include "Utils.h"
-#include "graph.h"
-
+#include "State.h"
+#include "Module.decl.h" 
 
 /*readonly*/ 
-extern CProxy_Main mainProxy;
+extern  CProxy_Main mainProxy;
+extern  AdjListType adjList_;
+extern  int vertices_;
 
 class Main : public CBase_Main {
   private:
-    int checksum_before_balance;
 
   public:
   Main(CkArgMsg* msg);
   Main(CkMigrateMessage* msg);
 
-  friend void parseCommandLine(char*,Graph&, VextexMap&);
+  friend void parseCommandLine(char*,AdjListType&, int&);
+  friend std::vector<int> getNextConstraintVertex(std::vector<State>&);
   void done();
+  void populateInitialState(std::vector<State>&);
 };
 
 class Node: public CBase_Node {
@@ -30,6 +29,8 @@ class Node: public CBase_Node {
   public:
   Node() ;
   Node (CkMigrateMessage*);
+  void testGraph(std::vector<State>& );
+  friend std::vector<int> getNextConstraintVertex(std::vector<State>&);
 };
 
 

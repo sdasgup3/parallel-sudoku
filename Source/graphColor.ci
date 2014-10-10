@@ -1,7 +1,7 @@
 mainmodule Module {
   readonly  CProxy_Main mainProxy;
-  //readonly  Graph graph;
-  //readonly VextexMap i2vMap;
+  readonly  AdjListType adjList_;
+  readonly  int vertices_;
 
 mainchare Main {
     entry Main(CkArgMsg*);
@@ -10,5 +10,6 @@ mainchare Main {
   
   chare Node { 
     entry Node();
+    entry void testGraph(std::vector<State>& );
   };
 };

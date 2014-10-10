@@ -1,8 +1,8 @@
 OPTS= -O3 -std=c++11
-CHARMC=/home/acun2/charm/net-linux-x86_64/bin/charmc $(OPTS)
+CHARMC=/home/sdasgup3/CS598LVK/charm/net-linux-x86_64/bin/charmc $(OPTS)
 TEST=graphColor
 
-OBJS = Main.o graph.o Node.o Utils.o
+OBJS = Main.o  Node.o Utils.o
 PROJ= #-tracemode projections 
 
 TARGET = gc
@@ -13,23 +13,20 @@ $(TARGET): $(OBJS)
 	$(CHARMC) -language charm++ -o $(TARGET) $(OBJS) $(PROJ) 
 
 
-graph.o: graph.cpp 
-	$(CHARMC)  -c graph.cpp
-
-Main.o: Main.cpp Module.decl.h graphColor.h State.h
+Main.o: Main.cpp Module.decl.h graphColor.h State.h 
 	$(CHARMC) -c Main.cpp
 
 Node.o: Node.cpp Module.decl.h graphColor.h
 	$(CHARMC) -c Node.cpp
 
-Utils.o: Utils.cpp Utils.h
+Utils.o: Utils.cpp Utils.h State.h
 	$(CHARMC)  -c  Utils.cpp
 
 Module.decl.h: graphColor.ci
 	$(CHARMC) -c graphColor.ci
 
 run: $(TARGET)
-	./charmrun +p4 $(TARGET) input.txt  ++local
+	./charmrun +p4 $(TARGET) ../Tests/inputG_1.txt  ++local
 clean:
 	rm -f conv-host *.o charmrun $(TARGET)
 	rm -f *.def.h *.decl.h
