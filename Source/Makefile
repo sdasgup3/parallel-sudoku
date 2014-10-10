@@ -1,5 +1,5 @@
 OPTS= -O3 -std=c++11
-CHARMC=/home/sdasgup3/CS598LVK/charm/net-linux-x86_64/bin/charmc $(OPTS)
+CHARMC=/home/acun2/charm/net-linux-x86_64/bin/charmc $(OPTS)
 TEST=graphColor
 
 OBJS = Main.o  Node.o Utils.o
