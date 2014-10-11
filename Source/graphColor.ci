@@ -1,4 +1,6 @@
 mainmodule Module {
+  include "State.h";
+
   readonly  CProxy_Main mainProxy;
   readonly  AdjListType adjList_;
   readonly  int vertices_;
