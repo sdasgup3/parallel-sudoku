@@ -1,19 +1,14 @@
-#ifndef _STATE_H
-#define _STATE_H
+#ifndef _VERTEX_H
+#define _VERTEX_H
+  
+#include "Utils.h"
 
-//#include <bitset>
-#include <vector>
-#include "pup_stl.h"
-
-const size_t bssz = size_t(9);
-
-
-class State  {
+class vertex  {
   public:
-    State() {
+    vertex(uint64_t chromaticNum=0): colorsPossible(chromaticNum) {
       vid = 0;  // Can be deleted
       isColored = false;
-      colorsPossible  = -1; //All ones
+      colorsPossible.set(); /* set every bit to 1 */
     }
     bool getIsColored() { return isColored;}
     void setIsColored(bool c) { isColored  = c;}
@@ -26,8 +21,7 @@ class State  {
   private:
     int vid;// The id of the vertex 
     bool isColored;
-    //std::bitset<bssz> colorsPossible;
-    unsigned int  colorsPossible;
+    boost::dynamic_bitset<> colorsPossible;
 };
 
 #endif

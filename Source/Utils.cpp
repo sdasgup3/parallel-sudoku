@@ -58,7 +58,7 @@ std::ostream &operator<<(std::ostream &stream, const AdjListType& map)
     {
       stream << (*it).first << " : " ;
       std::for_each(it->second.begin(), it->second.end(), [&](int v) { std::cout << v << " "; }); 
-        std::cout << std::endl;
+      std::cout << std::endl;
     }
   return stream;
 }
@@ -66,7 +66,7 @@ std::ostream &operator<<(std::ostream &stream, const AdjListType& map)
 /* Fir a given state finds the most constratint node and returns 
  * the possible colors in the order of pririty.
  */
-std::vector<int> getNextConstraintVertex(std::vector<State>& state) 
+std::vector<int> getNextConstraintVertex(std::vector<vertex>& state) 
 {
   std::vector<int> colorsPoss(1);
 

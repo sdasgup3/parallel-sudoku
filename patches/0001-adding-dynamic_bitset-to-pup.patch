@@ -1,0 +1,58 @@
+From 2f448134a4984c9dc9f99547133b07140e94adcb Mon Sep 17 00:00:00 2001
+From: Tanmay Gangwani <gangwan2@taubh1.campuscluster.illinois.edu>
+Date: Sat, 11 Oct 2014 21:11:57 -0500
+Subject: [PATCH] adding dynamic_bitset to pup
+
+---
+ src/util/pup_stl.h |   16 +++++++++++++++-
+ 1 files changed, 15 insertions(+), 1 deletions(-)
+
+diff --git a/src/util/pup_stl.h b/src/util/pup_stl.h
+index ef122b7..301566f 100644
+--- a/src/util/pup_stl.h
++++ b/src/util/pup_stl.h
+@@ -26,11 +26,13 @@ Orion Sky Lawlor, olawlor@acm.org, 7/22/2002
+ #include <string>
+ #include <complex>
+ #include <utility> /*for std::pair*/
++#include <boost/dynamic_bitset.hpp>
+ #include "pup.h"
+ 
+ namespace PUP {
+   /*************** Simple classes ***************/
+   // Non-const version is required for puping std::pair
++  inline void operator|(er &p, boost::dynamic_bitset<>& v);
+   template <class A,class B>
+   inline void operator|(er &p,typename std::pair<A,B> &v);
+   template <class A,class B>
+@@ -58,7 +60,6 @@ namespace PUP {
+   inline void operator|(er &p,typename std::multimap<V,T,Cmp> &m);
+   template <class T>
+   inline void operator|(er &p,typename std::set<T> &m);
+-
+   template <class A,class B>
+   inline void operator|(er &p,typename std::pair<A,B> &v)
+   {
+@@ -116,6 +117,19 @@ namespace PUP {
+     }
+     p.syncComment(sync_end_object);
+   }
++  inline void operator|(er &p, boost::dynamic_bitset<>& v)
++  {
++    std::string s;
++    if (p.isUnpacking()) { 
++      p|s;
++      boost::dynamic_bitset<> tmp(s);
++      v = tmp;
++    }
++    else {
++      boost::to_string(v, s);
++      p|s;
++    }
++  }
+ 
+   /**************** Containers *****************/
+ 
+-- 
+1.7.4.1
+

@@ -1,5 +1,5 @@
 mainmodule Module {
-  include "State.h";
+  include "vertex.h";
 
   readonly  CProxy_Main mainProxy;
   readonly  AdjListType adjList_;
@@ -12,6 +12,6 @@ mainchare Main {
   
   chare Node { 
     entry Node();
-    entry void testGraph(std::vector<State>& );
+    entry void testGraph(std::vector<vertex>&);
   };
 };

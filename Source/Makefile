@@ -1,5 +1,6 @@
 OPTS= -O3 -std=c++11
-CHARMC=/home/acun2/charm/net-linux-x86_64/bin/charmc $(OPTS)
+#CHARMC=/home/acun2/charm/net-linux-x86_64/bin/charmc $(OPTS)
+CHARMC=/home/gangwan2/cs598svn/gangwan2/testbed/local_build/net-linux-x86_64-smp/bin/charmc $(OPTS) 
 TEST=graphColor
 
 OBJS = Main.o  Node.o Utils.o
@@ -13,13 +14,13 @@ $(TARGET): $(OBJS)
 	$(CHARMC) -language charm++ -o $(TARGET) $(OBJS) $(PROJ) 
 
 
-Main.o: Main.cpp Module.decl.h graphColor.h State.h 
+Main.o: Main.cpp Module.decl.h graphColor.h vertex.h 
 	$(CHARMC) -c Main.cpp
 
 Node.o: Node.cpp Module.decl.h graphColor.h
 	$(CHARMC) -c Node.cpp
 
-Utils.o: Utils.cpp Utils.h State.h
+Utils.o: Utils.cpp Utils.h vertex.h
 	$(CHARMC)  -c  Utils.cpp
 
 Module.decl.h: graphColor.ci

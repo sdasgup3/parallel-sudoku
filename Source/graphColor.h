@@ -1,8 +1,6 @@
 #ifndef _GRAPHCOLOR_H
 #define _GRAPHCOLOR_H
 
-#include "Utils.h"
-#include "State.h"
 #include "Module.decl.h" 
 
 /*readonly*/ 
@@ -18,9 +16,9 @@ class Main : public CBase_Main {
   Main(CkMigrateMessage* msg);
 
   friend void parseCommandLine(char*,AdjListType&, int&);
-  friend std::vector<int> getNextConstraintVertex(std::vector<State>&);
+  friend std::vector<int> getNextConstraintVertex(std::vector<vertex>&);
   void done();
-  void populateInitialState(std::vector<State>&);
+  void populateInitialState(std::vector<vertex>&);
 };
 
 class Node: public CBase_Node {
@@ -29,8 +27,8 @@ class Node: public CBase_Node {
   public:
   Node() ;
   Node (CkMigrateMessage*);
-  void testGraph(std::vector<State>& );
-  friend std::vector<int> getNextConstraintVertex(std::vector<State>&);
+  void testGraph(std::vector<vertex>& );
+  friend std::vector<int> getNextConstraintVertex(std::vector<vertex>&);
 };
 
 

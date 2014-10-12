@@ -14,8 +14,9 @@ Main::Main(CkArgMsg* msg) {
   char* filename = msg->argv[1];
   delete msg;
 
+  /* TODO: read from input */
+  uint64_t chromaticNum=7;  
   mainProxy= thisProxy;
-
 
   /* Parse the file and populate the graph*/
   parseCommandLine(filename,  adjList_);
@@ -26,8 +27,7 @@ Main::Main(CkArgMsg* msg) {
   std::cout << adjList_;  
   std::cout << vertices_;  
 
-
-  std::vector<State> iState(vertices_) ;
+  std::vector<vertex> iState(vertices_, chromaticNum);
   populateInitialState(iState);
 
   std::vector<int> colorsPoss = getNextConstraintVertex(iState);
@@ -52,7 +52,7 @@ void Main::done() {
  *iState need to be modified in accordance with 
  *adjList_
  */
-void Main::populateInitialState(std::vector<State>& iState) {
+void Main::populateInitialState(std::vector<vertex>& iState) {
 
 }
 

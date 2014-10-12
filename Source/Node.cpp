@@ -9,7 +9,7 @@ Node::Node (CkMigrateMessage*)
 {
 };
 
-void Node::testGraph(std::vector<State>& state) {
+void Node::testGraph(std::vector<vertex>& state) {
   
   CkPrintf("\nFrom Chare\n");
   std::cout << adjList_;  
