@@ -1,7 +1,8 @@
 OPTS= -O3 -std=c++11
-#CHARMC=/home/acun2/charm/net-linux-x86_64/bin/charmc $(OPTS)
-CHARMC=/home/gangwan2/cs598svn/gangwan2/testbed/local_build/net-linux-x86_64-smp/bin/charmc $(OPTS) 
+/home/acun2/charm/net-linux-x86_64/bin/charmc $(OPTS)
 TEST=graphColor
+INC=-I${ROOT}/python_kit/intel64/include/python2.7
+LDFLAGS=-lboost_program_options -lpython2.7 -L${ROOT}/python_kit/intel64/lib
 
 OBJS = Main.o  Node.o Utils.o
 PROJ= #-tracemode projections 
@@ -11,11 +12,10 @@ TEST=	graphColor
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CHARMC) -language charm++ -o $(TARGET) $(OBJS) $(PROJ) 
-
+	$(CHARMC) $(LDFLAGS) -language charm++ -o $(TARGET) $(OBJS) $(PROJ) 
 
 Main.o: Main.cpp Module.decl.h graphColor.h vertex.h 
-	$(CHARMC) -c Main.cpp
+	$(CHARMC) $(INC) -c Main.cpp
 
 Node.o: Node.cpp Module.decl.h graphColor.h
 	$(CHARMC) -c Node.cpp

@@ -4,7 +4,7 @@
 using namespace std;
 
 
-void parseCommandLine(char* filename, AdjListType& adjList_)
+void parseInputFile(char* filename, AdjListType& adjList_)
 {
   ifstream fin;
   fin.open(filename); // open a file
