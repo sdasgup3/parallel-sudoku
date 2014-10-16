@@ -1,5 +1,5 @@
 OPTS= -O3 -std=c++11
-/home/acun2/charm/net-linux-x86_64/bin/charmc $(OPTS)
+CARMC=/home/acun2/charm/net-linux-x86_64/bin/charmc $(OPTS)
 TEST=graphColor
 INC=-I${ROOT}/python_kit/intel64/include/python2.7
 LDFLAGS=-lboost_program_options -lpython2.7 -L${ROOT}/python_kit/intel64/lib
