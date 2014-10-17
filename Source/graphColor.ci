@@ -1,9 +1,10 @@
 mainmodule Module {
   include "vertex.h";
 
-  readonly  CProxy_Main mainProxy;
-  readonly  AdjListType adjList_;
-  readonly  int vertices_;
+  readonly CProxy_Main mainProxy;
+  readonly AdjListType adjList_;
+  readonly int vertices_;
+  readonly int chromaticNum_;
 
 mainchare Main {
     entry Main(CkArgMsg*);
@@ -12,6 +13,32 @@ mainchare Main {
   
   chare Node { 
     entry Node();
+    entry Node(bool);
+    entry Node(std::vector<vertex>, bool);
     entry void testGraph(std::vector<vertex>&);
+
+    entry void run(){
+        serial{
+            //get the vertex to color
+            int v = getNextConstrainedVertex();
+
+            // for each possible color
+            // try it and create corresponding node state
+            // fire children
+        };
+
+        // when one of the child finishes
+        // pass to parent to merge
+        // will be used in later optimization
+        if(is_root_){
+            // print out the colored graph
+            // call CkExit()
+        } else {
+            when succeed atomic{
+                //merge graph
+                //pass to parent
+            }
+        }
+    };
   };
 };

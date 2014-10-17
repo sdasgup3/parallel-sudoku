@@ -7,6 +7,7 @@
 CProxy_Main mainProxy;
 AdjListType adjList_;
 int vertices_;
+int chromaticNum_;
 
 Main::Main(CkArgMsg* msg):newGraph("no") {
 
@@ -18,15 +19,28 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
   /* reads the adjacency list from python */
   readDataFromPython(msg->argc, msg->argv);
   vertices_ = adjList_.size();
-  
+  delete msg;
+ 
   /* TODO: read from somewhere? */
-  uint64_t chromaticNum=7;  
+  uint64_t chromaticNum_=7;  
   mainProxy= thisProxy;
 
   CkPrintf("Mainchare constructor..\n");
   std::cout << adjList_;  
-  std::cout << "Number of vertices = "<<vertices_<<"\n";  
+  std::cout << "Number of vertices = "<< vertices_<< std::endl;
+  std::cout << "Number of colors = " << chromaticNum_ << std::endl;
 
+  /*----------------------------------------
+   * TODO: if the graph is partial colored
+   * we need to initialize the original nodeState
+   *    std::vector<vertex> initializedState(vertices_, chromaticNum)
+   *    populateInitialState(initializeState);
+   *    ckNew(initializeState, true)
+   * For now we only create root node with empty uncolored state
+   * ---------------------------------------*/
+  CProxy_Node node = CProxy_Node::ckNew();
+
+  // fire the root chare, passing adjList
   std::vector<vertex> iState(vertices_, chromaticNum);
   populateInitialState(iState);
 
@@ -35,10 +49,8 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
    * 2. Update color and neighbr of each copy
    * 3. Spawn new Node chare for each copy
    */
-
-  CProxy_Node n = CProxy_Node::ckNew();
-  n.testGraph(iState);
-  delete msg;
+  
+  //n.testGraph(iState);
 }
 
 Main::Main(CkMigrateMessage* msg) {}
