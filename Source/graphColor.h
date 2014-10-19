@@ -3,7 +3,8 @@
 
 #include "Module.decl.h" 
 
-/*readonly*/ 
+/*readonly*/
+#define THRESHOLD (1)
 extern CProxy_Main mainProxy;
 extern AdjListType adjList_;
 extern int vertices_;
@@ -43,16 +44,31 @@ class Node: public CBase_Node {
     Node (CkMigrateMessage*);
     // ?? what this used for
     void testGraph(std::vector<vertex>& );
+
     // return the most constrained vertex id/index in vector
     int getNextConstraintVertex();
+
     // update a passed in state
     // by coloring vertex[vIndex] with color c
     void updateState(std::vector<vertex> & state, int vIndex, int c);
+
     // print out graph colored states
     void printGraph();
+
     // color the remaining part of graph locally
-    // return succeed or not
-    bool colorLocally();
+    // and respond to parent with result
+    void colorLocally();
+
+    // color remotely
+    // choose a constreint vertex, color it
+    // fire child chare to color remaining vertices
+    void colorRemotely();
+
+    // when receive its child response
+    // current chare should decide how to merge with the received part
+    // and how to respond to its parent
+    // reutrn whether need to wait for another child or not
+    bool mergeToParent(bool, std::vector<vertex>);
 };
 
 

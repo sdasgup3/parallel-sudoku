@@ -1,7 +1,7 @@
 #ifndef _VERTEX_H
 #define _VERTEX_H
  
-#define THRESHOLD (1)
+//#define THRESHOLD (1)
 #include "Utils.h"
 #include "pup_stl.h"
 

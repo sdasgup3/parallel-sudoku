@@ -16,7 +16,7 @@ mainchare Main {
     entry Node(bool, int, CProxy_Node);
     entry Node(std::vector<vertex>, bool, int, CProxy_Node);
     entry void testGraph(std::vector<vertex>&);
-    entry void succeed(bool, std::vector<vertex>);
+    entry void finish(bool, std::vector<vertex>);
 
     entry void run(){
         atomic { 
@@ -28,70 +28,30 @@ mainchare Main {
             //colorLocally() choose the first available color
             //for the remaining 1 vertex
             if(uncolored_num_ <= THRESHOLD){
-                bool res = colorLocally();
-                parent_.succeed(res, node_state_);
+                colorLocally();
                 return;
-            }
-
-            //get the vertex to color
-            int vIndex = this->getNextConstraintVertex();
-            
-            boost::dynamic_bitset<> possibleColor(
-                node_state_[vIndex].getPossibleColor());
-            //child_num_ = possibleColor.count();
-            child_num_ = 1;
-
-            //test whehter colorable or not
-            //return false if uncolorable
-            if(!possibleColor.any()){
-                parent_.succeed(false, node_state_);
-                return;
-            }
-
-            //---------DEUBG USE BELOW------------
-            CkPrintf("try to color vertex[%d] with %d colors\n",
-                vIndex, possibleColor.count());
-            //--------DEBUG USE ABOVE-------------
-
-            // for each possible color
-            // try it and create corresponding node state
-            // to fire children
-            for(boost::dynamic_bitset<>::size_type c=0;
-                c<possibleColor.size(); c++){
-                //if the color is not possible, skip it
-                if(!possibleColor.test(c))
-                    continue;
-
-                //get possible color c, and color it
-                //update neighbor's possible_color_
-                std::vector<vertex> new_state = node_state_;
-                updateState(new_state, vIndex, c);
-                //fire new child
-                CProxy_Node child = CProxy_Node::ckNew
-                    (new_state, false, uncolored_num_-1, thisProxy);
-                break;
+            } else {
+                colorRemotely();
             }
         }
 
         // when one of the child finishes
-        // passback to parent to merge the graph
+        // pass its state back to parent to merge the graph
         // for now, it's unneccesary to notify parent.
         // But it's needed in later optimization
         while(true){
-            when succeed(bool res, std::vector<vertex> state) atomic{
+            when finish(bool res, std::vector<vertex> state) atomic{
+                
+                //-----------DEBUG CODE BELOW-------------------
+                CkPrintf("A child finish in Chare[uncolor=%d]; \
+                    res=%d\n", uncolored_num_, res);
+                //-----------DEBUG CODE ABOVE------------------
+
                 child_finished_ ++;
-                if(res==true){
-                    if(is_root_){
-                        printGraph();
-                        CkExit();
-                    } else {
-                        parent_.succeed(true, state);
-                    }
+
+                bool waitChild = mergeToParent(res, state);
+                if(!waitChild)
                     return;
-                } else if(child_finished_==child_num_){
-                    parent_.succeed(false, state);
-                    return;
-                }
             }
         }
 
