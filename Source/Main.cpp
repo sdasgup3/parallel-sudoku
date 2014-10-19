@@ -168,7 +168,7 @@ void Main::populateInitialState(std::vector<vertex>& iState) {
 }
 
 /*
- * For each vertices, this akgo  tries to assign the minimum possible possible
+ * For each vertices, this algo  tries to assign the minimum possible color
  * depending on its nghs.
  */
 int Main::getConservativeChromaticNum() {
