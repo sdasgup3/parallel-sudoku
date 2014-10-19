@@ -174,8 +174,9 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state){
             parent_.finish(false, state);
         }
         waitChild = false;
+    } else {
+        waitChild = true;
     }
-    waitChild = true;
     return waitChild;
 }
 

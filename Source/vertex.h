@@ -30,16 +30,13 @@ class vertex  {
       p|color_;
 
       if(p.isUnpacking()){
-          unsigned long long x;
-          int size;
-          p|size;
-          p|x;
-          possible_colors_ = boost::dynamic_bitset<>(size, x);
+          std::string s; 
+          p|s;
+          possible_colors_ = boost::dynamic_bitset<>(s);
       } else {
-          unsigned long long x = possible_colors_.to_ulong();
-          int size = possible_colors_.size();
-          p|size;
-          p|x;
+          std::string s;
+          boost::to_string(possible_colors_, s);
+          p|s;
       }
     }
 
