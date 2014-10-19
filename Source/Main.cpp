@@ -34,7 +34,6 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
   std::cout << "Number of vertices = "<< vertices_<< std::endl;
   std::cout << "Number of colors = " << chromaticNum_ << std::endl;
 
-  CkExit();
   /*----------------------------------------
    * TODO: if the graph is partial colored
    * we need to initialize the original nodeState
