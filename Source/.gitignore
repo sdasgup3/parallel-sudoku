@@ -1,0 +1,7 @@
+*.o
+*.decl.h
+*.def.h
+cscope.out
+tags
+gc
+charmrun

@@ -1,4 +1,5 @@
-OPTS= -O3 -std=c++11
+ROOT= ..
+OPTS= -O3 #-std=c++11
 CHARMC=/home/acun2/charm/net-linux-x86_64/bin/charmc $(OPTS)
 TEST=graphColor
 INC=-I${ROOT}/python_kit/intel64/include/python2.7
