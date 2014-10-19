@@ -32,6 +32,8 @@ class Node: public CBase_Node {
     bool is_root_;
     CProxy_Node parent_;
     int uncolored_num_;//number of uncolored vertex
+    int child_num_;
+    int child_finished_;
 
   public:
     // default constructor creats root node
@@ -48,6 +50,9 @@ class Node: public CBase_Node {
     void updateState(std::vector<vertex> & state, int vIndex, int c);
     // print out graph colored states
     void printGraph();
+    // color the remaining part of graph locally
+    // return succeed or not
+    bool colorLocally();
 };
 
 

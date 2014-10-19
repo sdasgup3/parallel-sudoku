@@ -16,32 +16,46 @@ mainchare Main {
     entry Node(bool, int, CProxy_Node);
     entry Node(std::vector<vertex>, bool, int, CProxy_Node);
     entry void testGraph(std::vector<vertex>&);
-    entry void succeed();
+    entry void succeed(bool, std::vector<vertex>);
 
     entry void run(){
         atomic { 
-            this->printGraph();
-            //TODO: check number of uncolored nodes
-            //if uncolored_num_ < threshold, do coloring locally
+            //-----DEBUG USE BELOW--------
+            //this->printGraph();
+            //-----DEBUG USE ABOVE--------
+
+            //for now, THRESHOLD is set to 1
+            //colorLocally() choose the first available color
+            //for the remaining 1 vertex
+            if(uncolored_num_ <= THRESHOLD){
+                bool res = colorLocally();
+                parent_.succeed(res, node_state_);
+                return;
+            }
 
             //get the vertex to color
             int vIndex = this->getNextConstraintVertex();
             
-            // check whether valid or not
-            // if return -1, all nodes colored
-            if(vIndex==-1){
-                parent_.succeed();
+            boost::dynamic_bitset<> possibleColor(
+                node_state_[vIndex].getPossibleColor());
+            //child_num_ = possibleColor.count();
+            child_num_ = 1;
+
+            //test whehter colorable or not
+            //return false if uncolorable
+            if(!possibleColor.any()){
+                parent_.succeed(false, node_state_);
                 return;
             }
 
+            //---------DEUBG USE BELOW------------
+            CkPrintf("try to color vertex[%d] with %d colors\n",
+                vIndex, possibleColor.count());
+            //--------DEBUG USE ABOVE-------------
+
             // for each possible color
             // try it and create corresponding node state
-            // fire children
-            boost::dynamic_bitset<> possibleColor(
-                node_state_[vIndex].getPossibleColor());
-            int child_num=possibleColor.count();
-            CkPrintf("try to color vertex[%d] with %d colors\n",
-                vIndex, child_num);
+            // to fire children
             for(boost::dynamic_bitset<>::size_type c=0;
                 c<possibleColor.size(); c++){
                 //if the color is not possible, skip it
@@ -49,39 +63,35 @@ mainchare Main {
                     continue;
 
                 //get possible color c, and color it
+                //update neighbor's possible_color_
                 std::vector<vertex> new_state = node_state_;
                 updateState(new_state, vIndex, c);
                 //fire new child
-                CkPrintf("new chare with vertex[%d] with color[%d] uncolor[%d]\n",
-                    vIndex, c, uncolored_num_-1);
-    for(int i=0; i<new_state.size(); i++){
-        CkPrintf("new state: vertex[%d]:color[%d] ;\n", i, new_state[i].getColor());
-    }
-    CkPrintf("\n-------------------------------\n");
-
                 CProxy_Node child = CProxy_Node::ckNew
                     (new_state, false, uncolored_num_-1, thisProxy);
                 break;
             }
-            //if no color is possible, no need to wait
-            //TODO: count child return
-            // first succeed, return succeed
-            // all fail, return fail
-            if(child_num==0)
-                return;
         }
 
         // when one of the child finishes
-        // passback to parent to merge
-        // will be used in later optimization
-        when succeed() atomic{
-            if(is_root_){
-                // print out the colored graph
-                //printGraph();
-                // call CkExit()
-                CkExit();
-            } else {
-                parent_.succeed();
+        // passback to parent to merge the graph
+        // for now, it's unneccesary to notify parent.
+        // But it's needed in later optimization
+        while(true){
+            when succeed(bool res, std::vector<vertex> state) atomic{
+                child_finished_ ++;
+                if(res==true){
+                    if(is_root_){
+                        printGraph();
+                        CkExit();
+                    } else {
+                        parent_.succeed(true, state);
+                    }
+                    return;
+                } else if(child_finished_==child_num_){
+                    parent_.succeed(false, state);
+                    return;
+                }
             }
         }
 

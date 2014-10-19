@@ -1,7 +1,9 @@
 #ifndef _VERTEX_H
 #define _VERTEX_H
-  
+ 
+#define THRESHOLD (1)
 #include "Utils.h"
+#include "pup_stl.h"
 
 class vertex  {
   public:
@@ -15,7 +17,8 @@ class vertex  {
     void setColor(int c) { color_ = c;}
 
     void removePossibleColor(int c){
-        possible_colors_.reset(c);
+        if(!isColored())
+            possible_colors_.reset(c);
     }
 
     const boost::dynamic_bitset<> getPossibleColor(){
@@ -25,8 +28,19 @@ class vertex  {
     void pup(PUP::er &p){
       p|vertex_id_;
       p|color_;
-      unsigned long x = possible_colors_.to_ulong();
-      p|x; 
+
+      if(p.isUnpacking()){
+          unsigned long long x;
+          int size;
+          p|size;
+          p|x;
+          possible_colors_ = boost::dynamic_bitset<>(size, x);
+      } else {
+          unsigned long long x = possible_colors_.to_ulong();
+          int size = possible_colors_.size();
+          p|size;
+          p|x;
+      }
     }
 
   private:

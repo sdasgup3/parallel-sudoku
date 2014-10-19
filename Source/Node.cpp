@@ -6,7 +6,8 @@
  * all uncolored
  * ---------------------------------------*/
 Node::Node(bool isRoot, int n, CProxy_Node parent) :
-    parent_(parent), uncolored_num_(n), is_root_(isRoot)
+    parent_(parent), uncolored_num_(n), is_root_(isRoot),
+    child_num_(0), child_finished_(0)
 {
     vertex v = vertex(chromaticNum_);
     node_state_ = std::vector<vertex>(vertices_, v);
@@ -19,7 +20,8 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
  * used to fire child node by state configured
  * ---------------------------------------------*/
 Node::Node(std::vector<vertex> state, bool isRoot, int n, CProxy_Node parent)
-    : parent_(parent), uncolored_num_(n), node_state_(state), is_root_(isRoot)
+    : parent_(parent), uncolored_num_(n), node_state_(state),
+    is_root_(isRoot), child_num_(0), child_finished_(0)
 {
     thisProxy.run();
 }
@@ -50,7 +52,7 @@ int Node::getNextConstraintVertex(){
 /*---------------------------------------------
  * update a ppsed in state
  * by colorig vertex[vIndex] with color c
- * and update all its neighbors possible colors
+ * and update all its neighbors corresponding possible colors
  * --------------------------------------------*/
 void Node::updateState(std::vector<vertex> & state, int vIndex, int c){
     state[vIndex].setColor(c);
@@ -58,6 +60,35 @@ void Node::updateState(std::vector<vertex> & state, int vIndex, int c){
     for(std::list<int>::iterator it=adjList_[vIndex].begin();
             it!=adjList_[vIndex].end(); it++){
         state[*it].removePossibleColor(c);
+    }
+}
+
+/*--------------------------------------------
+ * color the remaining graph locally
+ * return if succeed or not
+ * TODO: when THREASHOLD!=1
+ * for now the THREASHOLD is set to 1
+ * so current implementation just color the 1 vertex
+ * with the first avaialbe color
+ * -----------------------------------------*/
+bool Node::colorLocally(){
+    CkAssert(THRESHOLD==1);
+
+    int vIndex = getNextConstraintVertex();
+    CkAssert(vIndex!=-1);
+
+    boost::dynamic_bitset<> possibleColor =
+        node_state_[vIndex].getPossibleColor(); 
+    if(possibleColor.any()){
+        for(boost::dynamic_bitset<>::size_type c=0;
+                c<possibleColor.size(); c++){
+            if(possibleColor.test(c)){
+                node_state_[vIndex].setColor(c);
+                return true;
+            }
+        }
+    } else {
+        return false;
     }
 }
 
