@@ -118,8 +118,8 @@ void Node::colorRemotely(){
     }
 
     //---------DEUBG USE BELOW------------
-    CkPrintf("In Chare[uncolor=%d],try to color vertex[%d] with %d colors\n",
-            uncolored_num_, vIndex, possibleColor.count());
+    //CkPrintf("In Chare[uncolor=%d],try to color vertex[%d] with %d colors\n",
+    //        uncolored_num_, vIndex, possibleColor.count());
     //--------DEBUG USE ABOVE-------------
 
     // for each possible color

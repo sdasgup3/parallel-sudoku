@@ -43,8 +43,8 @@ mainchare Main {
             when finish(bool res, std::vector<vertex> state) atomic{
                 
                 //-----------DEBUG CODE BELOW-------------------
-                CkPrintf("A child finish in Chare[uncolor=%d]; \
-                    res=%d\n", uncolored_num_, res);
+                //CkPrintf("A child finish in Chare[uncolor=%d]; \
+                //    res=%d\n", uncolored_num_, res);
                 //-----------DEBUG CODE ABOVE------------------
 
                 child_finished_ ++;

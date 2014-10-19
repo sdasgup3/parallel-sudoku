@@ -10,6 +10,7 @@ extern AdjListType adjList_;
 extern int vertices_;
 extern int chromaticNum_;
 
+
 class Main : public CBase_Main {
   private:
     std::string filename, newGraph;
