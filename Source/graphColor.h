@@ -25,19 +25,29 @@ class Main : public CBase_Main {
 };
 
 class Node: public CBase_Node {
+  Node_SDAG_CODE
+
   private:
     std::vector<vertex> node_state_;
     bool is_root_;
+    CProxy_Node parent_;
+    int uncolored_num_;//number of uncolored vertex
+
   public:
     // default constructor creats root node
-    Node();
-    Node(bool isRoot);
-    Node(std::vector<vertex> state, bool isRoot);
+    Node(bool isRoot, int n, CProxy_Node parent);
+    Node(std::vector<vertex> state, bool isRoot,
+            int n, CProxy_Node parent);
     Node (CkMigrateMessage*);
     // ?? what this used for
     void testGraph(std::vector<vertex>& );
     // return the most constrained vertex id/index in vector
-    int getNextConstraintVertex(std::vector<vertex>&);
+    int getNextConstraintVertex();
+    // update a passed in state
+    // by coloring vertex[vIndex] with color c
+    void updateState(std::vector<vertex> & state, int vIndex, int c);
+    // print out graph colored states
+    void printGraph();
 };
 
 

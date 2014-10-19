@@ -4,6 +4,7 @@
 #include "boost/program_options.hpp"
 #include "graphColor.h"
 
+/*readonly*/
 CProxy_Main mainProxy;
 AdjListType adjList_;
 int vertices_;
@@ -15,7 +16,9 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
   // parseInputFile(filename.c_str(),  adjList_);
 
   parseCommandLine(msg->argc, msg->argv);
-  
+
+  CkPrintf("finish parseing commandline\n");
+
   /* reads the adjacency list from python */
   readDataFromPython(msg->argc, msg->argv);
   vertices_ = adjList_.size();
@@ -33,18 +36,18 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
   /*----------------------------------------
    * TODO: if the graph is partial colored
    * we need to initialize the original nodeState
-   *    std::vector<vertex> initializedState(vertices_, chromaticNum)
+   *    std::vector<vertex> initializedState(vertices_, chromaticNum_)
    *    populateInitialState(initializeState);
    *    ckNew(initializeState, true)
    * For now we only create root node with empty uncolored state
    * ---------------------------------------*/
-  CProxy_Node node = CProxy_Node::ckNew();
+  //CProxy_Node node = CProxy_Node::ckNew(true, vertices_,
+  //        (CProxy_Node)thisProxy);
+
+  CkExit();
 
   // fire the root chare, passing adjList
-  std::vector<vertex> iState(vertices_, chromaticNum);
-  populateInitialState(iState);
-
-  std::vector<int> colorsPoss = getNextConstraintVertex(iState);
+  //std::vector<int> colorsPoss = getNextConstraintVertex(iState);
   /* 1. Create |colorsPoss| copies of iState.
    * 2. Update color and neighbr of each copy
    * 3. Spawn new Node chare for each copy

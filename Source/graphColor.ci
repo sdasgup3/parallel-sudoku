@@ -1,5 +1,6 @@
 mainmodule Module {
   include "vertex.h";
+  include "graphColor.h";
 
   readonly CProxy_Main mainProxy;
   readonly AdjListType adjList_;
@@ -12,31 +13,60 @@ mainchare Main {
   };
   
   chare Node { 
-    entry Node();
-    entry Node(bool);
-    entry Node(std::vector<vertex>, bool);
+    entry Node(bool, int, CProxy_Node);
+    entry Node(std::vector<vertex>, bool, int, CProxy_Node);
     entry void testGraph(std::vector<vertex>&);
+    entry void succeed();
 
     entry void run(){
-        serial{
+        atomic { 
+            //TODO: check number of uncolored nodes
+            //if uncolored_num_ < threshold, do coloring locally
+
             //get the vertex to color
-            int v = getNextConstrainedVertex();
+            int vIndex = this->getNextConstraintVertex();
+
+            // check whether valid or not
+            // if return -1, all nodes colored
+            if(vIndex==-1){
+                parent_.succeed();
+                return;
+            }
 
             // for each possible color
             // try it and create corresponding node state
             // fire children
-        };
+            boost::dynamic_bitset<> possibleColor =
+                node_state_[vIndex].getPossibleColor();
+            for(int c=0; c<possibleColor.size(); c++){
+                //if the color is not possible, skip it
+                if(possibleColor[c]==0)
+                    continue;
+
+                //get possible color c, and color it
+                std::vector<vertex> new_state = node_state_;
+                updateState(new_state, vIndex, c);
+                //fire new child
+                CProxy_Node child = CProxy_Node::ckNew
+                    (new_state, false, uncolored_num_-1, thisProxy);
+            }
+        }
 
         // when one of the child finishes
-        // pass to parent to merge
+        // passback to parent to merge
         // will be used in later optimization
         if(is_root_){
-            // print out the colored graph
-            // call CkExit()
+            atomic {
+                // print out the colored graph
+                printGraph();
+                // call CkExit()
+                CkExit();
+            }
         } else {
-            when succeed atomic{
-                //merge graph
+            when succeed() atomic{
+                //TODO: merge graph
                 //pass to parent
+                parent_.succeed();
             }
         }
     };

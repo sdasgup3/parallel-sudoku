@@ -59,7 +59,10 @@ std::ostream &operator<<(std::ostream &stream, const AdjListType& map)
   for (AdjListType::const_iterator it = map.begin(); it != map.end(); ++it)
     {
       stream << (*it).first << " : " ;
-      std::for_each(it->second.begin(), it->second.end(), [&](int v) { std::cout << v << " "; }); 
+      for(std::list<int>::const_iterator vit=it->second.begin();
+              vit!=it->second.end(); vit++){
+        std::cout << *vit << " ";
+      }
       std::cout << std::endl;
     }
   return stream;

@@ -1,20 +1,12 @@
 #include "graphColor.h"
 
-/*--------------------------------------------
- * Default Node constructor
- * call Node(true)
- * ----------------------------------------*/
-Node::Node() 
-{
-    this(true);    
-}
-
 /* -----------------------------------------
  * Node Constructor with bool parameters
  * initialize node_state_ with adjList
  * all uncolored
  * ---------------------------------------*/
-Node::Node(bool isRoot) : is_root_(isRoot)
+Node::Node(bool isRoot, int n, CProxy_Node parent) :
+    parent_(parent), uncolored_num_(n), is_root_(isRoot)
 {
     node_state_ = std::vector<vertex>(vertices_, chromaticNum_);
     thisProxy.run();
@@ -24,8 +16,8 @@ Node::Node(bool isRoot) : is_root_(isRoot)
  * Node constructor with two parameters
  * used to fire child node by state configured
  * ---------------------------------------------*/
-Node::Node(std::vector<vertex> state, bool isRoot)
-    : node_state_(state), is_root_(isRoot)
+Node::Node(std::vector<vertex> state, bool isRoot, int n, CProxy_Node parent)
+    : parent_(parent), uncolored_num_(n), node_state_(state), is_root_(isRoot)
 {
     thisProxy.run();
 }
@@ -33,6 +25,48 @@ Node::Node(std::vector<vertex> state, bool isRoot)
 Node::Node (CkMigrateMessage*) 
 {
 }
+
+/* ----------------------------------------------
+ * return the index of next constrained vertex
+ * the vertex list will be got from its node_state
+ *  For current implementation, we choose the first uncolored node
+ *  ----------------------------------------------*/
+int Node::getNextConstraintVertex(){
+
+    //choose first uncolored node
+    for(std::vector<vertex>::iterator it=node_state_.begin(); 
+            it!=node_state_.end(); it++){
+        if(it->isColored()==false){
+            return std::distance(node_state_.begin(), it);
+        }
+    }
+    // all finished coloring
+    return -1;
+
+}
+
+/*---------------------------------------------
+ * update a ppsed in state
+ * by colorig vertex[vIndex] with color c
+ * and update all its neighbors possible colors
+ * --------------------------------------------*/
+void Node::updateState(std::vector<vertex> & state, int vIndex, int c){
+    state[vIndex].setColor(c);
+    // remove possible color c from all the neighbors of vIndex
+    for(std::list<int>::iterator it=adjList_[vIndex].begin();
+            it!=adjList_[vIndex].end(); it++){
+        state[*it].removePossibleColor(c);
+    }
+}
+
+void Node::printGraph(){
+    CkPrintf("\nFrom Chare\n");
+    for(int i=0; i<node_state_.size(); i++){
+        CkPrintf("node[%d] - color[%d] ;\n", i, node_state_[i].getColor());
+    }
+    CkPrintf("\n-------------------------------\n");
+}
+
 
 void Node::testGraph(std::vector<vertex>& state) {
   

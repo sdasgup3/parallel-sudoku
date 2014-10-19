@@ -7,20 +7,33 @@ class vertex  {
   public:
     vertex(uint64_t chromaticNum=0): possible_colors_(chromaticNum) {
       vertex_id_ = 0;  // Can be deleted
-      is_colored_ = false;
+      color_ = -1;
       possible_colors_.set(); /* set every bit to 1 */
     }
-    bool getIsColored() { return is_colored_;}
-    void setIsColored(bool c) { is_colored_ = c;}
+    bool isColored() { return color_ >=0;}
+    int getColor() { return color_; }
+    void setColor(int c) { color_ = c;}
+
+    void removePossibleColor(int c){
+        possible_colors_[c] = 0;
+    }
+
+    const boost::dynamic_bitset<> getPossibleColor(){
+        return possible_colors_;
+    }
+
     void pup(PUP::er &p){
       p|vertex_id_;
-      p|is_colored_;
-      p|possible_colors_;
+      p|color_;
+      for(int i=0; i<possible_colors_.size(); i++){
+          bool x=(bool)possible_colors_[i];
+          p|x;
+      }
     }
 
   private:
     int vertex_id_;// The id of the vertex 
-    bool is_colored_;
+    int color_; // if color<0, it means haven't been colored yet
     boost::dynamic_bitset<> possible_colors_;
 };
 
