@@ -20,12 +20,13 @@ mainchare Main {
 
     entry void run(){
         atomic { 
+            this->printGraph();
             //TODO: check number of uncolored nodes
             //if uncolored_num_ < threshold, do coloring locally
 
             //get the vertex to color
             int vIndex = this->getNextConstraintVertex();
-
+            
             // check whether valid or not
             // if return -1, all nodes colored
             if(vIndex==-1){
@@ -36,39 +37,54 @@ mainchare Main {
             // for each possible color
             // try it and create corresponding node state
             // fire children
-            boost::dynamic_bitset<> possibleColor =
-                node_state_[vIndex].getPossibleColor();
-            for(int c=0; c<possibleColor.size(); c++){
+            boost::dynamic_bitset<> possibleColor(
+                node_state_[vIndex].getPossibleColor());
+            int child_num=possibleColor.count();
+            CkPrintf("try to color vertex[%d] with %d colors\n",
+                vIndex, child_num);
+            for(boost::dynamic_bitset<>::size_type c=0;
+                c<possibleColor.size(); c++){
                 //if the color is not possible, skip it
-                if(possibleColor[c]==0)
+                if(!possibleColor.test(c))
                     continue;
 
                 //get possible color c, and color it
                 std::vector<vertex> new_state = node_state_;
                 updateState(new_state, vIndex, c);
                 //fire new child
+                CkPrintf("new chare with vertex[%d] with color[%d] uncolor[%d]\n",
+                    vIndex, c, uncolored_num_-1);
+    for(int i=0; i<new_state.size(); i++){
+        CkPrintf("new state: vertex[%d]:color[%d] ;\n", i, new_state[i].getColor());
+    }
+    CkPrintf("\n-------------------------------\n");
+
                 CProxy_Node child = CProxy_Node::ckNew
                     (new_state, false, uncolored_num_-1, thisProxy);
+                break;
             }
+            //if no color is possible, no need to wait
+            //TODO: count child return
+            // first succeed, return succeed
+            // all fail, return fail
+            if(child_num==0)
+                return;
         }
 
         // when one of the child finishes
         // passback to parent to merge
         // will be used in later optimization
-        if(is_root_){
-            atomic {
+        when succeed() atomic{
+            if(is_root_){
                 // print out the colored graph
-                printGraph();
+                //printGraph();
                 // call CkExit()
                 CkExit();
-            }
-        } else {
-            when succeed() atomic{
-                //TODO: merge graph
-                //pass to parent
+            } else {
                 parent_.succeed();
             }
         }
+
     };
   };
 };

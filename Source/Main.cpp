@@ -25,7 +25,7 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
   delete msg;
  
   /* TODO: read from somewhere? */
-  uint64_t chromaticNum_=7;  
+  chromaticNum_=7;  
   mainProxy= thisProxy;
 
   CkPrintf("Mainchare constructor..\n");
@@ -41,18 +41,9 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
    *    ckNew(initializeState, true)
    * For now we only create root node with empty uncolored state
    * ---------------------------------------*/
-  //CProxy_Node node = CProxy_Node::ckNew(true, vertices_,
-  //        (CProxy_Node)thisProxy);
-
-  CkExit();
-
-  // fire the root chare, passing adjList
-  //std::vector<int> colorsPoss = getNextConstraintVertex(iState);
-  /* 1. Create |colorsPoss| copies of iState.
-   * 2. Update color and neighbr of each copy
-   * 3. Spawn new Node chare for each copy
-   */
-  
+  CProxy_Node node = CProxy_Node::ckNew(true, vertices_,
+          (CProxy_Node)thisProxy);
+   
   //n.testGraph(iState);
 }
 

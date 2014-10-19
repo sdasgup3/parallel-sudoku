@@ -1,5 +1,5 @@
 #include "graphColor.h"
-
+#include "string"
 /* -----------------------------------------
  * Node Constructor with bool parameters
  * initialize node_state_ with adjList
@@ -8,7 +8,9 @@
 Node::Node(bool isRoot, int n, CProxy_Node parent) :
     parent_(parent), uncolored_num_(n), is_root_(isRoot)
 {
-    node_state_ = std::vector<vertex>(vertices_, chromaticNum_);
+    vertex v = vertex(chromaticNum_);
+    node_state_ = std::vector<vertex>(vertices_, v);
+
     thisProxy.run();
 }
 
@@ -60,9 +62,9 @@ void Node::updateState(std::vector<vertex> & state, int vIndex, int c){
 }
 
 void Node::printGraph(){
-    CkPrintf("\nFrom Chare\n");
+    CkPrintf("\nFrom Chare - uncolored num = %d\n", uncolored_num_);
     for(int i=0; i<node_state_.size(); i++){
-        CkPrintf("node[%d] - color[%d] ;\n", i, node_state_[i].getColor());
+        CkPrintf("vertex[%d]:color[%d] ;\n", i, node_state_[i].getColor());
     }
     CkPrintf("\n-------------------------------\n");
 }

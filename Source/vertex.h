@@ -5,7 +5,7 @@
 
 class vertex  {
   public:
-    vertex(uint64_t chromaticNum=0): possible_colors_(chromaticNum) {
+    vertex(uint64_t chromaticNum=0) : possible_colors_(chromaticNum) {
       vertex_id_ = 0;  // Can be deleted
       color_ = -1;
       possible_colors_.set(); /* set every bit to 1 */
@@ -15,7 +15,7 @@ class vertex  {
     void setColor(int c) { color_ = c;}
 
     void removePossibleColor(int c){
-        possible_colors_[c] = 0;
+        possible_colors_.reset(c);
     }
 
     const boost::dynamic_bitset<> getPossibleColor(){
@@ -25,10 +25,8 @@ class vertex  {
     void pup(PUP::er &p){
       p|vertex_id_;
       p|color_;
-      for(int i=0; i<possible_colors_.size(); i++){
-          bool x=(bool)possible_colors_[i];
-          p|x;
-      }
+      unsigned long x = possible_colors_.to_ulong();
+      p|x; 
     }
 
   private:
