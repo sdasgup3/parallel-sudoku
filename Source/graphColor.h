@@ -21,6 +21,7 @@ class Main : public CBase_Main {
 
     void parseCommandLine(int argc, char **argv);
     void readDataFromPython(int argc, char **argv);
+    int getConservativeChromaticNum();
     
     void done();
     void populateInitialState(std::vector<vertex>&);
