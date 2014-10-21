@@ -20,7 +20,9 @@ typedef std::map<int, std::list<int> > AdjListType;
 /* forward declaration. TODO: Why are these functions made friend functions and kept here? */
 class vertex;
 
-void parseCommandLine(char* filename, AdjListType& adjList_);
+//---------functions below implemented in Main.h/cpp----------------
+//void parseCommandLine(char* filename, AdjListType& adjList_);
+//---------functions above implemented in Main.h/cpp----------------
 std::ostream &operator<<(std::ostream &stream, const AdjListType& map);
 void insertHelper(AdjListType& adjList_, const int& u, const int& v);
 

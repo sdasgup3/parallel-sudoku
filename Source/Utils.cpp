@@ -3,7 +3,8 @@
 
 using namespace std;
 
-
+//---------functions below implemented in Main.h/cpp----------------
+/*
 void parseInputFile(char* filename, AdjListType& adjList_)
 {
   ifstream fin;
@@ -51,13 +52,17 @@ void insertHelper(AdjListType& adjList_, const int& u, const int& v)
       adjList_.insert(AdjListType::value_type(u, list));
     }
 }
+*/
 
 std::ostream &operator<<(std::ostream &stream, const AdjListType& map)
 {
   for (AdjListType::const_iterator it = map.begin(); it != map.end(); ++it)
     {
       stream << (*it).first << " : " ;
-      std::for_each(it->second.begin(), it->second.end(), [&](int v) { std::cout << v << " "; }); 
+      for(std::list<int>::const_iterator vit=it->second.begin();
+              vit!=it->second.end(); vit++){
+        std::cout << *vit << " ";
+      }
       std::cout << std::endl;
     }
   return stream;

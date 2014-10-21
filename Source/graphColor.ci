@@ -1,9 +1,11 @@
 mainmodule Module {
   include "vertex.h";
+  include "graphColor.h";
 
-  readonly  CProxy_Main mainProxy;
-  readonly  AdjListType adjList_;
-  readonly  int vertices_;
+  readonly CProxy_Main mainProxy;
+  readonly AdjListType adjList_;
+  readonly int vertices_;
+  readonly int chromaticNum_;
 
 mainchare Main {
     entry Main(CkArgMsg*);
@@ -11,7 +13,48 @@ mainchare Main {
   };
   
   chare Node { 
-    entry Node();
+    entry Node(bool, int, CProxy_Node);
+    entry Node(std::vector<vertex>, bool, int, CProxy_Node);
     entry void testGraph(std::vector<vertex>&);
+    entry void finish(bool, std::vector<vertex>);
+
+    entry void run(){
+        atomic { 
+            //-----DEBUG USE BELOW--------
+            //this->printGraph();
+            //-----DEBUG USE ABOVE--------
+
+            //for now, THRESHOLD is set to 1
+            //colorLocally() choose the first available color
+            //for the remaining 1 vertex
+            if(uncolored_num_ <= THRESHOLD){
+                colorLocally();
+                return;
+            } else {
+                colorRemotely();
+            }
+        }
+
+        // when one of the child finishes
+        // pass its state back to parent to merge the graph
+        // for now, it's unneccesary to notify parent.
+        // But it's needed in later optimization
+        while(true){
+            when finish(bool res, std::vector<vertex> state) atomic{
+                
+                //-----------DEBUG CODE BELOW-------------------
+                //CkPrintf("A child finish in Chare[uncolor=%d]; \
+                //    res=%d\n", uncolored_num_, res);
+                //-----------DEBUG CODE ABOVE------------------
+
+                child_finished_ ++;
+
+                bool waitChild = mergeToParent(res, state);
+                if(!waitChild)
+                    return;
+            }
+        }
+
+    };
   };
 };

@@ -4,9 +4,11 @@
 #include "boost/program_options.hpp"
 #include "graphColor.h"
 
+/*readonly*/
 CProxy_Main mainProxy;
 AdjListType adjList_;
 int vertices_;
+int chromaticNum_;
 
 Main::Main(CkArgMsg* msg):newGraph("no") {
 
@@ -14,31 +16,36 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
   // parseInputFile(filename.c_str(),  adjList_);
 
   parseCommandLine(msg->argc, msg->argv);
-  
+
+  CkPrintf("finish parseing commandline\n");
+
   /* reads the adjacency list from python */
   readDataFromPython(msg->argc, msg->argv);
   vertices_ = adjList_.size();
-  
+  delete msg;
+ 
   /* TODO: read from somewhere? */
-  uint64_t chromaticNum=7;  
+  chromaticNum_= getConservativeChromaticNum();
   mainProxy= thisProxy;
+
 
   CkPrintf("Mainchare constructor..\n");
   std::cout << adjList_;  
-  std::cout << "Number of vertices = "<<vertices_<<"\n";  
+  std::cout << "Number of vertices = "<< vertices_<< std::endl;
+  std::cout << "Number of colors = " << chromaticNum_ << std::endl;
 
-  std::vector<vertex> iState(vertices_, chromaticNum);
-  populateInitialState(iState);
-
-  std::vector<int> colorsPoss = getNextConstraintVertex(iState);
-  /* 1. Create |colorsPoss| copies of iState.
-   * 2. Update color and neighbr of each copy
-   * 3. Spawn new Node chare for each copy
-   */
-
-  CProxy_Node n = CProxy_Node::ckNew();
-  n.testGraph(iState);
-  delete msg;
+  /*----------------------------------------
+   * TODO: if the graph is partial colored
+   * we need to initialize the original nodeState
+   *    std::vector<vertex> initializedState(vertices_, chromaticNum_)
+   *    populateInitialState(initializeState);
+   *    ckNew(initializeState, true)
+   * For now we only create root node with empty uncolored state
+   * ---------------------------------------*/
+  CProxy_Node node = CProxy_Node::ckNew(true, vertices_,
+          (CProxy_Node)thisProxy);
+   
+  //n.testGraph(iState);
 }
 
 Main::Main(CkMigrateMessage* msg) {}
@@ -159,5 +166,54 @@ void Main::populateInitialState(std::vector<vertex>& iState) {
 
 }
 
+/*
+ * For each vertices, this algo  tries to assign the minimum possible color
+ * depending on its nghs.
+ */
+int Main::getConservativeChromaticNum() {
+
+  int size = adjList_.size();
+  int *colors   = (int *) malloc(sizeof(int) * size);
+  int init_s = 10;
+  std::vector<int> colorsUsedByNgh(init_s);
+  for(int i = 0 ; i < size ; i ++) colors[i] = 0;
+  int bestColor;
+
+  for (AdjListType::const_iterator it = adjList_.begin(); it != adjList_.end(); ++it) {
+
+    int toBeColored = (*it).first;
+    for(std::list<int>::const_iterator jt = it->second.begin(); jt != it->second.end(); jt++ ) {
+      colorsUsedByNgh[colors[*jt]] = 1;
+    }
+
+    for(int j = 1 ; j < colorsUsedByNgh.size() ; j++) {
+      if(0 == colorsUsedByNgh[j]) {
+        bestColor = j;
+        break;
+      } else {
+        colorsUsedByNgh[j] = 0;
+      }
+    }
+    for(int j = bestColor +1; j < colorsUsedByNgh.size(); j++) {
+        colorsUsedByNgh[j] = 0;
+    }
+
+    if(bestColor == init_s - 2) {
+      init_s = init_s*2;
+      colorsUsedByNgh.resize(init_s);
+    }
+
+    colors[toBeColored] = bestColor;
+  }
+
+  int retVal = -1;
+  for(int i = 0 ; i < size ; i++) {
+  //  CkPrintf("V: %d --> C:%d\n", i, colors[i]);
+    if(retVal < colors[i]) retVal = colors[i];
+  }
+  return retVal;
+
+
+}
 
 #include "Module.def.h" 
