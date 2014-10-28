@@ -17,14 +17,13 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
 
   parseCommandLine(msg->argc, msg->argv);
 
-  CkPrintf("finish parseing commandline\n");
+  CkPrintf("finish parsing commandline\n");
 
   /* reads the adjacency list from python */
   readDataFromPython(msg->argc, msg->argv);
   vertices_ = adjList_.size();
   delete msg;
  
-  /* TODO: read from somewhere? */
   chromaticNum_= getConservativeChromaticNum();
   mainProxy= thisProxy;
 
