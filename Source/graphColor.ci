@@ -24,9 +24,11 @@ mainchare Main {
             //this->printGraph();
             //-----DEBUG USE ABOVE--------
 
-            //for now, THRESHOLD is set to 1
-            //colorLocally() choose the first available color
-            //for the remaining 1 vertex
+            /* For a given chare if the number of uncolored vertices is below a
+             * threshold then it colors them locally using a naive sequential
+             * algorithm. (for now, THRESHOLD is set to 1).
+             */
+
             if(uncolored_num_ <= THRESHOLD){
                 colorLocally();
                 return;
@@ -35,18 +37,17 @@ mainchare Main {
             }
         }
 
-        // when one of the child finishes
-        // pass its state back to parent to merge the graph
-        // for now, it's unneccesary to notify parent.
-        // But it's needed in later optimization
+        /* When  one of the child finishes, either it finds the solution or
+         * gets into an dead end, it notifies its parent.  In the former case
+         * the parent can either propagate the victory information to its
+         * parent(in case of OR tree) or wait for another children to respond (in case of AND tree).
+         * Also the parent needs to make sure that all the other chares should stop
+         * evaluating their subtrees.
+         */
+
         while(true){
             when finish(bool res, std::vector<vertex> state) atomic{
                 
-                //-----------DEBUG CODE BELOW-------------------
-                //CkPrintf("A child finish in Chare[uncolor=%d]; \
-                //    res=%d\n", uncolored_num_, res);
-                //-----------DEBUG CODE ABOVE------------------
-
                 child_finished_ ++;
 
                 bool waitChild = mergeToParent(res, state);
