@@ -16,6 +16,7 @@ mainchare Main {
     entry Node(bool, int, CProxy_Node);
     entry Node(std::vector<vertex>, bool, int, CProxy_Node);
     entry void testGraph(std::vector<vertex>&);
+
     entry void finish(bool, std::vector<vertex>);
 
     entry void run(){
@@ -30,9 +31,20 @@ mainchare Main {
             if(uncolored_num_ <= THRESHOLD){
                 colorLocally();
                 return;
-            } else {
-                colorRemotely();
             }
+            
+            if(is_root_){
+                //TODO:
+                // add "preprocess" function calls here
+                // Please set up is_and_node_=true if it creates subgraphs
+                // it means all children should reply
+                // default is false, only requires 1 success reply 
+            }
+
+            //TODO: should we check threshold again?
+            //because preprocess may reduce the uncolored number
+
+            colorRemotely();
         }
 
         // when one of the child finishes
@@ -47,9 +59,8 @@ mainchare Main {
                 //    res=%d\n", uncolored_num_, res);
                 //-----------DEBUG CODE ABOVE------------------
 
-                child_finished_ ++;
-
                 bool waitChild = mergeToParent(res, state);
+
                 if(!waitChild)
                     return;
             }
