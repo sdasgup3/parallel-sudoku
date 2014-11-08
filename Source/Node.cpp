@@ -7,7 +7,8 @@
  * ---------------------------------------*/
 Node::Node(bool isRoot, int n, CProxy_Node parent) :
     parent_(parent), uncolored_num_(n), is_root_(isRoot),
-    child_num_(0), child_finished_(0)
+    child_num_(0), child_finished_(0), 
+    child_succeed_(0), is_and_node_(false)
 {
     vertex v = vertex(chromaticNum_);
     node_state_ = std::vector<vertex>(vertices_, v);
@@ -21,7 +22,8 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
  * ---------------------------------------------*/
 Node::Node(std::vector<vertex> state, bool isRoot, int n, CProxy_Node parent)
     : parent_(parent), uncolored_num_(n), node_state_(state),
-    is_root_(isRoot), child_num_(0), child_finished_(0)
+    is_root_(isRoot), child_num_(0), child_finished_(0),
+    child_succeed_(0), is_and_node_(false)
 {
     thisProxy.run();
 }
@@ -50,7 +52,7 @@ int Node::getNextConstraintVertex(){
 }
 
 /*---------------------------------------------
- * update a ppsed in state
+ * update a passed in state
  * by colorig vertex[vIndex] with color c
  * and update all its neighbors corresponding possible colors
  * --------------------------------------------*/
@@ -103,15 +105,34 @@ void Node::colorLocally(){
  * - fire a child chare to color the remaining
  *   ----------------------------------------*/
 void Node::colorRemotely(){
+
+    if(is_and_node_){
+        //TODO: call "Detect and Create Subgraph" functions here
+        //TODO: fire children based on the subgraphs
+        //return;
+    }
+
+    // -----------------------------------------
+    // Following code deals with case is_and_node=false
+    // -----------------------------------------
+
+
+    //TODO: call "Pre-Color" Functions here
+    //TODO: call "Vertex Remove" Function here
+    //add variable in graphcolor.h file if needed
+
+
+    //TODO: "Grainsize control" requires modify code below
     //get the vertex to color
     int vIndex = this->getNextConstraintVertex();
-            
+
     boost::dynamic_bitset<> possibleColor(
             node_state_[vIndex].getPossibleColor());
     child_num_ = possibleColor.count();
 
     //test whehter colorable or not
     //return false if uncolorable
+    //TODO: for each vertice, do "Impossible Test and Forced Moves"
     if(!possibleColor.any()){
         parent_.finish(false, node_state_);
         return;
@@ -136,6 +157,7 @@ void Node::colorRemotely(){
         std::vector<vertex> new_state = node_state_;
         updateState(new_state, vIndex, c);
         //fire new child
+        //TODO: "Value Numbering and Prioritization"
         CProxy_Node child = CProxy_Node::ckNew
             (new_state, false, uncolored_num_-1, thisProxy);
     }
@@ -151,33 +173,58 @@ void Node::colorRemotely(){
  *  current implementation doesn't need to merge the graph
  *  but will be needed with later optimization
  * -------------------------------------------------*/
-bool Node::mergeToParent(bool res, std::vector<vertex> state){
-    bool waitChild = true;
-    if(is_root_ && res){
-        // In Root and successfully colored
-        node_state_ = state;
-        printGraph();
-        CkExit();
-        waitChild = false;
-    } else if(!is_root_ && res){
+bool Node::mergeToParent(int ref, bool res, std::vector<vertex> state){
+    
+    child_finished_ ++;
+    if(res==true){
+        child_succeed_++;
+    }
+
+    bool success = is_and_node_ ?
+                  //if it's and node, success means all children succeed
+                  child_succeed_==child_num_ :
+                  //if it's or node, success means at least one child succeed
+                  (child_succeed_!=0);
+    //if all children return, don't need to wait
+    bool finish  = (child_finished_ == child_num_); 
+    finish  |= is_and_node_ ?
+               //if it's and node,
+               //return success, terminate if finish=num
+               //return fail, terminate if one fail
+               (child_succeed_!=child_finished_) :
+               //if it's or node,
+               //return success, terminate one success
+               //return fail, terminate all finish
+               (child_succeed_!=0);
+
+    if(is_and_node_){
+        //TODO: call "Merge Subgraph" here
+        //Attention: it's different from merge from stack
+    }
+
+    if(is_root_ && finish){
+        // In Root and don't need to wait anymore
+        if(success){
+            // TODO: call "Merge From Stack" here
+            // it's coupled with "Vertex Removal"
+            node_state_ = state;
+            printGraph();
+            CkExit();
+        } else {
+            CkPrintf("Fail to color!\n");
+            CkExit();
+        }
+    } else if(!is_root_ && finish){
         // In one child, successfully colored
         // TODO:: once it succeeds, it should notify other child chares
         // sharing the same parent to stop working
-        parent_.finish(true, state);
-        waitChild = false;
-    } else if(!res && child_finished_==child_num_){
-        // All children respond failure
-        if(is_root_){
-            CkPrintf("Fail to color!\n");
-            CkExit();
-        } else {
-            parent_.finish(false, state);
-        }
-        waitChild = false;
-    } else {
-        waitChild = true;
-    }
-    return waitChild;
+        // TODO:: add real merge function here
+        node_state_ = state;
+        parent_.finish(success, node_state_);
+    } //else not finish
+    //keep wait
+    
+    return !finish;
 }
 
 /* --------------------------------------------

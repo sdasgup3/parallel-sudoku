@@ -35,8 +35,11 @@ class Node: public CBase_Node {
     bool is_root_;
     CProxy_Node parent_;
     int uncolored_num_;//number of uncolored vertex
-    int child_num_;
-    int child_finished_;
+    int child_num_;//number of children this chare creates
+                                //each element corresponds to a subgraph
+    int child_finished_;//current finished children
+    int child_succeed_;
+    bool is_and_node_;//set to true if it requires all children reply
 
   public:
     // default constructor creats root node
