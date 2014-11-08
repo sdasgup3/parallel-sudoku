@@ -173,7 +173,7 @@ void Node::colorRemotely(){
  *  current implementation doesn't need to merge the graph
  *  but will be needed with later optimization
  * -------------------------------------------------*/
-bool Node::mergeToParent(int ref, bool res, std::vector<vertex> state){
+bool Node::mergeToParent(bool res, std::vector<vertex> state){
     
     child_finished_ ++;
     if(res==true){
