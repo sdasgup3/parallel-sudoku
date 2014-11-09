@@ -4,7 +4,6 @@
 #include "boost/program_options.hpp"
 #include "graphColor.h"
 
-/*readonly*/
 CProxy_Main mainProxy;
 AdjListType adjList_;
 int vertices_;
@@ -12,12 +11,7 @@ int chromaticNum_;
 
 Main::Main(CkArgMsg* msg):newGraph("no") {
 
-  /* Parse the file and populate the graph*/
-  // parseInputFile(filename.c_str(),  adjList_);
-
   parseCommandLine(msg->argc, msg->argv);
-
-  CkPrintf("finish parsing commandline\n");
 
   /* reads the adjacency list from python */
   readDataFromPython(msg->argc, msg->argv);
@@ -28,7 +22,6 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
   mainProxy= thisProxy;
 
 
-  CkPrintf("Mainchare constructor..\n");
   std::cout << adjList_;  
   std::cout << "Number of vertices = "<< vertices_<< std::endl;
   std::cout << "Number of colors = " << chromaticNum_ << std::endl;
@@ -44,7 +37,6 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
   CProxy_Node node = CProxy_Node::ckNew(true, vertices_,
           (CProxy_Node)thisProxy);
    
-  //n.testGraph(iState);
 }
 
 Main::Main(CkMigrateMessage* msg) {}
@@ -169,7 +161,8 @@ void Main::populateInitialState(std::vector<vertex>& iState) {
  * For each vertices, this algo  tries to assign the minimum possible color
  * depending on its nghs.
  */
-int Main::getConservativeChromaticNum() {
+int Main::getConservativeChromaticNum() 
+{
 
   int size = adjList_.size();
   int *colors   = (int *) malloc(sizeof(int) * size);

@@ -34,12 +34,12 @@ class Node: public CBase_Node {
     std::vector<vertex> node_state_;
     bool is_root_;
     CProxy_Node parent_;
-    int uncolored_num_;//number of uncolored vertex
-    int child_num_;//number of children this chare creates
-                                //each element corresponds to a subgraph
-    int child_finished_;//current finished children
+    int uncolored_num_;   //number of uncolored vertex
+    int child_num_;       //number of children this chare creates
+                          //each element corresponds to a subgraph
+    int child_finished_;  //current finished children
     int child_succeed_;
-    bool is_and_node_;//set to true if it requires all children reply
+    bool is_and_node_;    //set to true if it requires all children reply
 
   public:
     // default constructor creats root node
@@ -47,8 +47,6 @@ class Node: public CBase_Node {
     Node(std::vector<vertex> state, bool isRoot,
             int n, CProxy_Node parent);
     Node (CkMigrateMessage*);
-    // ?? what this used for
-    void testGraph(std::vector<vertex>& );
 
     // return the most constrained vertex id/index in vector
     int getNextConstraintVertex();

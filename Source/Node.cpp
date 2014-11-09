@@ -1,5 +1,6 @@
 #include "graphColor.h"
 #include "string"
+
 /* -----------------------------------------
  * Node Constructor with bool parameters
  * initialize node_state_ with adjList
@@ -125,6 +126,7 @@ void Node::colorRemotely(){
     //TODO: "Grainsize control" requires modify code below
     //get the vertex to color
     int vIndex = this->getNextConstraintVertex();
+    CkAssert(vIndex!=-1);
 
     boost::dynamic_bitset<> possibleColor(
             node_state_[vIndex].getPossibleColor());
@@ -173,7 +175,8 @@ void Node::colorRemotely(){
  *  current implementation doesn't need to merge the graph
  *  but will be needed with later optimization
  * -------------------------------------------------*/
-bool Node::mergeToParent(bool res, std::vector<vertex> state){
+bool Node::mergeToParent(bool res, std::vector<vertex> state)
+{
     
     child_finished_ ++;
     if(res==true){
@@ -185,6 +188,7 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state){
                   child_succeed_==child_num_ :
                   //if it's or node, success means at least one child succeed
                   (child_succeed_!=0);
+
     //if all children return, don't need to wait
     bool finish  = (child_finished_ == child_num_); 
     finish  |= is_and_node_ ?
@@ -242,13 +246,3 @@ void Node::printGraph(){
     }
     CkPrintf("\n-------------------------------\n");
 }
-
-
-void Node::testGraph(std::vector<vertex>& state) {
-  
-  CkPrintf("\nFrom Chare\n");
-  std::cout << adjList_;  
-  std::cout << "Number of vertices = "<<vertices_<<"\n";
-  CkExit();
-}
-

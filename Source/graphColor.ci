@@ -7,7 +7,7 @@ mainmodule Module {
   readonly int vertices_;
   readonly int chromaticNum_;
 
-mainchare Main {
+  mainchare Main {
     entry Main(CkArgMsg*);
     entry [reductiontarget] void done(void);
   };
@@ -15,7 +15,6 @@ mainchare Main {
   chare Node { 
     entry Node(bool, int, CProxy_Node);
     entry Node(std::vector<vertex>, bool, int, CProxy_Node);
-    entry void testGraph(std::vector<vertex>&);
 
     entry void finish(bool, std::vector<vertex>);
 
