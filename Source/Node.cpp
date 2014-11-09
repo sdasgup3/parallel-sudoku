@@ -8,7 +8,7 @@
  * ---------------------------------------*/
 Node::Node(bool isRoot, int n, CProxy_Node parent) :
     parent_(parent), uncolored_num_(n), is_root_(isRoot),
-    child_num_(0), child_finished_(0), 
+    child_num_(0), child_finished_(0),  vertexColored(-1),
     child_succeed_(0), is_and_node_(false)
 {
     vertex v = vertex(chromaticNum_);
@@ -21,8 +21,8 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
  * Node constructor with two parameters
  * used to fire child node by state configured
  * ---------------------------------------------*/
-Node::Node(std::vector<vertex> state, bool isRoot, int n, CProxy_Node parent)
-    : parent_(parent), uncolored_num_(n), node_state_(state),
+Node::Node(std::vector<vertex> state, bool isRoot, int uncol, int vColored,  CProxy_Node parent)
+    : parent_(parent), uncolored_num_(uncol), node_state_(state), vertexColored(vColored),
     is_root_(isRoot), child_num_(0), child_finished_(0),
     child_succeed_(0), is_and_node_(false)
 {
@@ -34,22 +34,32 @@ Node::Node (CkMigrateMessage*)
 }
 
 /* ----------------------------------------------
- * return the index of next constrained vertex
- * the vertex list will be got from its node_state
- *  For current implementation, we choose the first uncolored node
+ *  Return the index of next uncolored vertex which
+ *  is most constrained.
+ *  This heuristic will choose a vertex with the
+ *  fewest colors available to it. 
+ * 
+ *  Return: index of most constrained vertex which is
+ *  Else -1;
  *  ----------------------------------------------*/
 int Node::getNextConstraintVertex(){
 
-    //choose first uncolored node
-    for(std::vector<vertex>::iterator it=node_state_.begin(); 
-            it!=node_state_.end(); it++){
-        if(it->isColored()==false){
-            return std::distance(node_state_.begin(), it);
-        }
-    }
-    // all finished coloring
-    return -1;
+    int cVertex, cVextexPossColor; 
 
+    cVertex = -1;
+    cVextexPossColor = chromaticNum_ + 1;
+
+    for(int  i = 0 ; i < node_state_.size(); i++){
+      if(node_state_[i].isColored() == false){
+        boost::dynamic_bitset<> possibleColor = node_state_[i].getPossibleColor(); 
+        if(cVextexPossColor > possibleColor.count() ) {
+          cVertex = i;
+          cVextexPossColor = possibleColor.count() ;
+        }
+      }
+    }
+
+    return cVertex;
 }
 
 /*---------------------------------------------
@@ -124,7 +134,6 @@ void Node::colorRemotely(){
 
 
     //TODO: "Grainsize control" requires modify code below
-    //get the vertex to color
     int vIndex = this->getNextConstraintVertex();
     CkAssert(vIndex!=-1);
 
@@ -160,8 +169,10 @@ void Node::colorRemotely(){
         updateState(new_state, vIndex, c);
         //fire new child
         //TODO: "Value Numbering and Prioritization"
+
+        //CkPrintf("Node [%d] fires child [%d] with color [%d]\n", vertexColored, vIndex, c);
         CProxy_Node child = CProxy_Node::ckNew
-            (new_state, false, uncolored_num_-1, thisProxy);
+            (new_state, false, uncolored_num_-1, vIndex, thisProxy);
     }
 
 }
@@ -212,6 +223,7 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
             // TODO: call "Merge From Stack" here
             // it's coupled with "Vertex Removal"
             node_state_ = state;
+            CkAssert(1 == isColoringValid(node_state_));
             printGraph();
             CkExit();
         } else {
@@ -245,4 +257,25 @@ void Node::printGraph(){
         CkPrintf("vertex[%d]:color[%d] ;\n", i, node_state_[i].getColor());
     }
     CkPrintf("\n-------------------------------\n");
+}
+
+/* --------------------------------------------
+ * Checks if the reported coloring is valid.
+ * -------------------------------------------*/
+bool Node::isColoringValid(std::vector<vertex> state)
+{
+  for (AdjListType::const_iterator it = adjList_.begin(); it != adjList_.end(); ++it) {
+
+    int iColor = state[(*it).first].getColor();
+
+    if(iColor >= chromaticNum_) return 0; 
+
+    for(std::list<int>::const_iterator jt = it->second.begin(); jt != it->second.end(); jt++ ) {
+      int jColor = state[*jt].getColor();
+      if(jColor >= chromaticNum_) return 0; 
+      if(iColor == jColor) return 0;
+    }
+
+  }  
+  return  1;
 }

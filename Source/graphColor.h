@@ -33,6 +33,7 @@ class Node: public CBase_Node {
   private:
     std::vector<vertex> node_state_;
     bool is_root_;
+    int vertexColored;    //The vertex colored in this node;Debug purpose
     CProxy_Node parent_;
     int uncolored_num_;   //number of uncolored vertex
     int child_num_;       //number of children this chare creates
@@ -45,7 +46,7 @@ class Node: public CBase_Node {
     // default constructor creats root node
     Node(bool isRoot, int n, CProxy_Node parent);
     Node(std::vector<vertex> state, bool isRoot,
-            int n, CProxy_Node parent);
+            int n, int, CProxy_Node parent);
     Node (CkMigrateMessage*);
 
     // return the most constrained vertex id/index in vector
@@ -72,6 +73,9 @@ class Node: public CBase_Node {
     // and how to respond to its parent
     // reutrn whether need to wait for another child or not
     bool mergeToParent(bool, std::vector<vertex>);
+
+    //Checks if the reported coloring is valid. 
+    bool isColoringValid(std::vector<vertex>);
 };
 
 

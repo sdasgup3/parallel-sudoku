@@ -14,7 +14,7 @@ mainmodule Module {
   
   chare Node { 
     entry Node(bool, int, CProxy_Node);
-    entry Node(std::vector<vertex>, bool, int, CProxy_Node);
+    entry Node(std::vector<vertex>, bool, int, int, CProxy_Node);
 
     entry void finish(bool, std::vector<vertex>);
 
@@ -26,7 +26,7 @@ mainmodule Module {
 
             /* For a given chare if the number of uncolored vertices is below a
              * threshold then it colors them locally using a naive sequential
-             * algorithm. (for now, THRESHOLD is set to 1).
+             * algorithm. (for now, THRESHOLD is set to 1)  .
              */
 
             if(uncolored_num_ <= THRESHOLD){
