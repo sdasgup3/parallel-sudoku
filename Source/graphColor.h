@@ -2,6 +2,7 @@
 #define _GRAPHCOLOR_H
 
 #include "Module.decl.h" 
+#include <queue>
 
 /*readonly*/
 #define THRESHOLD (1)
@@ -10,6 +11,14 @@ extern AdjListType adjList_;
 extern int vertices_;
 extern int chromaticNum_;
 
+class compareColorRank {
+  public:
+    bool operator()(std::pair<int, int> &p1, std::pair<int, int>  &p2)
+    {
+      return p1.second < p2.second;
+    }
+};
+typedef std::priority_queue <std::pair<int,int>, std::vector<std::pair<int,int> >, compareColorRank> pq_type;
 
 class Main : public CBase_Main {
   private:
@@ -49,8 +58,8 @@ class Node: public CBase_Node {
             int n, int, CProxy_Node parent);
     Node (CkMigrateMessage*);
 
-    // return the most constrained vertex id/index in vector
     int getNextConstraintVertex();
+    pq_type getValueOrderingOfColors(int);
 
     // update a passed in state
     // by coloring vertex[vIndex] with color c

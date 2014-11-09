@@ -41,7 +41,8 @@ Node::Node (CkMigrateMessage*)
  * 
  *  Return: index of most constrained vertex which is
  *  Else -1;
- *  ----------------------------------------------*/
+ *  ----------------------------------------------
+ */
 int Node::getNextConstraintVertex(){
 
     int cVertex, cVextexPossColor; 
@@ -62,6 +63,40 @@ int Node::getNextConstraintVertex(){
     return cVertex;
 }
 
+/* ----------------------------------------------
+ *  For a vertex id 'vIndex', returns the ordering of 
+ *  possible colors, i.e. c1 < c2, such that if we color vIndex with
+ *  c1 then the number of possible colorings of its neighbours 
+ *  will be more than the number if vIndex is colored with c2. 
+ *  ----------------------------------------------
+ */
+pq_type Node::getValueOrderingOfColors(int vIndex) 
+{
+  int rank; 
+  pq_type  priorityColors;
+
+  boost::dynamic_bitset<> possibleColor = node_state_[vIndex].getPossibleColor();
+  if(false == possibleColor.any()) {
+    return priorityColors;
+  }
+
+  std::list<int> neighbours = adjList_[vIndex];
+
+  for(boost::dynamic_bitset<>::size_type c=0; c<possibleColor.size(); c++){
+    if(false == possibleColor.test(c)) {
+      continue;
+    }
+    
+    rank = 0 ;
+    for(std::list<int>::const_iterator jt = neighbours.begin(); jt != neighbours.end(); jt++ ) {
+      boost::dynamic_bitset<> possibleColorOfNgb  = node_state_[*jt].getPossibleColor();
+      rank = rank +  possibleColorOfNgb.test(c) ? possibleColorOfNgb.count() -1 : possibleColorOfNgb.count();
+    }
+    priorityColors.push(std::pair<int,int>(c,rank));
+  }
+  return priorityColors;
+}
+
 /*---------------------------------------------
  * update a passed in state
  * by colorig vertex[vIndex] with color c
@@ -69,7 +104,6 @@ int Node::getNextConstraintVertex(){
  * --------------------------------------------*/
 void Node::updateState(std::vector<vertex> & state, int vIndex, int c){
     state[vIndex].setColor(c);
-    // remove possible color c from all the neighbors of vIndex
     for(std::list<int>::iterator it=adjList_[vIndex].begin();
             it!=adjList_[vIndex].end(); it++){
         state[*it].removePossibleColor(c);
@@ -114,6 +148,7 @@ void Node::colorLocally(){
  * - try each one
  * - update its neighbors
  * - fire a child chare to color the remaining
+    //Spawn a node chare in priority order for each possible  color.
  *   ----------------------------------------*/
 void Node::colorRemotely(){
 
@@ -137,41 +172,27 @@ void Node::colorRemotely(){
     int vIndex = this->getNextConstraintVertex();
     CkAssert(vIndex!=-1);
 
-    boost::dynamic_bitset<> possibleColor(
-            node_state_[vIndex].getPossibleColor());
+    //Test if the `vIndex` vertex is colorable.
+    //Return false if un-colorable
+    boost::dynamic_bitset<> possibleColor = node_state_[vIndex].getPossibleColor();
     child_num_ = possibleColor.count();
-
-    //test whehter colorable or not
-    //return false if uncolorable
-    //TODO: for each vertice, do "Impossible Test and Forced Moves"
     if(!possibleColor.any()){
         parent_.finish(false, node_state_);
         return;
     }
 
-    //---------DEUBG USE BELOW------------
-    //CkPrintf("In Chare[uncolor=%d],try to color vertex[%d] with %d colors\n",
-    //        uncolored_num_, vIndex, possibleColor.count());
-    //--------DEBUG USE ABOVE-------------
+    pq_type priorityColors = getValueOrderingOfColors(vIndex);
 
-    // for each possible color
-    // try it and create corresponding node state
-    // to fire children
-    for(boost::dynamic_bitset<>::size_type c=0;
-            c<possibleColor.size(); c++){
-        //if the color is not possible, skip it
-        if(!possibleColor.test(c))
-            continue;
+    //TODO: for each vertice, do "Impossible Test and Forced Moves"
 
-        //get possible color c, and color it
-        //update neighbor's possible_color_
-        std::vector<vertex> new_state = node_state_;
-        updateState(new_state, vIndex, c);
-        //fire new child
-        //TODO: "Value Numbering and Prioritization"
+    while (! priorityColors.empty()) {
 
-        //CkPrintf("Node [%d] fires child [%d] with color [%d]\n", vertexColored, vIndex, c);
-        CProxy_Node child = CProxy_Node::ckNew
+      std::pair<int,int> p =  priorityColors.top();
+      priorityColors.pop();
+
+      std::vector<vertex> new_state = node_state_;
+      updateState(new_state, vIndex, p.first);
+      CProxy_Node child = CProxy_Node::ckNew
             (new_state, false, uncolored_num_-1, vIndex, thisProxy);
     }
 
