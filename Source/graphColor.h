@@ -60,6 +60,8 @@ class Node: public CBase_Node {
 
     int getNextConstraintVertex();
     pq_type getValueOrderingOfColors(int);
+    void preColor();
+    void colorClique3(int i, int j, int k);
 
     // update a passed in state
     // by coloring vertex[vIndex] with color c

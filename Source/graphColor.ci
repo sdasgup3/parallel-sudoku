@@ -11,7 +11,7 @@ mainmodule Module {
     entry Main(CkArgMsg*);
     entry [reductiontarget] void done(void);
   };
-  
+
   chare Node { 
     entry Node(bool, int, CProxy_Node);
     entry Node(std::vector<vertex>, bool, int, int, CProxy_Node);
@@ -19,57 +19,57 @@ mainmodule Module {
     entry void finish(bool, std::vector<vertex>);
 
     entry void run(){
-        atomic { 
-            //-----DEBUG USE BELOW--------
-            //this->printGraph();
-            //-----DEBUG USE ABOVE--------
+      atomic { 
+        //-----DEBUG USE BELOW--------
+        //this->printGraph();
+        //-----DEBUG USE ABOVE--------
 
-            /* For a given chare if the number of uncolored vertices is below a
-             * threshold then it colors them locally using a naive sequential
-             * algorithm. (for now, THRESHOLD is set to 1)  .
-             */
-
-            if(uncolored_num_ <= THRESHOLD){
-                colorLocally();
-                return;
-            }
-            
-            if(is_root_){
-                //TODO:
-                // add "preprocess" function calls here
-                // Please set up is_and_node_=true if it creates subgraphs
-                // it means all children should reply
-                // default is false, only requires 1 success reply 
-            }
-
-            //TODO: should we check threshold again?
-            //because preprocess may reduce the uncolored number
-
-            colorRemotely();
-        }
-
-        /* When  one of the child finishes, either it finds the solution or
-         * gets into an dead end, it notifies its parent.  In the former case
-         * the parent can either propagate the victory information to its
-         * parent(in case of OR tree) or wait for another children to respond (in case of AND tree).
-         * Also the parent needs to make sure that all the other chares should stop
-         * evaluating their subtrees.
+        /* For a given chare if the number of uncolored vertices is below a
+         * threshold then it colors them locally using a naive sequential
+         * algorithm. (for now, THRESHOLD is set to 1)  .
          */
 
-        while(true){
-            when finish(bool res, std::vector<vertex> state) atomic{
-                
-                //-----------DEBUG CODE BELOW-------------------
-                //CkPrintf("A child finish in Chare[uncolor=%d]; \
-                //    res=%d\n", uncolored_num_, res);
-                //-----------DEBUG CODE ABOVE------------------
-
-                bool waitChild = mergeToParent(res, state);
-
-                if(!waitChild)
-                    return;
-            }
+        if(uncolored_num_ <= THRESHOLD){
+          colorLocally();
+          return;
         }
+
+        if(is_root_){
+          //TODO:
+          // add "preprocess" function calls here
+          // Please set up is_and_node_=true if it creates subgraphs
+          // it means all children should reply
+          // default is false, only requires 1 success reply 
+        }
+
+        //TODO: should we check threshold again?
+        //because preprocess may reduce the uncolored number
+
+        colorRemotely();
+      }
+
+      /* When  one of the child finishes, either it finds the solution or
+       * gets into an dead end, it notifies its parent.  In the former case
+       * the parent can either propagate the victory information to its
+       * parent(in case of OR tree) or wait for another children to respond (in case of AND tree).
+       * Also the parent needs to make sure that all the other chares should stop
+       * evaluating their subtrees.
+       */
+
+      while(true){
+        when finish(bool res, std::vector<vertex> state) atomic{
+
+          //-----------DEBUG CODE BELOW-------------------
+          //CkPrintf("A child finish in Chare[uncolor=%d]; \
+          //    res=%d\n", uncolored_num_, res);
+          //-----------DEBUG CODE ABOVE------------------
+
+          bool waitChild = mergeToParent(res, state);
+
+          if(!waitChild)
+            return;
+        }
+      }
 
     };
   };

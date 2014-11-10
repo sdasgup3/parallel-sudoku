@@ -26,14 +26,6 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
   std::cout << "Number of vertices = "<< vertices_<< std::endl;
   std::cout << "Number of colors = " << chromaticNum_ << std::endl;
 
-  /*----------------------------------------
-   * TODO: if the graph is partial colored
-   * we need to initialize the original nodeState
-   *    std::vector<vertex> initializedState(vertices_, chromaticNum_)
-   *    populateInitialState(initializeState);
-   *    ckNew(initializeState, true)
-   * For now we only create root node with empty uncolored state
-   * ---------------------------------------*/
   CProxy_Node node = CProxy_Node::ckNew(true, vertices_,
           (CProxy_Node)thisProxy);
    
