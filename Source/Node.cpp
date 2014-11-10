@@ -133,11 +133,12 @@ int Node::getNextConstraintVertex(){
  *  possible colors, i.e. c1 < c2, such that if we color vIndex with
  *  c1 then the number of possible colorings of its neighbours 
  *  will be more than the number if vIndex is colored with c2. 
+ *  Also, if for a color c, the nghbr of vIndex reduced to
+ *  0 possible colors, then that c will not be considered.(Impossibility Testing)
  *  ----------------------------------------------
  */
 pq_type Node::getValueOrderingOfColors(int vIndex) 
 {
-  int rank; 
   pq_type  priorityColors;
 
   boost::dynamic_bitset<> possibleColor = node_state_[vIndex].getPossibleColor();
@@ -151,13 +152,21 @@ pq_type Node::getValueOrderingOfColors(int vIndex)
     if(false == possibleColor.test(c)) {
       continue;
     }
+    bool impossColoring = false;
+    int rank = 0 ;
 
-    rank = 0 ;
     for(std::list<int>::const_iterator jt = neighbours.begin(); jt != neighbours.end(); jt++ ) {
       boost::dynamic_bitset<> possibleColorOfNgb  = node_state_[*jt].getPossibleColor();
-      rank = rank +  possibleColorOfNgb.test(c) ? possibleColorOfNgb.count() -1 : possibleColorOfNgb.count();
+      int count = possibleColorOfNgb.test(c) ? possibleColorOfNgb.count() -1 : possibleColorOfNgb.count();
+      if(0 == count) {
+        impossColoring = true;
+        break;
+      }
+      rank = rank +  count;
     }
-    priorityColors.push(std::pair<int,int>(c,rank));
+    if(false == impossColoring) {
+      priorityColors.push(std::pair<int,int>(c,rank));
+    }
   }
   return priorityColors;
 }
@@ -214,15 +223,20 @@ void Node::colorLocally(){
 }
 
   /*-------------------------------------------
-   * color remotely
-   * TODO: maybe the function name is not that clear,
-   * can change later
-   * TODO: most heuristic methods are supposed to be put here
-   * - for the choosed index and its possible colors
-   * - try each one
-   * - update its neighbors
-   * - fire a child chare to color the remaining
-  //Spawn a node chare in priority order for each possible  color.
+   * A Node coloring routine which does the following 
+   *  - Find the next constrained vertex, vIndex  (variable Ordering)
+   *  - Test if the `vIndex` vertex is colorable. Return false if not.
+   *  - Find the colors possible for vIndex (Value Ordering of Colors)
+   *    - The colors will be found in the priority order   
+   *    - If for a perticular color option, one of the ngb of
+   *      vIndex is reduced to zero available colors, then dont consider that
+   *      color. (Impossibility Testing)
+   *  - Spawn a new node state in priority order for each possible  color.
+   *    - In that Node state, mark the color of vIndex
+   *    - Update the coloring info for ngbs of vIndex
+   *    - If by coloring vIndex with a particular color
+   *      one of its ngbs reduced to one color possibility,
+   *      then color that vertex as well recursively. (Forced Move) 
    *   ----------------------------------------*/
   void Node::colorRemotely(){
 
@@ -245,8 +259,6 @@ void Node::colorLocally(){
     int vIndex = this->getNextConstraintVertex();
     CkAssert(vIndex!=-1);
 
-    //Test if the `vIndex` vertex is colorable.
-    //Return false if un-colorable
     boost::dynamic_bitset<> possibleColor = node_state_[vIndex].getPossibleColor();
     child_num_ = possibleColor.count();
     if(!possibleColor.any()){
