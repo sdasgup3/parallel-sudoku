@@ -3,6 +3,7 @@
 
 #include "Module.decl.h" 
 #include <queue>
+#include <stack>
 
 /*readonly*/
 #define THRESHOLD (1)
@@ -41,6 +42,7 @@ class Node: public CBase_Node {
 
   private:
     std::vector<vertex> node_state_;
+    std::stack<int> deletedV;
     bool is_root_;
     int vertexColored;    //The vertex colored in this node;Debug purpose
     CProxy_Node parent_;
@@ -61,7 +63,10 @@ class Node: public CBase_Node {
     int getNextConstraintVertex();
     pq_type getValueOrderingOfColors(int);
     void preColor();
+    int vertexRemoval(int);
     void colorClique3(int i, int j, int k);
+    int getUncoloredNgbr(int);
+    void mergeRemovedVerticesBack(std::stack<int>, std::vector<vertex> &);
 
     // update a passed in state
     // by coloring vertex[vIndex] with color c

@@ -10,6 +10,7 @@ class vertex  {
       vertex_id_ = 0;           // Can be deleted
       color_ = -1;
       possible_colors_.set();   //set every bit to 1 
+      is_onStack = false;
     }
     bool isColored() { return color_ >=0;}
     int getColor() { return color_; }
@@ -24,6 +25,13 @@ class vertex  {
         return possible_colors_;
     }
 
+    void set_is_onStack(bool v) {
+      is_onStack  = v;
+    }
+
+    const bool get_is_onStack() {
+      return is_onStack;
+    }
     void pup(PUP::er &p){
       p|vertex_id_;
       p|color_;
@@ -43,6 +51,7 @@ class vertex  {
     int vertex_id_; // The id of the vertex 
     int color_;     // if color<0, it means haven't been colored yet
     boost::dynamic_bitset<> possible_colors_;
+    bool is_onStack;
 };
 
 #endif
