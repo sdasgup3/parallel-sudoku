@@ -36,6 +36,9 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
 /*  Coloring clique (i.j,k).
  *  assign min possible color to i and update its ngh.
  *  Do the same for j and k.
+ *  While we are doing clique coloring we are also doing 
+ *  forced moves (using updateState) which will give
+ *  further improvements.
  */
 void Node::colorClique3(int i, int j, int k)
 {
@@ -43,24 +46,24 @@ void Node::colorClique3(int i, int j, int k)
     boost::dynamic_bitset<> i_possC = node_state_[i].getPossibleColor();
     size_t i_color = i_possC.find_first();
     CkAssert(i_color != boost::dynamic_bitset<>::npos);
-    updateState(node_state_, i, i_color );
-    uncolored_num_ --;
+    int verticesColored =  updateState(node_state_, i, i_color , true);
+    uncolored_num_  -=  verticesColored;
   }
 
   if(false == node_state_[j].isColored()) {
     boost::dynamic_bitset<> j_possC = node_state_[j].getPossibleColor();
     size_t j_color = j_possC.find_first();
     CkAssert(j_color != boost::dynamic_bitset<>::npos);
-    updateState(node_state_, j, j_color );
-    uncolored_num_ --;
+    int verticesColored = updateState(node_state_, j, j_color , true);
+    uncolored_num_ -= verticesColored;
   }
 
   if(false == node_state_[k].isColored()) {
     boost::dynamic_bitset<> k_possC = node_state_[k].getPossibleColor();
     size_t k_color = k_possC.find_first();
     CkAssert(k_color != boost::dynamic_bitset<>::npos);
-    updateState(node_state_, k, k_color );
-    uncolored_num_ --;
+    int verticesColored = updateState(node_state_, k, k_color, true );
+    uncolored_num_ -= verticesColored;
   }
 }
 
@@ -91,6 +94,7 @@ void Node::preColor()
       }
     }
   }
+
 }
 
 
@@ -165,7 +169,7 @@ pq_type Node::getValueOrderingOfColors(int vIndex)
       rank = rank +  count;
     }
     if(false == impossColoring) {
-      priorityColors.push(std::pair<int,int>(c,rank));
+      priorityColors.push(std::pair<size_t,int>(c,rank));
     }
   }
   return priorityColors;
@@ -174,15 +178,36 @@ pq_type Node::getValueOrderingOfColors(int vIndex)
 /*---------------------------------------------
  * updates an input state
  * 1. Color vertex[vIndex] with color c
- * 2. Spdates all its neighbors corresponding possible colors
- * 3. TODO: Cannot be a member of Node, but may be friend of node 
+ * 2. Updates all its neighbors corresponding possible colors
+ * 3. doForcedMove == true -> color the ngh nodes recursively
+ *                    if their possibility is reduced to 1.
+ * 4. Return the number of vertices colored in the process. 
  * --------------------------------------------*/
-void Node::updateState(std::vector<vertex> & state, int vIndex, int c){
+int Node::updateState(std::vector<vertex> & state, int vIndex, size_t c, bool doForcedMove){
+  int verticesColored = 0;
+
+  if(state[vIndex].isColored()) {
+    return verticesColored;
+  }
+
   state[vIndex].setColor(c);
+  verticesColored ++;
+
   for(std::list<int>::iterator it=adjList_[vIndex].begin();
       it!=adjList_[vIndex].end(); it++){
     state[*it].removePossibleColor(c);
   }
+
+  if(true == doForcedMove) {
+    for(std::list<int>::iterator it=adjList_[vIndex].begin();
+        it!=adjList_[vIndex].end(); it++){
+      boost::dynamic_bitset<> possColor = state[(*it)].getPossibleColor();
+      if(1 == possColor.count()) {
+        verticesColored += updateState(state, (*it), possColor.find_first(), doForcedMove);
+      }
+    }
+  }
+  return verticesColored;
 }
 
 /*--------------------------------------------
@@ -194,7 +219,17 @@ void Node::updateState(std::vector<vertex> & state, int vIndex, int c){
  * with the first avaialbe color
  * -----------------------------------------*/
 void Node::colorLocally(){
-  CkAssert(THRESHOLD==1);
+
+  if(0 == uncolored_num_) {
+    if(is_root_) {
+      CkAssert(1 == isColoringValid(node_state_));
+      printGraph();
+      CkExit();
+    } else {
+      parent_.finish(true, node_state_);
+    }
+    return;
+  }
 
   int vIndex = getNextConstraintVertex();
   CkAssert(vIndex!=-1);
@@ -204,7 +239,9 @@ void Node::colorLocally(){
   if(possibleColor.any()){
     size_t c = possibleColor.find_first();
     CkAssert(c != boost::dynamic_bitset<>::npos);
-    updateState(node_state_,vIndex,c );
+    int verticesColored = updateState(node_state_,vIndex,c, true );
+    CkAssert(verticesColored == uncolored_num_);
+
     if(is_root_){
       CkAssert(1 == isColoringValid(node_state_));
       printGraph();
@@ -260,7 +297,6 @@ void Node::colorLocally(){
     CkAssert(vIndex!=-1);
 
     boost::dynamic_bitset<> possibleColor = node_state_[vIndex].getPossibleColor();
-    child_num_ = possibleColor.count();
     if(!possibleColor.any()){
       parent_.finish(false, node_state_);
       return;
@@ -268,17 +304,16 @@ void Node::colorLocally(){
 
     pq_type priorityColors = getValueOrderingOfColors(vIndex);
 
-    //TODO: for each vertice, do "Impossible Test and Forced Moves"
-
     while (! priorityColors.empty()) {
 
       std::pair<int,int> p =  priorityColors.top();
       priorityColors.pop();
 
       std::vector<vertex> new_state = node_state_;
-      updateState(new_state, vIndex, p.first);
+      int verticesColored = updateState(new_state, vIndex, p.first, true);
       CProxy_Node child = CProxy_Node::ckNew
-        (new_state, false, uncolored_num_-1, vIndex, thisProxy);
+        (new_state, false, uncolored_num_- verticesColored, vIndex, thisProxy);
+      child_num_ ++;
     }
 
   }

@@ -13,12 +13,12 @@ extern int chromaticNum_;
 
 class compareColorRank {
   public:
-    bool operator()(std::pair<int, int> &p1, std::pair<int, int>  &p2)
+    bool operator()(std::pair<size_t, int> &p1, std::pair<size_t, int>  &p2)
     {
       return p1.second < p2.second;
     }
 };
-typedef std::priority_queue <std::pair<int,int>, std::vector<std::pair<int,int> >, compareColorRank> pq_type;
+typedef std::priority_queue <std::pair<size_t,int>, std::vector<std::pair<size_t,int> >, compareColorRank> pq_type;
 
 class Main : public CBase_Main {
   private:
@@ -65,7 +65,7 @@ class Node: public CBase_Node {
 
     // update a passed in state
     // by coloring vertex[vIndex] with color c
-    void updateState(std::vector<vertex> & state, int vIndex, int c);
+    int updateState(std::vector<vertex> & state, int vIndex, size_t c, bool doForcedMove);
 
     // print out graph colored states
     void printGraph();
