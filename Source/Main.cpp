@@ -26,8 +26,7 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
   std::cout << "Number of vertices = "<< vertices_<< std::endl;
   std::cout << "Number of colors = " << chromaticNum_ << std::endl;
 
-  CProxy_Node node = CProxy_Node::ckNew(true, vertices_,
-          (CProxy_Node)thisProxy);
+  CProxy_Node node = CProxy_Node::ckNew(true, vertices_, (CProxy_Node)thisProxy);
    
 }
 

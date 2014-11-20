@@ -10,7 +10,8 @@
 Node::Node(bool isRoot, int n, CProxy_Node parent) :
   parent_(parent), uncolored_num_(n), is_root_(isRoot),
   child_num_(0), child_finished_(0),  vertexColored(-1),
-  child_succeed_(0), is_and_node_(false)
+  child_succeed_(0), is_and_node_(false), parentBits(1), parentPtr(NULL)
+
 {
   vertex v = vertex(chromaticNum_);
   node_state_ = std::vector<vertex>(vertices_, v);
@@ -36,10 +37,11 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
  * Node constructor with two parameters
  * used to fire child node by state configured
  * ---------------------------------------------*/
-  Node::Node(std::vector<vertex> state, bool isRoot, int uncol, int vColored,  CProxy_Node parent)
+Node::Node( std::vector<vertex> state, bool isRoot, int uncol, int vColored,  CProxy_Node parent, 
+    UShort pBits, UInt* pPtr, int size)
 : parent_(parent), uncolored_num_(uncol), node_state_(state), vertexColored(vColored),
   is_root_(isRoot), child_num_(0), child_finished_(0),
-  child_succeed_(0), is_and_node_(false)
+  child_succeed_(0), is_and_node_(false), parentBits(pBits), parentPtr(pPtr)
 {
   thisProxy.run();
 }
@@ -359,6 +361,8 @@ void Node::colorRemotely(){
   }
 
   pq_type priorityColors = getValueOrderingOfColors(vIndex);
+  int numChildrenStates = priorityColors.size();
+  UShort childBits = _log(numChildrenStates);
 
   while (! priorityColors.empty()) {
 
@@ -366,15 +370,44 @@ void Node::colorRemotely(){
     priorityColors.pop();
 
     std::vector<vertex> new_state = node_state_;
+    CkEntryOptions* opts = new CkEntryOptions ();
+    UShort newParentBits; UInt* newParentPtr;
+    UInt newParentPtrSize;
+    getPriorityInfo(newParentBits, newParentPtr, newParentPtrSize, parentBits, parentPtr, childBits, child_num_);
+    opts->setPriority(newParentBits, newParentPtr);
 
     int verticesColored = updateState(new_state, vIndex, p.first, true);
-    CProxy_Node child = CProxy_Node::ckNew
-      (new_state, false, uncolored_num_- verticesColored, vIndex, thisProxy);
+    CProxy_Node child = CProxy_Node::ckNew(new_state, false, uncolored_num_- verticesColored, vIndex, thisProxy,
+        newParentBits, newParentPtr, newParentPtrSize, CK_PE_ANY , opts);
     child_num_ ++;
   }
 
 }
 
+void Node::getPriorityInfo(UShort & newParentBits, UInt* &newParentPtr, UInt &newParentPtrSize, UShort &parentBits, UInt* &parentPtr, UShort &childBits, UInt &childnum)
+{
+  if(NULL == parentPtr) {
+    CkAssert(childBits <= CkIntbits);
+    newParentBits  = childBits + parentBits;
+    newParentPtr  = (UInt *)malloc(sizeof(UInt));
+    *newParentPtr = childnum << (8*sizeof(unsigned int) - newParentBits);
+    newParentPtrSize = 1;
+    return;
+  }
+
+
+  /*
+  parentBits = UsrToEnv(msg)->getPriobits();
+  parentPtr = (unsigned int *)(CkPriorityPtr(msg));        
+  UShort extraBits = __se_log(totalNumChildren);
+  CkAssert(extraBits <= CkIntbits);
+  UShort newpbsize = extraBits + parentBits;
+  SearchNodeMsg *msg = new (size, newpbsize) SearchNodeMsg(0, searchLevel, size, 1);
+  CkSetQueueing(msg, CK_QUEUEING_BLIFO);
+  setMsgPriority(msg, extraBits, childnum, CkPriobitsToInts(newpbsize), parentBits, parentPtr );
+  return;
+  */
+}
 /* ---------------------------------------------------
  * called when receive child finish response
  * - merge the part sent by child
@@ -485,4 +518,14 @@ bool Node::isColoringValid(std::vector<vertex> state)
 
   }  
   return  1;
+}
+
+int Node::_log(int n)
+{
+  int _mylog = 0;
+  for(n=n-1;n>0;n=n>>1)
+  {
+    _mylog++;
+  }
+  return _mylog;
 }

@@ -20,6 +20,8 @@ class compareColorRank {
     }
 };
 typedef std::priority_queue <std::pair<size_t,int>, std::vector<std::pair<size_t,int> >, compareColorRank> pq_type;
+typedef unsigned int   UInt;
+typedef unsigned short UShort;
 
 class Main : public CBase_Main {
   private:
@@ -47,17 +49,19 @@ class Node: public CBase_Node {
     int vertexColored;    //The vertex colored in this node;Debug purpose
     CProxy_Node parent_;
     int uncolored_num_;   //number of uncolored vertex
-    int child_num_;       //number of children this chare creates
+    UInt child_num_;       //number of children this chare creates
                           //each element corresponds to a subgraph
     int child_finished_;  //current finished children
     int child_succeed_;
     bool is_and_node_;    //set to true if it requires all children reply
+    UShort parentBits;          //Number of priority bits used 
+    UInt* parentPtr;    
 
   public:
     // default constructor creats root node
     Node(bool isRoot, int n, CProxy_Node parent);
-    Node(std::vector<vertex> state, bool isRoot,
-            int n, int, CProxy_Node parent);
+    Node(std::vector<vertex> state, bool isRoot, int n, int, CProxy_Node parent, 
+          UShort , UInt *, int);
     Node (CkMigrateMessage*);
 
     int getNextConstraintVertex();
@@ -92,6 +96,9 @@ class Node: public CBase_Node {
 
     //Checks if the reported coloring is valid. 
     bool isColoringValid(std::vector<vertex>);
+    void getPriorityInfo(UShort & newParentBits, UInt* &newParentPtr, UInt &newParentPtrSize, UShort& parentBits, UInt*& parentPtr, UShort& childBits, UInt &childnum);
+    inline int _log(int n);
+
 };
 
 
