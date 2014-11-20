@@ -6,3 +6,5 @@ tags
 gc
 charmrun
 log
+run.sh
+Makefile
