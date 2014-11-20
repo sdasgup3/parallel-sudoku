@@ -1,6 +1,9 @@
 #include "graphColor.h"
 #include "string"
 #define DEBUG 0
+#define CkIntbits (sizeof(int)*8)
+#define CkPriobitsToInts(nBits)    ((nBits+CkIntbits-1)/CkIntbits)
+
 
 /* -----------------------------------------
  * This is the node state BEFORE the search is initiated.
@@ -371,43 +374,70 @@ void Node::colorRemotely(){
 
     std::vector<vertex> new_state = node_state_;
     CkEntryOptions* opts = new CkEntryOptions ();
-    UShort newParentBits; UInt* newParentPtr;
-    UInt newParentPtrSize;
-    getPriorityInfo(newParentBits, newParentPtr, newParentPtrSize, parentBits, parentPtr, childBits, child_num_);
-    opts->setPriority(newParentBits, newParentPtr);
+    UShort newParentPrioBits; UInt* newParentPrioPtr;
+    UInt newParentPrioPtrSize;
+    getPriorityInfo(newParentPrioBits, newParentPrioPtr, newParentPrioPtrSize, parentBits, parentPtr, childBits, child_num_);
+    opts->setPriority(newParentPrioBits, newParentPrioPtr);
 
     int verticesColored = updateState(new_state, vIndex, p.first, true);
     CProxy_Node child = CProxy_Node::ckNew(new_state, false, uncolored_num_- verticesColored, vIndex, thisProxy,
-        newParentBits, newParentPtr, newParentPtrSize, CK_PE_ANY , opts);
+        newParentPrioBits, newParentPrioPtr, newParentPrioPtrSize, CK_PE_ANY , opts);
     child_num_ ++;
+    free(newParentPrioPtr);
   }
 
 }
 
-void Node::getPriorityInfo(UShort & newParentBits, UInt* &newParentPtr, UInt &newParentPtrSize, UShort &parentBits, UInt* &parentPtr, UShort &childBits, UInt &childnum)
+void Node::getPriorityInfo(UShort & newParentPrioBits, UInt* &newParentPrioPtr, UInt &newParentPrioPtrSize, 
+      UShort &parentPrioBits, UInt* &parentPrioPtr, UShort &childPrioBits, UInt &childnum)
 {
-  if(NULL == parentPtr) {
-    CkAssert(childBits <= CkIntbits);
-    newParentBits  = childBits + parentBits;
-    newParentPtr  = (UInt *)malloc(sizeof(UInt));
-    *newParentPtr = childnum << (8*sizeof(unsigned int) - newParentBits);
-    newParentPtrSize = 1;
+  if(NULL == parentPrioPtr) {
+    CkAssert(childPrioBits <= CkIntbits);
+    newParentPrioBits  = childPrioBits + parentPrioBits;
+    newParentPrioPtr  = (UInt *)malloc(sizeof(int));
+    *newParentPrioPtr = childnum << (8*sizeof(unsigned int) - newParentPrioBits);
+    newParentPrioPtrSize = 1;
     return;
   }
 
+  newParentPrioBits           = parentPrioBits + childPrioBits;
+  UShort parentPrioWords      = CkPriobitsToInts(parentPrioBits);
+  UShort newParentPrioWords   = CkPriobitsToInts(parentPrioBits + childPrioBits);
+  int shiftbits = 0;
 
-  /*
-  parentBits = UsrToEnv(msg)->getPriobits();
-  parentPtr = (unsigned int *)(CkPriorityPtr(msg));        
-  UShort extraBits = __se_log(totalNumChildren);
-  CkAssert(extraBits <= CkIntbits);
-  UShort newpbsize = extraBits + parentBits;
-  SearchNodeMsg *msg = new (size, newpbsize) SearchNodeMsg(0, searchLevel, size, 1);
-  CkSetQueueing(msg, CK_QUEUEING_BLIFO);
-  setMsgPriority(msg, extraBits, childnum, CkPriobitsToInts(newpbsize), parentBits, parentPtr );
-  return;
-  */
+  if(newParentPrioWords == parentPrioWords) {
+    newParentPrioPtr  = (UInt *)malloc(parentPrioWords*sizeof(int));
+    for(int i=0; i<parentPrioWords; i++) {
+      newParentPrioPtr[i] = parentPrioPtr[i];
+    }
+    newParentPrioPtrSize  = parentPrioWords;
+
+    if((newParentPrioBits) % (8*sizeof(unsigned int)) != 0) {
+      shiftbits = 8*sizeof(unsigned int) - (newParentPrioBits)%(8*sizeof(unsigned int));
+    }
+    newParentPrioPtr[parentPrioWords-1] = parentPrioPtr[parentPrioWords-1] | (childnum << shiftbits);
+
+  } else if(newParentPrioWords > parentPrioWords) {
+    /* have to append a new integer */
+    newParentPrioPtr  = (UInt *)malloc(newParentPrioWords*sizeof(int));
+    for(int i=0; i<parentPrioWords; i++) {
+      newParentPrioPtr[i] = parentPrioPtr[i];
+    }
+    newParentPrioPtrSize  = newParentPrioWords;
+
+    if(parentPrioBits % (8*sizeof(unsigned int)) == 0) {
+      shiftbits = sizeof(unsigned int)*8 - childPrioBits;
+      newParentPrioPtr[parentPrioWords] = (childnum << shiftbits);
+    } else { /*higher bits are appended to the last integer and then use anothe new integer */
+      int inusebits = 8*sizeof(unsigned int) - (parentPrioBits % ( 8*sizeof(unsigned int)));
+      unsigned int higherbits =  childnum >> (childPrioBits - inusebits);
+      newParentPrioPtr[parentPrioWords-1] = parentPrioPtr[parentPrioWords-1] | higherbits;
+      /* lower bits are stored in new integer */
+      newParentPrioPtr[parentPrioWords] = childnum << (8*sizeof(unsigned int) - childPrioBits + inusebits);
+    }
+  }
 }
+
 /* ---------------------------------------------------
  * called when receive child finish response
  * - merge the part sent by child
