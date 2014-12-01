@@ -167,7 +167,7 @@ Node::Node (CkMigrateMessage*)
 }
 
 /* ----------------------------------------------
- *  Return the index of next uncolored vertex which
+ *  Return the index of next uncolored and unstacked vertex which
  *  is most constrained.
  *  This heuristic will choose a vertex with the
  *  fewest colors available to it. 
@@ -298,18 +298,7 @@ void Node::colorLocally()
     return;
   }
 
-  // TODO: This changes when we have more than 1 vertex to color locally
-  int vIndex = getNextConstraintVertex();
-  CkAssert(vIndex!=-1);
-
-  boost::dynamic_bitset<> possibleColor =
-    node_state_[vIndex].getPossibleColor(); 
-  if(possibleColor.any()){
-    size_t c = possibleColor.find_first();
-    CkAssert(c != boost::dynamic_bitset<>::npos);
-    int verticesColored = updateState(node_state_,vIndex,c, true );
-    CkAssert(verticesColored == uncolored_num_);
-
+  if(solveBruteForce()){
     mergeRemovedVerticesBack(deletedV, node_state_);
     if(is_root_){
       CkAssert(1 == isColoringValid(node_state_));
@@ -327,6 +316,41 @@ void Node::colorLocally()
       parent_.finish(false, node_state_);
     }
   }
+}
+
+/*-------------------------------------------
+ * At the leaf state when uncolored_num_ <= THRESHOLD
+ *  we will try to color the graph using a brute force
+ *  strategy.
+ *   ----------------------------------------*/
+bool Node::solveBruteForceHelper(std::vector<vertex>& state, std::vector<int> uncoloredIndices, int index )
+{
+  if(index == uncoloredIndices.size()) {
+    return true;
+  }
+  boost::dynamic_bitset<> possibleColor = state[uncoloredIndices[index]].getPossibleColor(); 
+  for(boost::dynamic_bitset<>::size_type c=0; c<possibleColor.size(); c++){
+    if(true == possibleColor.test(c)) {
+      std::vector<vertex> tempState = state;
+      updateState(tempState, uncoloredIndices[index], c, false);
+      if(true == solveBruteForceHelper(tempState, uncoloredIndices, index + 1)) {
+        state = tempState;
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+bool Node::solveBruteForce() 
+{
+  std::vector<int> uncoloredIndices;
+  for(int  i = 0 ; i < node_state_.size(); i++){
+    if(false == node_state_[i].isColored() && false == node_state_[i].get_is_onStack()){
+      uncoloredIndices.push_back(i);
+    }
+  }
+  return solveBruteForceHelper(node_state_, uncoloredIndices, 0);
 }
 
 /*-------------------------------------------
