@@ -21,7 +21,6 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
   chromaticNum_= getConservativeChromaticNum();
   mainProxy= thisProxy;
 
-
   std::cout << adjList_;  
   std::cout << "Number of vertices = "<< vertices_<< std::endl;
   std::cout << "Number of colors = " << chromaticNum_ << std::endl;
