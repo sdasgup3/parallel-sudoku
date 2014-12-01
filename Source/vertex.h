@@ -14,7 +14,7 @@ class vertex  {
     }
     bool isColored() { return color_ >=0;}
     int getColor() { return color_; }
-    void setColor(int c) { color_ = c; possible_colors_.reset(); }
+    void setColor(int c) { color_ = c; /*possible_colors_.reset();*/ }
 
     void removePossibleColor(int c){
         if(!isColored())
