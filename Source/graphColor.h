@@ -5,7 +5,7 @@
 #include "Utils.h"
 
 /*readonly*/
-#define THRESHOLD 1
+#define THRESHOLD 5
 extern CProxy_Main mainProxy;
 extern AdjListType adjList_;
 extern int vertices_;
@@ -93,8 +93,12 @@ class Node: public CBase_Node {
 
     //Checks if the reported coloring is valid. 
     bool isColoringValid(std::vector<vertex>);
+
     void getPriorityInfo(UShort & newParentBits, UInt* &newParentPtr, UInt &newParentPtrSize, UShort& parentBits, UInt*& parentPtr, UShort& childBits, UInt &childnum);
     inline int _log(int n);
+
+    bool solveBruteForce() ;
+    bool solveBruteForceHelper(std::vector<vertex>& , std::vector<int> , int );
 
 };
 
