@@ -20,7 +20,7 @@ mainmodule Module {
     entry void finish(bool, std::vector<vertex>);
 
     entry void run(){
-      atomic { 
+      serial { 
         //-----DEBUG USE BELOW--------
         //this->printGraph();
         //-----DEBUG USE ABOVE--------
@@ -58,7 +58,7 @@ mainmodule Module {
        */
 
       while(true){
-        when finish(bool res, std::vector<vertex> state) atomic{
+        when finish(bool res, std::vector<vertex> state) serial{
 
           //-----------DEBUG CODE BELOW-------------------
           //CkPrintf("A child finish in Chare[uncolor=%d]; \

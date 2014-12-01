@@ -21,13 +21,12 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
   chromaticNum_= getConservativeChromaticNum();
   mainProxy= thisProxy;
 
-
-  std::cout << adjList_;  
+  //print input graph
+  //std::cout << adjList_;  
   std::cout << "Number of vertices = "<< vertices_<< std::endl;
-  std::cout << "Number of colors = " << chromaticNum_ << std::endl;
+  std::cout << "Conservative Chromatic Number = " << chromaticNum_ << std::endl;
 
   CProxy_Node node = CProxy_Node::ckNew(true, vertices_, (CProxy_Node)thisProxy);
-   
 }
 
 Main::Main(CkMigrateMessage* msg) {}

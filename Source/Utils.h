@@ -10,22 +10,25 @@
 #include <iostream>
 #include <assert.h>   
 #include <map>   
-#include <list>   
+#include <list>  
+#include <queue>
+#include <stack>
 #include <algorithm>
 #include <boost/dynamic_bitset.hpp>
 #include <inttypes.h>
 
-typedef std::map<int, std::list<int> > AdjListType;
+// forward declaration
+class compareColorRank;
 
-/* forward declaration. TODO: Why are these functions made friend functions and kept here? */
+typedef std::map<int, std::list<int> > AdjListType;
+typedef std::priority_queue <std::pair<size_t,int>, std::vector<std::pair<size_t,int> >, compareColorRank> pq_type;
+typedef unsigned int   UInt;
+typedef unsigned short UShort;
+
+/* forward declaration */ 
 class vertex;
 
-//---------functions below implemented in Main.h/cpp----------------
-//void parseCommandLine(char* filename, AdjListType& adjList_);
-//---------functions above implemented in Main.h/cpp----------------
 std::ostream &operator<<(std::ostream &stream, const AdjListType& map);
 void insertHelper(AdjListType& adjList_, const int& u, const int& v);
-
-std::vector<int> getNextConstraintVertex(std::vector<vertex>&);
 
 #endif

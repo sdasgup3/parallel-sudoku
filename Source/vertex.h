@@ -14,7 +14,7 @@ class vertex  {
     }
     bool isColored() { return color_ >=0;}
     int getColor() { return color_; }
-    void setColor(int c) { color_ = c;}
+    void setColor(int c) { color_ = c; possible_colors_.reset(); }
 
     void removePossibleColor(int c){
         if(!isColored())
@@ -35,6 +35,7 @@ class vertex  {
     void pup(PUP::er &p){
       p|vertex_id_;
       p|color_;
+      p|is_onStack;
 
       if(p.isUnpacking()){
           std::string s; 

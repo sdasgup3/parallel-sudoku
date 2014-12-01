@@ -1,12 +1,11 @@
 #ifndef _GRAPHCOLOR_H
 #define _GRAPHCOLOR_H
 
-#include "Module.decl.h" 
-#include <queue>
-#include <stack>
+#include "Module.decl.h"
+#include "Utils.h"
 
 /*readonly*/
-#define THRESHOLD (1)
+#define THRESHOLD 1
 extern CProxy_Main mainProxy;
 extern AdjListType adjList_;
 extern int vertices_;
@@ -19,9 +18,6 @@ class compareColorRank {
       return p1.second < p2.second;
     }
 };
-typedef std::priority_queue <std::pair<size_t,int>, std::vector<std::pair<size_t,int> >, compareColorRank> pq_type;
-typedef unsigned int   UInt;
-typedef unsigned short UShort;
 
 class Main : public CBase_Main {
   private:

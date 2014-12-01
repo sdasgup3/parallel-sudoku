@@ -1,9 +1,9 @@
 #include "graphColor.h"
 #include "string"
-#define DEBUG 0
 #define CkIntbits (sizeof(int)*8)
 #define CkPriobitsToInts(nBits)    ((nBits+CkIntbits-1)/CkIntbits)
 
+//#define DEBUG 
 
 /* -----------------------------------------
  * This is the node state BEFORE the search is initiated.
@@ -19,15 +19,17 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
   vertex v = vertex(chromaticNum_);
   node_state_ = std::vector<vertex>(vertices_, v);
 
-  preColor();
+  //preColor();
 #ifdef  DEBUG 
   CkPrintf("After Precolor\n");
   printGraph();
 #endif 
-
+  
+  int count = uncolored_num_;
   for (AdjListType::const_iterator it = adjList_.begin(); it != adjList_.end(); ++it) {
     uncolored_num_ -= vertexRemoval((*it).first);
   }
+  CkPrintf("[RootChare] Vertices removed by 'vertexRemoval' step = %d\n", count-uncolored_num_);
 #ifdef  DEBUG 
   CkPrintf("Vertex Removal\n");
   printGraph();
@@ -46,6 +48,10 @@ Node::Node( std::vector<vertex> state, bool isRoot, int uncol, int vColored,  CP
   is_root_(isRoot), child_num_(0), child_finished_(0),
   child_succeed_(0), is_and_node_(false), parentBits(pBits), parentPtr(pPtr)
 {
+  for (AdjListType::const_iterator it = adjList_.begin(); it != adjList_.end(); ++it) {
+    uncolored_num_ -= vertexRemoval((*it).first);
+  }
+
   thisProxy.run();
 }
 
@@ -73,7 +79,7 @@ int Node::vertexRemoval(int vertex)
 {
   int vertexRemoved = 0;
   if(node_state_[vertex].isColored() || node_state_[vertex].get_is_onStack()) {
-    return vertexRemoved;
+    return 0;
   }
   boost::dynamic_bitset<> possColors = node_state_[vertex].getPossibleColor();    
   int possColorCount  = possColors.count();
@@ -245,7 +251,7 @@ int Node::updateState(std::vector<vertex> & state, int vIndex, size_t c, bool do
   int verticesColored = 0;
 
   if(state[vIndex].isColored() || state[vIndex].get_is_onStack()) {
-    return verticesColored;
+    return 0;
   }
 
   state[vIndex].setColor(c);
@@ -349,11 +355,6 @@ void Node::colorRemotely(){
   // -----------------------------------------
   //TODO: "Grainsize control" requires modify code below
 
-
-  for (AdjListType::const_iterator it = adjList_.begin(); it != adjList_.end(); ++it) {
-    uncolored_num_ -= vertexRemoval((*it).first);
-  }
-
   int vIndex = this->getNextConstraintVertex();
   CkAssert(vIndex!=-1);
 
@@ -380,12 +381,12 @@ void Node::colorRemotely(){
     opts->setPriority(newParentPrioBits, newParentPrioPtr);
 
     int verticesColored = updateState(new_state, vIndex, p.first, true);
+
     CProxy_Node child = CProxy_Node::ckNew(new_state, false, uncolored_num_- verticesColored, vIndex, thisProxy,
         newParentPrioBits, newParentPrioPtr, newParentPrioPtrSize, CK_PE_ANY , opts);
     child_num_ ++;
     free(newParentPrioPtr);
   }
-
 }
 
 void Node::getPriorityInfo(UShort & newParentPrioBits, UInt* &newParentPrioPtr, UInt &newParentPrioPtrSize, 
@@ -509,7 +510,9 @@ void Node::mergeRemovedVerticesBack(std::stack<int> deletedV, std::vector<vertex
     boost::dynamic_bitset<> possColor = node_state_[vertex].getPossibleColor();
     size_t c = possColor.find_first();
     CkAssert(c != boost::dynamic_bitset<>::npos);
+#ifdef DEBUG
     CkPrintf("poped vertex %d color %d\n", vertex,c);
+#endif
     updateState(node_state_, vertex, c, false);
   }
 }

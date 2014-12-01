@@ -5,6 +5,6 @@ TARGET=gc
 
 # Enter the command line parameters here. --help to get a list of allowed
 # options
-PROGRAM_OPTIONS=--newGraph=no
+PROGRAM_OPTIONS=--newGraph=yes
 set -x
 ./charmrun +p4 $TARGET $PROGRAM_OPTIONS ++local

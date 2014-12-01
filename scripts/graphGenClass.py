@@ -1,8 +1,8 @@
 import random, json, os, ast
 from graphClass import graph
       
-_vertices = 20
-_edgeDensity = 20 # _edges/_vertices [reference: https://hal.inria.fr/file/index/docid/91354/filename/BELIV_2006_Melancon_Final.pdf]
+_vertices = 10
+_edgeDensity = 10 # _edges/_vertices [reference: https://hal.inria.fr/file/index/docid/91354/filename/BELIV_2006_Melancon_Final.pdf]
 
 class graphGen:
   def __init__(self):
