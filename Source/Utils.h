@@ -14,6 +14,7 @@
 #include <queue>
 #include <stack>
 #include <algorithm>
+#include <string>
 #include <boost/dynamic_bitset.hpp>
 #include <inttypes.h>
 

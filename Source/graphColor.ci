@@ -14,7 +14,7 @@ mainmodule Module {
 
   chare Node { 
     entry Node(bool, int, CProxy_Node);
-    entry Node( std::vector<vertex> state, bool isRoot, int uncol, int vColored,  CProxy_Node parent, 
+    entry Node( std::vector<vertex> state, bool isRoot, int uncol, int vColored,  CProxy_Node parent, std::string nodeID, 
         UShort pBits, UInt pPtr[size], int size);
 
     entry void finish(bool, std::vector<vertex>);

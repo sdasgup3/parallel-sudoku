@@ -11,11 +11,12 @@
  * 2. Does pre-coloring
  * ---------------------------------------*/
 Node::Node(bool isRoot, int n, CProxy_Node parent) :
-  parent_(parent), uncolored_num_(n), is_root_(isRoot),
+  nodeID_("0"), parent_(parent), uncolored_num_(n), is_root_(isRoot),
   child_num_(0), child_finished_(0),  vertexColored(-1),
   child_succeed_(0), is_and_node_(false), parentBits(1), parentPtr(NULL)
 
 {
+  CkAssert(isRoot);  // nodeID=1, since this constructor is only called for root chare
   vertex v = vertex(chromaticNum_);
   node_state_ = std::vector<vertex>(vertices_, v);
 
@@ -25,11 +26,10 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
   printGraph();
 #endif 
   
-  int count = uncolored_num_;
   for (AdjListType::const_iterator it = adjList_.begin(); it != adjList_.end(); ++it) {
     uncolored_num_ -= vertexRemoval((*it).first);
-  }
-  CkPrintf("[RootChare] Vertices removed by 'vertexRemoval' step = %d\n", count-uncolored_num_);
+  } 
+
 #ifdef  DEBUG 
   CkPrintf("Vertex Removal\n");
   printGraph();
@@ -42,11 +42,11 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
  * Node constructor with two parameters
  * used to fire child node by state configured
  * ---------------------------------------------*/
-Node::Node( std::vector<vertex> state, bool isRoot, int uncol, int vColored,  CProxy_Node parent, 
-    UShort pBits, UInt* pPtr, int size)
-: parent_(parent), uncolored_num_(uncol), node_state_(state), vertexColored(vColored),
-  is_root_(isRoot), child_num_(0), child_finished_(0),
-  child_succeed_(0), is_and_node_(false), parentBits(pBits), parentPtr(pPtr)
+Node::Node( std::vector<vertex> state, bool isRoot, int uncol, int vColored,  CProxy_Node parent,
+    std::string nodeID, UShort pBits, UInt* pPtr, int size) : nodeID_(nodeID), parent_(parent), 
+    uncolored_num_(uncol), node_state_(state), vertexColored(vColored), is_root_(isRoot), 
+    child_num_(0), child_finished_(0),
+    child_succeed_(0), is_and_node_(false), parentBits(pBits), parentPtr(pPtr)
 {
   for (AdjListType::const_iterator it = adjList_.begin(); it != adjList_.end(); ++it) {
     uncolored_num_ -= vertexRemoval((*it).first);
@@ -224,6 +224,7 @@ pq_type Node::getValueOrderingOfColors(int vIndex)
     int rank = 0 ;
 
     for(std::list<int>::const_iterator jt = neighbours.begin(); jt != neighbours.end(); jt++ ) {
+      if(node_state_[*jt].isColored() || node_state_[*jt].get_is_onStack()) continue;
       boost::dynamic_bitset<> possibleColorOfNgb  = node_state_[*jt].getPossibleColor();
       int count = possibleColorOfNgb.test(c) ? possibleColorOfNgb.count() -1 : possibleColorOfNgb.count();
       if(0 == count) {
@@ -286,8 +287,8 @@ void Node::colorLocally()
 {
 
   if(0 == uncolored_num_) {
+    mergeRemovedVerticesBack(deletedV, node_state_);
     if(is_root_) {
-      mergeRemovedVerticesBack(deletedV, node_state_);
       printGraph();
       CkAssert(1 == isColoringValid(node_state_));
       CkExit();
@@ -297,6 +298,7 @@ void Node::colorLocally()
     return;
   }
 
+  // TODO: This changes when we have more than 1 vertex to color locally
   int vIndex = getNextConstraintVertex();
   CkAssert(vIndex!=-1);
 
@@ -308,8 +310,8 @@ void Node::colorLocally()
     int verticesColored = updateState(node_state_,vIndex,c, true );
     CkAssert(verticesColored == uncolored_num_);
 
+    mergeRemovedVerticesBack(deletedV, node_state_);
     if(is_root_){
-      mergeRemovedVerticesBack(deletedV, node_state_);
       CkAssert(1 == isColoringValid(node_state_));
       printGraph();
       CkExit();
@@ -321,6 +323,7 @@ void Node::colorLocally()
       CkPrintf("Fail to color!\n");
       CkExit();
     } else {
+      mergeRemovedVerticesBack(deletedV, node_state_);
       parent_.finish(false, node_state_);
     }
   }
@@ -382,8 +385,9 @@ void Node::colorRemotely(){
 
     int verticesColored = updateState(new_state, vIndex, p.first, true);
 
-    CProxy_Node child = CProxy_Node::ckNew(new_state, false, uncolored_num_- verticesColored, vIndex, thisProxy,
-        newParentPrioBits, newParentPrioPtr, newParentPrioPtrSize, CK_PE_ANY , opts);
+    CProxy_Node child = CProxy_Node::ckNew(new_state, false, uncolored_num_- verticesColored, 
+        vIndex, thisProxy, nodeID_ + std::to_string(child_num_), newParentPrioBits, newParentPrioPtr, newParentPrioPtrSize, 
+        CK_PE_ANY , opts);
     child_num_ ++;
     free(newParentPrioPtr);
   }
@@ -511,7 +515,7 @@ void Node::mergeRemovedVerticesBack(std::stack<int> deletedV, std::vector<vertex
     size_t c = possColor.find_first();
     CkAssert(c != boost::dynamic_bitset<>::npos);
 #ifdef DEBUG
-    CkPrintf("poped vertex %d color %d\n", vertex,c);
+    CkPrintf("Popped vertex %d color %d\n", vertex,c);
 #endif
     updateState(node_state_, vertex, c, false);
   }

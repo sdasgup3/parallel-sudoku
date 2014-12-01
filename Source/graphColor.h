@@ -39,6 +39,7 @@ class Node: public CBase_Node {
   Node_SDAG_CODE
 
   private:
+    std::string nodeID_;    // unique ID of the node
     std::vector<vertex> node_state_;
     std::stack<int> deletedV;
     bool is_root_;
@@ -56,7 +57,7 @@ class Node: public CBase_Node {
   public:
     // default constructor creats root node
     Node(bool isRoot, int n, CProxy_Node parent);
-    Node(std::vector<vertex> state, bool isRoot, int n, int, CProxy_Node parent, 
+    Node(std::vector<vertex> state, bool isRoot, int n, int, CProxy_Node parent, std::string parentID, 
           UShort , UInt *, int);
     Node (CkMigrateMessage*);
 
