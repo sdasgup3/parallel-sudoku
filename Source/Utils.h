@@ -32,4 +32,7 @@ class vertex;
 std::ostream &operator<<(std::ostream &stream, const AdjListType& map);
 void insertHelper(AdjListType& adjList_, const int& u, const int& v);
 
+
+/* bitset operations */
+int get_first_set_bit(std::bitset<> l);
 #endif

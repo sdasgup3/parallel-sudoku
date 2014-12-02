@@ -67,3 +67,15 @@ std::ostream &operator<<(std::ostream &stream, const AdjListType& map)
     }
   return stream;
 }
+
+int get_first_set_bit(std::bitset<> l)
+{
+    for(int i=0; i<l.size(); i++){
+        if(l.test(i)){
+            return i;
+        }
+    }
+    assert(0 && "the passed in bitset must have at least one bit set");
+    return -1;
+}
+
