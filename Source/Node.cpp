@@ -279,6 +279,16 @@ int Node::updateState(std::vector<vertex> & state, int vIndex, size_t c, bool do
   return verticesColored;
 }
 
+void Node::printStats()
+{
+  return;
+  CProxy_counter grp(counterGroup);
+  DUMMYMSG* msg; // = grp[0].getTotalCount();
+  int totalCharesSpawned = msg->val;
+  CkPrintf("Total chares Spawned %d\n", totalCharesSpawned);
+  delete msg;
+
+}
 /*--------------------------------------------
  * color the remaining graph locally
  * return if finish or not
@@ -298,14 +308,6 @@ void Node::sequentialColoring()
       CkPrintf("Sequential Coloring called from root. No parallelism\n");
       CkAssert(1 == isColoringValid(node_state_));
 
-      /*
-      CProxy_counter grp(counterGroup);
-      DUMMYMSG* msg = grp[0].getTotalCount();
-      int totalCharesSpawned = msg->val;
-      CkPrintf("Total chares Spawned %d\n", totalCharesSpawned);
-      delete msg;
-      */
-
       CkExit();
     } else {
       parent_.finish(true, node_state_);
@@ -323,13 +325,6 @@ void Node::sequentialColoring()
 #ifdef DEBUG
       printGraph(true);
 #endif
-      /*
-      CProxy_counter grp(counterGroup);
-      DUMMYMSG* msg = grp[0].getTotalCount();
-      int totalCharesSpawned = msg->val;
-      CkPrintf("Total chares Spawned %d\n", totalCharesSpawned);
-      delete msg;
-      */
 
       CkExit();
     } else {
@@ -546,13 +541,6 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
       printGraph(true);
 #endif
 
-      /*
-      CProxy_counter grp(counterGroup);
-      DUMMYMSG* msg = grp[0].getTotalCount();
-      int totalCharesSpawned = msg->val;
-      CkPrintf("Total chares Spawned %d\n", totalCharesSpawned);
-      delete msg;
-      */
 
       CkExit();
     } else {
@@ -631,6 +619,7 @@ bool Node::isColoringValid(std::vector<vertex> state)
       });
   
   CkPrintf("Vertices removed by [Vertex Removal] = %d\n", vertexRemovalEfficiency);
+  printStats();
   return  1;
 }
 
