@@ -8,8 +8,9 @@ CProxy_Main mainProxy;
 AdjListType adjList_;
 int vertices_;
 int chromaticNum_;
+int grainSize;
 
-Main::Main(CkArgMsg* msg):newGraph("no") {
+Main::Main(CkArgMsg* msg):newGraph("no"), inputGrainSize(1) {
 
   parseCommandLine(msg->argc, msg->argv);
 
@@ -20,11 +21,13 @@ Main::Main(CkArgMsg* msg):newGraph("no") {
  
   chromaticNum_= getConservativeChromaticNum();
   mainProxy= thisProxy;
+  grainSize = inputGrainSize;
 
   //print input graph
   //std::cout << adjList_;  
   std::cout << "Number of vertices = "<< vertices_<< std::endl;
   std::cout << "Conservative Chromatic Number = " << chromaticNum_ << std::endl;
+  std::cout << "Grain-size = "<< grainSize << std::endl;
 
   CProxy_Node node = CProxy_Node::ckNew(true, vertices_, (CProxy_Node)thisProxy);
 }
@@ -40,6 +43,7 @@ void Main::parseCommandLine(int argc, char **argv)
   namespace po = boost::program_options;
   po::options_description desc("Allowed options");
   desc.add_options()
+    ("grain-size", po::value<int>(), "Grain-size for state space search")
     ("newGraph", po::value<std::string>(),"Generate new graph from python (default=no)")
     ("filename", po::value<std::string>(),"Input file");
 
@@ -54,6 +58,8 @@ void Main::parseCommandLine(int argc, char **argv)
     }
 
     // if parameter was passed in command line, assign it.
+    if(vm.count("grain-size"))
+      inputGrainSize = vm["grain-size"].as<int>();
     if(vm.count("newGraph"))          
       newGraph.assign(vm["newGraph"].as<std::string>());
   }

@@ -27,6 +27,8 @@ class vertex  {
 
     void set_is_onStack(bool v) {
       is_onStack  = v;
+      if(v)
+        _stat_vertexRemoval = true;
     }
 
     const bool get_is_onStack() {
@@ -36,6 +38,7 @@ class vertex  {
       p|vertex_id_;
       p|color_;
       p|is_onStack;
+      p|_stat_vertexRemoval;
 
       if(p.isUnpacking()){
           std::string s; 
@@ -47,6 +50,9 @@ class vertex  {
           p|s;
       }
     }
+
+  /* Add variables for statistics collection */
+  bool _stat_vertexRemoval;  // was this vertex colored using vertex removal
 
   private:
     int vertex_id_; // The id of the vertex 

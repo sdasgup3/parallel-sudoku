@@ -5,11 +5,11 @@
 #include "Utils.h"
 
 /*readonly*/
-#define THRESHOLD 5
 extern CProxy_Main mainProxy;
 extern AdjListType adjList_;
 extern int vertices_;
 extern int chromaticNum_;
+extern int grainSize;
 
 class compareColorRank {
   public:
@@ -22,6 +22,7 @@ class compareColorRank {
 class Main : public CBase_Main {
   private:
     std::string filename, newGraph;
+    int inputGrainSize;
   
   public:
     Main(CkArgMsg* msg);
@@ -74,11 +75,11 @@ class Node: public CBase_Node {
     int updateState(std::vector<vertex> & state, int vIndex, size_t c, bool doForcedMove);
 
     // print out graph colored states
-    void printGraph();
+    void printGraph(bool final=false);
 
-    // color the remaining part of graph locally
-    // and respond to parent with result
-    void colorLocally();
+    // color the remaining part of graph using sequential algorithm and respond
+    // to parent with result
+    void sequentialColoring();
 
     // color remotely
     // choose a constreint vertex, color it

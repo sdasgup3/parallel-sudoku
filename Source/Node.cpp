@@ -283,13 +283,17 @@ int Node::updateState(std::vector<vertex> & state, int vIndex, size_t c, bool do
  * so current implementation just color the 1 vertex
  * with the first avaialbe color
  * -----------------------------------------*/
-void Node::colorLocally()
+void Node::sequentialColoring()
 {
-
+  // 'vertex removal' and/or 'forced move' helped take out all the remaining
+  // vertices, and we have none for the sequential algorithm
   if(0 == uncolored_num_) {
     mergeRemovedVerticesBack(deletedV, node_state_);
     if(is_root_) {
-      printGraph();
+#ifdef DEBUG
+      printGraph(true);
+#endif
+      CkPrintf("Sequential Coloring called from root. No parallelism\n");
       CkAssert(1 == isColoringValid(node_state_));
       CkExit();
     } else {
@@ -302,7 +306,9 @@ void Node::colorLocally()
     mergeRemovedVerticesBack(deletedV, node_state_);
     if(is_root_){
       CkAssert(1 == isColoringValid(node_state_));
-      printGraph();
+#ifdef DEBUG
+      printGraph(true);
+#endif
       CkExit();
     } else {
       parent_.finish(true, node_state_);
@@ -512,7 +518,9 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
       node_state_ = state;
       mergeRemovedVerticesBack(deletedV, node_state_);
       CkAssert(1 == isColoringValid(node_state_));
-      printGraph();
+#ifdef DEBUG
+      printGraph(true);
+#endif
       CkExit();
     } else {
       CkPrintf("Fail to color!\n");
@@ -548,13 +556,18 @@ void Node::mergeRemovedVerticesBack(std::stack<int> deletedV, std::vector<vertex
 /* --------------------------------------------
  * print out node_state_
  * -------------------------------------------*/
-void Node::printGraph(){
-  if(is_root_)
-    CkPrintf("\nFrom Root Chare");
-  else 
-    CkPrintf("\nFrom Chare");
+void Node::printGraph(bool final){
+  if(final)
+    CkPrintf("--Printing final graph %s--\n", is_root_?"from Root Chare":"from Non-root Chare");
+  else
+    CkPrintf("--Printing partial graph %s--\n", is_root_?"from Root Chare":"from Non-root Chare");
 
-  CkPrintf(" - uncolored num = %d\n", uncolored_num_);
+  //if(is_root_)
+  //  CkPrintf("From Root Chare");
+  //else 
+  //  CkPrintf("From Chare");
+  //CkPrintf(" - uncolored num = %d\n", uncolored_num_);
+  
   for(int i=0; i<node_state_.size(); i++){
     CkPrintf("vertex[%d]:color[%d] ;\n", i, node_state_[i].getColor());
   }
@@ -566,6 +579,9 @@ void Node::printGraph(){
  * -------------------------------------------*/
 bool Node::isColoringValid(std::vector<vertex> state)
 {
+  // Only the root chare should check validity of solution
+  CkAssert(is_root_); 
+
   for (AdjListType::const_iterator it = adjList_.begin(); it != adjList_.end(); ++it) {
 
     int iColor = state[(*it).first].getColor();
@@ -578,6 +594,16 @@ bool Node::isColoringValid(std::vector<vertex> state)
     }
 
   }  
+
+  // valid coloring! Print statistics (if any)
+  CkPrintf("Valid Coloring found. Hurray! Printing stats.\n");
+  int vertexRemovalEfficiency = 0;
+  for_each(state.begin(), state.end(), [&](vertex v){
+      if(v._stat_vertexRemoval)
+        vertexRemovalEfficiency++;
+      });
+  
+  CkPrintf("Vertices removed by [Vertex Removal] = %d\n", vertexRemovalEfficiency);
   return  1;
 }
 

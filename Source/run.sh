@@ -5,7 +5,7 @@ TARGET=gc
 
 # Enter the command line parameters here. --help to get a list of allowed
 # options
-PROGRAM_OPTIONS=--newGraph=no
+PROGRAM_OPTIONS='--newGraph=yes --grain-size=5'
 #set -x
 runreg=false
 

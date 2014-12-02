@@ -6,6 +6,7 @@ mainmodule Module {
   readonly AdjListType adjList_;
   readonly int vertices_;
   readonly int chromaticNum_;
+  readonly int grainSize;
 
   mainchare Main {
     entry Main(CkArgMsg*);
@@ -26,12 +27,12 @@ mainmodule Module {
         //-----DEBUG USE ABOVE--------
 
         /* For a given chare if the number of uncolored vertices is below a
-         * threshold then it colors them locally using a naive sequential
-         * algorithm. (for now, THRESHOLD is set to 1)  .
+         * threshold (grainsize) then it colors them using a sequential LIFO
+         * stack
          */
 
-        if(uncolored_num_ <= THRESHOLD){
-          colorLocally();
+        if(uncolored_num_ <= grainSize){
+          sequentialColoring();
           return;
         }
 
