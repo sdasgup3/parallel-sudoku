@@ -93,6 +93,7 @@ class Node: public CBase_Node {
 
     //Checks if the reported coloring is valid. 
     bool isColoringValid(std::vector<vertex>);
+    void printStats();
 
     void getPriorityInfo(UShort & newParentBits, UInt* &newParentPtr, UInt &newParentPtrSize, UShort& parentBits, UInt*& parentPtr, UShort& childBits, UInt &childnum);
     inline int _log(int n);
@@ -135,22 +136,20 @@ class counter : public CBase_counter {
 
   void childCount(int n) {
     totalCount += n;
-    //waitFor--;
-    //if (waitFor == 0)  
-    //  if (threadId) { CthAwaken(threadId);}
+    waitFor--;
+    if (waitFor == 0)  
+      if (threadId) { CthAwaken(threadId);}
   }
-
 
   DUMMYMSG* getTotalCount() {
     CProxy_counter grp(mygrp);
     grp.sendCounts();
-    //threadId = CthSelf();
-    //while (waitFor != 0)  CthSuspend(); 
+    threadId = CthSelf();
+    while (waitFor != 0)  CthSuspend(); 
     DUMMYMSG* msg = new DUMMYMSG();
     msg->val = totalCount;
     return msg;
   }
-
 
 };
 
