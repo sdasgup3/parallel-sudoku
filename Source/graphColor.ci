@@ -3,22 +3,34 @@ mainmodule Module {
   include "graphColor.h";
 
   readonly CProxy_Main mainProxy;
+  readonly  CkGroupID counterGroup;
   readonly AdjListType adjList_;
   readonly int vertices_;
   readonly int chromaticNum_;
   readonly int grainSize;
+  readonly CkChareID mainhandle;
 
+  message DUMMYMSG;
   mainchare Main {
     entry Main(CkArgMsg*);
     entry [reductiontarget] void done(void);
   };
 
+  group counter {
+    entry counter();
+    entry void registerMe();
+    entry void sendCounts(); 
+    entry void childCount(int ); 
+    entry [sync] DUMMYMSG* getTotalCount();
+  };
+
   chare Node { 
-    entry Node(bool, int, CProxy_Node);
-    entry Node( std::vector<vertex> state, bool isRoot, int uncol, int vColored,  CProxy_Node parent, std::string nodeID, 
-        UShort pBits, UInt pPtr[size], int size);
+    entry Node(bool, int, CProxy_Node, CkGroupID);
+    entry Node( std::vector<vertex> state, bool isRoot, int uncol, int vColored,  
+        CProxy_Node parent, CkGroupID,  std::string nodeID, UShort pBits, UInt pPtr[size], int size);
 
     entry void finish(bool, std::vector<vertex>);
+    entry [threaded] void sequentialColoring();
 
     entry void run(){
       serial { 

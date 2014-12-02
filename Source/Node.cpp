@@ -2,6 +2,7 @@
 #include "string"
 #define CkIntbits (sizeof(int)*8)
 #define CkPriobitsToInts(nBits)    ((nBits+CkIntbits-1)/CkIntbits)
+extern CkGroupID counterGroup;
 
 //#define DEBUG 
 
@@ -10,10 +11,10 @@
  * 1. initialize node_state_ with adjList all uncolored
  * 2. Does pre-coloring
  * ---------------------------------------*/
-Node::Node(bool isRoot, int n, CProxy_Node parent) :
+Node::Node(bool isRoot, int n, CProxy_Node parent, CkGroupID g) :
   nodeID_("0"), parent_(parent), uncolored_num_(n), is_root_(isRoot),
   child_num_(0), child_finished_(0),  vertexColored(-1),
-  child_succeed_(0), is_and_node_(false), parentBits(1), parentPtr(NULL)
+  child_succeed_(0), is_and_node_(false), parentBits(1), parentPtr(NULL), counterGroup(g)
 
 {
   CkAssert(isRoot);  // nodeID=1, since this constructor is only called for root chare
@@ -35,6 +36,7 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
   printGraph();
 #endif 
 
+  CProxy_counter(counterGroup).ckLocalBranch()->registerMe();
   thisProxy.run();
 }
 
@@ -42,16 +44,18 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
  * Node constructor with two parameters
  * used to fire child node by state configured
  * ---------------------------------------------*/
-Node::Node( std::vector<vertex> state, bool isRoot, int uncol, int vColored,  CProxy_Node parent,
-    std::string nodeID, UShort pBits, UInt* pPtr, int size) : nodeID_(nodeID), parent_(parent), 
-    uncolored_num_(uncol), node_state_(state), vertexColored(vColored), is_root_(isRoot), 
-    child_num_(0), child_finished_(0),
-    child_succeed_(0), is_and_node_(false), parentBits(pBits), parentPtr(pPtr)
+Node::Node( std::vector<vertex> state, bool isRoot, int uncol, int vColored,  
+    CProxy_Node parent, CkGroupID g, std::string nodeID, UShort pBits, UInt* pPtr, int size) : 
+  nodeID_(nodeID), parent_(parent), uncolored_num_(uncol), node_state_(state), 
+  vertexColored(vColored), is_root_(isRoot), child_num_(0), child_finished_(0),
+    child_succeed_(0), is_and_node_(false), parentBits(pBits), parentPtr(pPtr), counterGroup(g)
+
 {
   for (AdjListType::const_iterator it = adjList_.begin(); it != adjList_.end(); ++it) {
     uncolored_num_ -= vertexRemoval((*it).first);
   }
 
+  CProxy_counter(counterGroup).ckLocalBranch()->registerMe();
   thisProxy.run();
 }
 
@@ -289,12 +293,23 @@ void Node::sequentialColoring()
   // vertices, and we have none for the sequential algorithm
   if(0 == uncolored_num_) {
     mergeRemovedVerticesBack(deletedV, node_state_);
+
+
     if(is_root_) {
 #ifdef DEBUG
       printGraph(true);
 #endif
       CkPrintf("Sequential Coloring called from root. No parallelism\n");
       CkAssert(1 == isColoringValid(node_state_));
+
+      /*
+      CProxy_counter grp(counterGroup);
+      DUMMYMSG* msg = grp[0].getTotalCount();
+      int totalCharesSpawned = msg->val;
+      CkPrintf("Total chares Spawned %d\n", totalCharesSpawned);
+      delete msg;
+      */
+
       CkExit();
     } else {
       parent_.finish(true, node_state_);
@@ -304,11 +319,20 @@ void Node::sequentialColoring()
 
   if(solveBruteForce()){
     mergeRemovedVerticesBack(deletedV, node_state_);
+
     if(is_root_){
       CkAssert(1 == isColoringValid(node_state_));
 #ifdef DEBUG
       printGraph(true);
 #endif
+      /*
+      CProxy_counter grp(counterGroup);
+      DUMMYMSG* msg = grp[0].getTotalCount();
+      int totalCharesSpawned = msg->val;
+      CkPrintf("Total chares Spawned %d\n", totalCharesSpawned);
+      delete msg;
+      */
+
       CkExit();
     } else {
       parent_.finish(true, node_state_);
@@ -416,7 +440,7 @@ void Node::colorRemotely(){
     int verticesColored = updateState(new_state, vIndex, p.first, true);
 
     CProxy_Node child = CProxy_Node::ckNew(new_state, false, uncolored_num_- verticesColored, 
-        vIndex, thisProxy, nodeID_ + std::to_string(child_num_), newParentPrioBits, newParentPrioPtr, newParentPrioPtrSize, 
+        vIndex, thisProxy, counterGroup, nodeID_ + std::to_string(child_num_), newParentPrioBits, newParentPrioPtr, newParentPrioPtrSize, 
         CK_PE_ANY , opts);
     child_num_ ++;
     free(newParentPrioPtr);
@@ -521,6 +545,15 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
 #ifdef DEBUG
       printGraph(true);
 #endif
+
+      /*
+      CProxy_counter grp(counterGroup);
+      DUMMYMSG* msg = grp[0].getTotalCount();
+      int totalCharesSpawned = msg->val;
+      CkPrintf("Total chares Spawned %d\n", totalCharesSpawned);
+      delete msg;
+      */
+
       CkExit();
     } else {
       CkPrintf("Fail to color!\n");
@@ -562,12 +595,6 @@ void Node::printGraph(bool final){
   else
     CkPrintf("--Printing partial graph %s--\n", is_root_?"from Root Chare":"from Non-root Chare");
 
-  //if(is_root_)
-  //  CkPrintf("From Root Chare");
-  //else 
-  //  CkPrintf("From Chare");
-  //CkPrintf(" - uncolored num = %d\n", uncolored_num_);
-  
   for(int i=0; i<node_state_.size(); i++){
     CkPrintf("vertex[%d]:color[%d] ;\n", i, node_state_[i].getColor());
   }

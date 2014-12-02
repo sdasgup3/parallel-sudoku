@@ -5,10 +5,19 @@
 #include "graphColor.h"
 
 CProxy_Main mainProxy;
+CkGroupID counterGroup;
 AdjListType adjList_;
 int vertices_;
 int chromaticNum_;
+CkChareID mainhandle;
 int grainSize;
+
+
+CkGroupID  counterInit()
+{
+  CkGroupID g =CProxy_counter::ckNew();  
+  return g;
+}
 
 Main::Main(CkArgMsg* msg):newGraph("no"), inputGrainSize(1) {
 
@@ -21,6 +30,7 @@ Main::Main(CkArgMsg* msg):newGraph("no"), inputGrainSize(1) {
  
   chromaticNum_= getConservativeChromaticNum();
   mainProxy= thisProxy;
+  mainhandle=thishandle;
   grainSize = inputGrainSize;
 
   //print input graph
@@ -28,8 +38,9 @@ Main::Main(CkArgMsg* msg):newGraph("no"), inputGrainSize(1) {
   std::cout << "Number of vertices = "<< vertices_<< std::endl;
   std::cout << "Conservative Chromatic Number = " << chromaticNum_ << std::endl;
   std::cout << "Grain-size = "<< grainSize << std::endl;
+  CkGroupID counterGroup = counterInit();
+  CProxy_Node node = CProxy_Node::ckNew(true, vertices_, (CProxy_Node)thisProxy, counterGroup);
 
-  CProxy_Node node = CProxy_Node::ckNew(true, vertices_, (CProxy_Node)thisProxy);
 }
 
 Main::Main(CkMigrateMessage* msg) {}

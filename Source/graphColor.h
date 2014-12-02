@@ -31,7 +31,6 @@ class Main : public CBase_Main {
     void parseCommandLine(int argc, char **argv);
     void readDataFromPython(int argc, char **argv);
     int getConservativeChromaticNum();
-    
     void done();
     void populateInitialState(std::vector<vertex>&);
 };
@@ -46,9 +45,10 @@ class Node: public CBase_Node {
     bool is_root_;
     int vertexColored;    //The vertex colored in this node;Debug purpose
     CProxy_Node parent_;
+    CkGroupID counterGroup;
     int uncolored_num_;   //number of uncolored vertex
     UInt child_num_;       //number of children this chare creates
-                          //each element corresponds to a subgraph
+                         //each element corresponds to a subgraph
     int child_finished_;  //current finished children
     int child_succeed_;
     bool is_and_node_;    //set to true if it requires all children reply
@@ -57,8 +57,8 @@ class Node: public CBase_Node {
 
   public:
     // default constructor creats root node
-    Node(bool isRoot, int n, CProxy_Node parent);
-    Node(std::vector<vertex> state, bool isRoot, int n, int, CProxy_Node parent, std::string parentID, 
+    Node(bool isRoot, int n, CProxy_Node parent, CkGroupID);
+    Node(std::vector<vertex> state, bool isRoot, int n, int, CProxy_Node parent, CkGroupID, std::string parentID, 
           UShort , UInt *, int);
     Node (CkMigrateMessage*);
 
@@ -103,5 +103,56 @@ class Node: public CBase_Node {
 
 };
 
+class DUMMYMSG : public CMessage_DUMMYMSG {
+  public:
+    int val;
+};
+
+class counter : public CBase_counter {
+  private:
+    int nCharesOnMyPe;
+    CkGroupID mygrp;
+    int waitFor;
+    CthThread threadId;
+    int totalCount;
+
+  public:
+  counter(){
+    mygrp = thisgroup;
+    nCharesOnMyPe = 0;
+    waitFor = CkNumPes();
+    totalCount = 0;
+  }
+
+  void registerMe(){
+    nCharesOnMyPe++; 
+  }
+
+  void sendCounts() {
+    CProxy_counter grp(mygrp);
+    CkPrintf("num %d ", nCharesOnMyPe);
+    grp[0].childCount(nCharesOnMyPe);
+  }
+
+  void childCount(int n) {
+    totalCount += n;
+    //waitFor--;
+    //if (waitFor == 0)  
+    //  if (threadId) { CthAwaken(threadId);}
+  }
+
+
+  DUMMYMSG* getTotalCount() {
+    CProxy_counter grp(mygrp);
+    grp.sendCounts();
+    //threadId = CthSelf();
+    //while (waitFor != 0)  CthSuspend(); 
+    DUMMYMSG* msg = new DUMMYMSG();
+    msg->val = totalCount;
+    return msg;
+  }
+
+
+};
 
 #endif
