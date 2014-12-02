@@ -94,6 +94,11 @@ class Node: public CBase_Node {
     //Checks if the reported coloring is valid. 
     bool isColoringValid(std::vector<vertex>);
 
+    //detect subgraphs and create corresponding states
+    //if only one graph existed, return false
+    bool detectAndCreateSubgraphs(
+       std::map<boost::dynamic_bitset<>, std::vector<vertex>> & subgraphs);
+
     void getPriorityInfo(UShort & newParentBits, UInt* &newParentPtr, UInt &newParentPtrSize, UShort& parentBits, UInt*& parentPtr, UShort& childBits, UInt &childnum);
     inline int _log(int n);
 

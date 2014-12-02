@@ -401,9 +401,9 @@ void Node::colorRemotely(){
 
   if(is_and_node_){
      //TODO: call "Detect and Create Subgraph" functions here
-     std::map<std::bitset<vertices>, std::vector<vertex>> subgraphs;
+     std::map<boost::dynamic_bitset<>, std::vector<vertex>> subgraphs;
      //detect subgraphs and create states correspondingly
-     detectAndCreateSubgraphs( &subgraphs );
+     detectAndCreateSubgraphs( subgraphs );
      //remove vertices accordingly for each subgraph
      for(auto subgraph_entry : subgraphs ){
         //for each subgraph, fire a child node to do the work
@@ -648,36 +648,42 @@ int Node::_log(int n)
 //detectAndCreateSubgraphs
 // - return true if it consists more than one subgraphs
 //---------------------------------------------------------
-bool detectAndCreateSubgraphs(
-        std::vector<std::bitset<vertices>, std::vector<vertex>> subgraphs);
+bool Node::detectAndCreateSubgraphs(
+        std::map<boost::dynamic_bitset<>, std::vector<vertex>> & subgraphs)
 {
-    std::bitset<vertices> init_bitset;
+    boost::dynamic_bitset<> init_bitset(vertices_);
     //initialize the bitset by marking all removed vertices as 0
     //and existed vertices as 1
-
-    std::bitset<vertices> work_bitset(init_bitset);
-    std::bitset<vertices> subgraph_bitset;
+    
+    boost::dynamic_bitset<> work_bitset(init_bitset);
+    boost::dynamic_bitset<> subgraph_bitset(vertices_);
     std::list<int> worklist;
 
     while(work_bitset.any()){
+        worklist.clear();
         //get an unremoved vertex
-        int first_bit = get_first_set_bit(work_bitset);
+        int first_bit = 0;
+        while(!work_bitset.test(first_bit))
+            first_bit++;
         //add it to subgraph
         subgraph_bitset.set(first_bit);
         work_bitset.reset(first_bit);
         worklist.push_back(first_bit);
-        //test all its neighbors
+        //add its neighbors to subgraph iteratively
         do{
             int i = worklist.front();
             worklist.pop_front();
-            for( int neighbor_vertex_index : adjList[i]){
+            for( int neighbor_vertex_index : adjList_[i]){
                 if(work_bitset.test(neighbor_vertex_index)){
-                    subgraph.bitset.set(neighbor_vertex_index);
+                    subgraph_bitset.set(neighbor_vertex_index);
                     work_bitset.reset(neighbor_vertex_index);
                     worklist.push_back(neighbor_vertex_index);
                 }
             }
         }while(!worklist.empty());
+        //get one subgraph, create corresponding states and insert
+        //it to map
+
     }
     //get an unremoved vertex v
     //  put it into subgraph_bitset
