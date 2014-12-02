@@ -11,6 +11,7 @@ class vertex  {
       color_ = -1;
       possible_colors_.set();   //set every bit to 1 
       is_onStack = false;
+      _stat_vertexRemoval = false;
     }
     bool isColored() { return color_ >=0;}
     int getColor() { return color_; }
