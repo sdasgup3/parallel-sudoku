@@ -399,18 +399,26 @@ void Node::colorRemotely(){
   //TODO: remove vertex and all other preprocessing operations
   //place here
 
-  if(is_and_node_){
-     //TODO: call "Detect and Create Subgraph" functions here
+
+    //Detect Subgraphs
+    //If have >=2 subgraphs, make this node and_node
+    //and spawn children to color each subgraphs
      std::map<boost::dynamic_bitset<>, std::vector<vertex>> subgraphs;
      //detect subgraphs and create states correspondingly
-     detectAndCreateSubgraphs( subgraphs );
-     //remove vertices accordingly for each subgraph
-     for(auto subgraph_entry : subgraphs ){
-        //for each subgraph, fire a child node to do the work
-        //CProxy_Node::ckNew();
+     if(  detectAndCreateSubgraphs( subgraphs ) ){
+        is_and_node = true;
+        child_num_=subgraphs.size();
+        //remove vertices accordingly for each subgraph
+        for(auto subgraph_entry : subgraphs ){
+            //for each subgraph, fire a child node to do the work
+            CProxy_Node::ckNew(subgraph_entry.second, false,
+                    subgraph_entry.first.count(), vColored, thisProxy,
+                    counterGroup, nodeID_+std::to_string(child_num_),
+                    newParentPrioBits, newParentPrioPtr, newParentPrioPtrSize,
+                    CK_PE_ANY, opts);
+        }
+        return;
      }
-     return;
-  }
 
   // -----------------------------------------
   // Following code deals with case is_and_node=false
@@ -654,12 +662,12 @@ bool Node::detectAndCreateSubgraphs(
     boost::dynamic_bitset<> init_bitset(vertices_);
     //initialize the bitset by marking all removed vertices as 0
     //and existed vertices as 1
-    
     boost::dynamic_bitset<> work_bitset(init_bitset);
     boost::dynamic_bitset<> subgraph_bitset(vertices_);
     std::list<int> worklist;
 
     while(work_bitset.any()){
+        subgraph_bitset.reset();
         worklist.clear();
         //get an unremoved vertex
         int first_bit = 0;
@@ -683,19 +691,16 @@ bool Node::detectAndCreateSubgraphs(
         }while(!worklist.empty());
         //get one subgraph, create corresponding states and insert
         //it to map
-
+        std::vector<vertex> new_state = node_state_;
+        boost::dynamic_bitset<> remove_bitset = init_bitset ^ subgraph_bitset;
+        for(int i=0; i<remove_bitset.size(); i++){
+            if(remove_bitset.test(i)){
+                //remove from the list
+                new_state[i]._stat_vertexRemoval=true;
+            }
+        }
+        subgraphs.insert(std::pair<boost::dynamic_bitset<>, std::vector<vertex>>(
+                    subgraph_bitset, new_state));
     }
-    //get an unremoved vertex v
-    //  put it into subgraph_bitset
-    //  get all its unremoved neighbors, put it into worklist, remove it from init_bitset
-    //  for each vertice in the work list
-    //      if it's already in the subgraph, ignore it
-    //      if not, put it in the subgraph and get all its neighbors, put it into worklist, remove from init_bitset
-    //      if there's nothing in worklist,
-    //      create corresponding subgraph states
-    //  test whether there is still vertex in init_bitset
-    //      if yes, do again
-    //      if not, test size of init_bitset
-    //      return false if =1
-    //      else return true
+    return subgraphs.size()>1  ;
 }
