@@ -278,10 +278,6 @@ int Node::updateState(std::vector<vertex> & state, int vIndex, size_t c, bool do
 /*--------------------------------------------
  * color the remaining graph locally
  * return if finish or not
- * TODO: when THREASHOLD!=1
- * for now the THREASHOLD is set to 1
- * so current implementation just color the 1 vertex
- * with the first avaialbe color
  * -----------------------------------------*/
 void Node::sequentialColoring()
 {
@@ -302,7 +298,9 @@ void Node::sequentialColoring()
     return;
   }
 
+  std::cout<<"Chare:"<<nodeID_<<" starting seq.\n";
   if(solveBruteForce()){
+  std::cout<<"Chare:"<<nodeID_<<" end seq.\n";
     mergeRemovedVerticesBack(deletedV, node_state_);
     if(is_root_){
       CkAssert(1 == isColoringValid(node_state_));
@@ -314,6 +312,7 @@ void Node::sequentialColoring()
       parent_.finish(true, node_state_);
     }
   } else {
+    std::cout<<"Chare:"<<nodeID_<<" end seq.\n";
     if(is_root_){
       CkPrintf("Fail to color!\n");
       CkExit();
@@ -325,7 +324,7 @@ void Node::sequentialColoring()
 }
 
 /*-------------------------------------------
- * At the leaf state when uncolored_num_ <= THRESHOLD
+ * At the leaf state when uncolored_num_ <= grain-size
  *  we will try to color the graph using a brute force
  *  strategy.
  *   ----------------------------------------*/
@@ -348,6 +347,7 @@ bool Node::solveBruteForceHelper(std::vector<vertex>& state, std::vector<int> un
   return false;
 }
 
+// recursive sequential algorithm 
 bool Node::solveBruteForce() 
 {
   std::vector<int> uncoloredIndices;

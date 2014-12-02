@@ -10,7 +10,7 @@ int vertices_;
 int chromaticNum_;
 int grainSize;
 
-Main::Main(CkArgMsg* msg):newGraph("no"), inputGrainSize(1) {
+Main::Main(CkArgMsg* msg):newGraph("no") {
 
   parseCommandLine(msg->argc, msg->argv);
 
@@ -21,7 +21,6 @@ Main::Main(CkArgMsg* msg):newGraph("no"), inputGrainSize(1) {
  
   chromaticNum_= getConservativeChromaticNum();
   mainProxy= thisProxy;
-  grainSize = inputGrainSize;
 
   //print input graph
   //std::cout << adjList_;  
@@ -43,7 +42,7 @@ void Main::parseCommandLine(int argc, char **argv)
   namespace po = boost::program_options;
   po::options_description desc("Allowed options");
   desc.add_options()
-    ("grain-size", po::value<int>(), "Grain-size for state space search")
+    ("grain-size", po::value<int>(), "Grain-size for state space search (default=1)")
     ("newGraph", po::value<std::string>(),"Generate new graph from python (default=no)")
     ("filename", po::value<std::string>(),"Input file");
 
@@ -59,7 +58,10 @@ void Main::parseCommandLine(int argc, char **argv)
 
     // if parameter was passed in command line, assign it.
     if(vm.count("grain-size"))
-      inputGrainSize = vm["grain-size"].as<int>();
+      grainSize = vm["grain-size"].as<int>();
+    else
+      grainSize = 1;
+
     if(vm.count("newGraph"))          
       newGraph.assign(vm["newGraph"].as<std::string>());
   }

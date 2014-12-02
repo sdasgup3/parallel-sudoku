@@ -22,7 +22,6 @@ class compareColorRank {
 class Main : public CBase_Main {
   private:
     std::string filename, newGraph;
-    int inputGrainSize;
   
   public:
     Main(CkArgMsg* msg);
