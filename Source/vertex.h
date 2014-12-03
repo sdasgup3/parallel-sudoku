@@ -33,6 +33,10 @@ class vertex  {
         _stat_vertexRemoval = true;
     }
 
+    void set_removal(bool v){
+        _stat_vertexRemoval = v;
+    }
+
     void set_out_of_subgraph(bool v) {
       is_out_of_subgraph  = v;
     }

@@ -294,12 +294,12 @@ void Node::printStats()
 void Node::colorLocally()
 {
     //-------------debug code below---------------
-//#ifdef DEBUG
+#ifdef DEBUG
     char *id = new char[nodeID_.size()];
     strcpy(id, nodeID_.c_str());
     CkPrintf("Color locally in node [%s] with uncolored num=%d\n", id, uncolored_num_);
     delete [] id;
-//#endif
+#endif
     //------------debug code above----------------
   // 'vertex removal' and/or 'forced move' helped take out all the remaining
   // vertices, and we have none for the sequential algorithm
@@ -431,12 +431,12 @@ void Node::sequentialColoringHelper(bool& solutionFound, std::vector<vertex>& re
 void Node::colorRemotely(){
 
     //-------------debug code below---------------
-//#ifdef DEBUG
+#ifdef DEBUG
     char *id = new char[nodeID_.size()];
     strcpy(id, nodeID_.c_str());
     CkPrintf("Color remotely in node [%s] with uncolored num=%d\n", id, uncolored_num_);
     delete [] id;
-//#endif
+#endif
     //------------debug code above----------------
 
   //TODO: remove vertex and all other preprocessing operations
@@ -450,7 +450,7 @@ void Node::colorRemotely(){
      if(  detectAndCreateSubgraphs( subgraphs ) ){
 
          //----------debug code below-----------------------
-//#ifdef DEUBG
+#ifdef DEUBG
          char * id = new char[nodeID_.size()+1];
          strcpy(id, nodeID_.c_str());
          CkPrintf("find %d subgraphs in node[%s]\n", subgraphs.size(), id);
@@ -463,7 +463,7 @@ void Node::colorRemotely(){
              CkPrintf("%s\n", bits);
              delete [] bits;
          }
-//#endif
+#endif
          //----------debug code above-----------------------
         is_and_node_ = true;
         //child_num_=subgraphs.size();
@@ -759,11 +759,23 @@ bool Node::detectAndCreateSubgraphs(
     //and existed vertices as 1
     CkAssert(node_state_.size()==vertices_);
     for(int i=0; i<vertices_; i++){
-        if(node_state_[i].get_is_onStack()==true ||
-                node_state_[i].get_is_out_of_subgraph()==true)
-            //these vertices have been removed from current graph
+       //these vertices have been removed from current graph
+       if(!node_state_[i].isOperationPermissible())
             init_bitset.reset(i);
     }
+   // #ifdef DEBUG
+        if(init_bitset.count()!=vertices_){
+        std::string s;
+         char * id = new char[nodeID_.size()+1];
+         strcpy(id, nodeID_.c_str());
+             boost::to_string(init_bitset, s);
+             char * bits = new char[s.size()+1];
+             strcpy(bits, s.c_str());
+             CkPrintf("in node [%s] detect subgraphs %s\n", id, bits);
+             delete [] id;
+             delete [] bits;
+        }
+   // #endif
     //keep track of vertices haven't been assigned to any subgraph
     boost::dynamic_bitset<> work_bitset(init_bitset);
     //record vertices in current computing subgraph

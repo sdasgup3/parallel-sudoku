@@ -123,6 +123,7 @@ void stackNode::mergeRemovedVerticesBack() {
     int vertex = deletedV.top();
     deletedV.pop();
     node_state_[vertex].set_is_onStack(false);
+    node_state_[vertex].set_removal(false);
     boost::dynamic_bitset<> possColor = node_state_[vertex].getPossibleColor();
     size_t c = possColor.find_first();
     CkAssert(c != boost::dynamic_bitset<>::npos);
