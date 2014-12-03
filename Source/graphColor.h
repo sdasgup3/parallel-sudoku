@@ -19,6 +19,12 @@ class compareColorRank {
     }
 };
 
+class priorityMsg : public CMessage_priorityMsg {
+  public:
+    UInt* parentPtr;
+    UShort parentBits;
+};
+
 class Main : public CBase_Main {
   private:
     std::string filename, newGraph;
@@ -44,7 +50,6 @@ class Node: public CBase_Node {
     bool is_root_;
     int vertexColored;    //The vertex colored in this node;Debug purpose
     CProxy_Node parent_;
-    CkGroupID counterGroup;
     int uncolored_num_;   //number of uncolored vertex
     UInt child_num_;       //number of children this chare creates
                          //each element corresponds to a subgraph
@@ -52,13 +57,13 @@ class Node: public CBase_Node {
     int child_succeed_;
     bool is_and_node_;    //set to true if it requires all children reply
     UShort parentBits;          //Number of priority bits used 
-    UInt* parentPtr;    
+    UInt* parentPtr;
 
   public:
     // default constructor creats root node
-    Node(bool isRoot, int n, CProxy_Node parent, CkGroupID);
-    Node(std::vector<vertex> state, bool isRoot, int n, int, CProxy_Node parent, CkGroupID, std::string parentID, 
-          UShort , UInt *, int);
+    Node(bool isRoot, int n, CProxy_Node parent);
+    Node(std::vector<vertex> state, bool isRoot, int n, CProxy_Node parent, 
+        std::string parentID, UShort , UInt *, int);
     Node (CkMigrateMessage*);
 
     int getNextConstraintVertex();
@@ -95,7 +100,7 @@ class Node: public CBase_Node {
     bool isColoringValid(std::vector<vertex>);
     void printStats();
 
-    void getPriorityInfo(UShort & newParentBits, UInt* &newParentPtr, UInt &newParentPtrSize, UShort& parentBits, UInt*& parentPtr, UShort& childBits, UInt &childnum);
+    void getPriorityInfo(UShort &, UInt* &, UInt&, UShort& , UInt*& , UShort& , UInt &);
     inline int _log(int n);
 
     bool solveBruteForce() ;

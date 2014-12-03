@@ -11,6 +11,9 @@ mainmodule Module {
   readonly CkChareID mainhandle;
 
   message DUMMYMSG;
+
+  message priorityMsg; // { UInt parentPtr[]; };
+
   mainchare Main {
     entry Main(CkArgMsg*);
     entry [reductiontarget] void done(void);
@@ -25,9 +28,8 @@ mainmodule Module {
   };
 
   chare Node { 
-    entry Node(bool, int, CProxy_Node, CkGroupID);
-    entry Node( std::vector<vertex> state, bool isRoot, int uncol, int vColored,  
-        CProxy_Node parent, CkGroupID,  std::string nodeID, UShort pBits, UInt pPtr[size], int size);
+    entry Node(bool, int, CProxy_Node );
+    entry Node( std::vector<vertex> , bool , int , CProxy_Node ,  std::string , UShort pBits, UInt pPtr[size], int size);
 
     entry void finish(bool, std::vector<vertex>);
     entry [threaded] void sequentialColoring();

@@ -30,14 +30,14 @@ Main::Main(CkArgMsg* msg):newGraph("no"){
   chromaticNum_= getConservativeChromaticNum();
   mainProxy= thisProxy;
   mainhandle=thishandle;
+  counterGroup = counterInit();
 
   //print input graph
   //std::cout << adjList_;  
   std::cout << "Number of vertices = "<< vertices_<< std::endl;
   std::cout << "Conservative Chromatic Number = " << chromaticNum_ << std::endl;
   std::cout << "Grain-size = "<< grainSize << std::endl;
-  CkGroupID counterGroup = counterInit();
-  CProxy_Node node = CProxy_Node::ckNew(true, vertices_, (CProxy_Node)thisProxy, counterGroup);
+  CProxy_Node node = CProxy_Node::ckNew(true, vertices_, (CProxy_Node)thisProxy);
 }
 
 Main::Main(CkMigrateMessage* msg) {}
