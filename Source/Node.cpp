@@ -189,7 +189,8 @@ int Node::getNextConstraintVertex(){
   cVextexPossColor = chromaticNum_ + 1;
 
   for(int  i = 0 ; i < node_state_.size(); i++){
-    if(false == node_state_[i].isColored() && false == node_state_[i].get_is_onStack()){
+    if(false == node_state_[i].isColored() && false == node_state_[i].get_is_onStack()
+            && false == node_state_[i].get_is_out_of_subgraph()){
       boost::dynamic_bitset<> possibleColor = node_state_[i].getPossibleColor(); 
       if(cVextexPossColor > possibleColor.count() ) {
         cVertex = i;
@@ -295,6 +296,14 @@ void Node::printStats()
  * -----------------------------------------*/
 void Node::colorLocally()
 {
+    //-------------debug code below---------------
+#ifdef DEBUG
+    char *id = new char[nodeID_.size()];
+    strcpy(id, nodeID_.c_str());
+    CkPrintf("Color locally in node [%s] with uncolored num=%d\n", id, uncolored_num_);
+    delete [] id;
+#endif
+    //------------debug code above----------------
   // 'vertex removal' and/or 'forced move' helped take out all the remaining
   // vertices, and we have none for the sequential algorithm
   if(0 == uncolored_num_) {
@@ -472,10 +481,20 @@ void Node::colorRemotely(){
      if(  detectAndCreateSubgraphs( subgraphs ) ){
 
          //----------debug code below-----------------------
+//#ifdef DEUBG
          char * id = new char[nodeID_.size()+1];
          strcpy(id, nodeID_.c_str());
          CkPrintf("find %d subgraphs in node[%s]\n", subgraphs.size(), id);
          delete [] id;
+         for(auto subgraph_entry : subgraphs ){
+             std::string s;
+             boost::to_string(subgraph_entry.first, s);
+             char * bits = new char[s.size()+1];
+             strcpy(bits, s.c_str());
+             CkPrintf("%s\n", bits);
+             delete [] bits;
+         }
+//#endif
          //----------debug code above-----------------------
         is_and_node_ = true;
         child_num_=subgraphs.size();
