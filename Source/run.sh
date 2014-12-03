@@ -5,11 +5,11 @@ TARGET=gc
 
 # Enter the command line parameters here. --help to get a list of allowed
 # options
-PROGRAM_OPTIONS='--newGraph=yes --grain-size=5 --do-priority=false'
+PROGRAM_OPTIONS='--newGraph=yes --grain-size=1 --do-priority=false'
 #set -x
 runreg=false
 
-while getopts ":r" opt; do
+while getopts ":r:f" opt; do
   case $opt in
     r)
       for file in $( find ../Tests/ -name "*json" ); do
@@ -21,7 +21,15 @@ while getopts ":r" opt; do
       done
       runreg=true  
       ;;
-    \?)
+    f)
+        echo =================================
+        echo Testing $2
+        echo ================================
+        cp $2 latestGraph.json
+        ./charmrun +p4 $TARGET --newGraph=no ++local
+        runreg=true
+      ;;
+   \?)
       echo "Invalid option: -$OPTARG" >&2
       ;;
   esac

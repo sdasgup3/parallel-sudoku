@@ -82,6 +82,7 @@ int Node::getUncoloredNgbr(int vertex)
 int Node::vertexRemoval(int vertex)
 {
   int vertexRemoved = 0;
+  return 0;
   if(node_state_[vertex].isColored() || node_state_[vertex].get_is_onStack()) {
     return 0;
   }
@@ -471,7 +472,10 @@ void Node::colorRemotely(){
      if(  detectAndCreateSubgraphs( subgraphs ) ){
 
          //----------debug code below-----------------------
-         CkPrintf("find %d subgraphs in node[%s]\n", subgraphs.size(), nodeID_);
+         char * id = new char[nodeID_.size()+1];
+         strcpy(id, nodeID_.c_str());
+         CkPrintf("find %d subgraphs in node[%s]\n", subgraphs.size(), id);
+         delete [] id;
          //----------debug code above-----------------------
         is_and_node_ = true;
         child_num_=subgraphs.size();
@@ -482,7 +486,8 @@ void Node::colorRemotely(){
             //state, isRoot, uncoloredNum, parentProxy, nodeId
             CProxy_Node::ckNew(subgraph_entry.second, false,
                     subgraph_entry.first.count(), thisProxy,
-                    nodeID_+std::to_string(child_num_));
+                    nodeID_+std::to_string(child_num_),
+                    0, NULL, 0);
         }
         return;
      }
