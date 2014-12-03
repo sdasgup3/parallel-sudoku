@@ -299,7 +299,6 @@ void Node::sequentialColoring()
   if(0 == uncolored_num_) {
     mergeRemovedVerticesBack(deletedV, node_state_);
 
-
     if(is_root_) {
 #ifdef DEBUG
       printGraph(true);
@@ -314,9 +313,7 @@ void Node::sequentialColoring()
     return;
   }
 
-  std::cout<<"Chare:"<<nodeID_<<" starting seq.\n";
   if(solveBruteForce()){
-  std::cout<<"Chare:"<<nodeID_<<" end seq.\n";
     mergeRemovedVerticesBack(deletedV, node_state_);
 
     if(is_root_){
@@ -330,7 +327,6 @@ void Node::sequentialColoring()
       parent_.finish(true, node_state_);
     }
   } else {
-    std::cout<<"Chare:"<<nodeID_<<" end seq.\n";
     if(is_root_){
       CkPrintf("Fail to color!\n");
       CkExit();
