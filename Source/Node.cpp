@@ -292,7 +292,7 @@ void Node::printStats()
  * color the remaining graph locally
  * return if finish or not
  * -----------------------------------------*/
-void Node::sequentialColoring()
+void Node::colorLocally()
 {
   // 'vertex removal' and/or 'forced move' helped take out all the remaining
   // vertices, and we have none for the sequential algorithm
@@ -312,8 +312,8 @@ void Node::sequentialColoring()
     }
     return;
   }
-
-  if(solveBruteForce()){
+ 
+  if(sequentialColoring()){
     mergeRemovedVerticesBack(deletedV, node_state_);
 
     if(is_root_){
@@ -334,6 +334,74 @@ void Node::sequentialColoring()
       mergeRemovedVerticesBack(deletedV, node_state_);
       parent_.finish(false, node_state_);
     }
+  }
+}
+
+bool Node::sequentialColoring()
+{
+  // stackForSequential = Stack which holds stackNodes objects. Each stackNode
+  // object represents a node of the state space search. stackNode class is
+  // similar to the node class
+  stackForSequential.emplace(stackNode(node_state_, uncolored_num_));
+  bool solutionFound = false; 
+  
+  // if a solution is found in the recursive sequentialColoringHelper function,
+  // the vertices in node_state_ are updated (colored)
+  sequentialColoringHelper(solutionFound, node_state_);
+  return solutionFound;
+}
+
+void Node::sequentialColoringHelper(bool& solutionFound, std::vector<vertex>& result)
+{
+  CkAssert(!stackForSequential.empty());
+  
+  stackNode curr_node_ = stackForSequential.top();
+  stackForSequential.pop();
+  if(!solutionFound)
+  {
+    // vertex removal step
+    for (AdjListType::const_iterator it = adjList_.begin(); it != adjList_.end(); ++it) {
+      curr_node_.uncolored_num_ -= curr_node_.vertexRemoval((*it).first);
+    }
+
+    // coloring found, merge the vertices we removed in the vertex removal step,
+    // store the result, and return
+    if(curr_node_.uncolored_num_==0)
+    {
+      solutionFound = true;
+      curr_node_.mergeRemovedVerticesBack();
+      result = curr_node_.node_state_;
+      return;
+    }
+
+    // get next contrained vertex, apply value ordering. The order specified by
+    // the priority queue leads to LIFO DFS of the state space
+    int vIndex = curr_node_.getNextConstrainedVertex();
+    CkAssert(vIndex!=-1);
+
+    pq_type priorityColors = curr_node_.getValueOrderingOfColors(vIndex);
+    while(!priorityColors.empty()){
+      std::pair<int,int> p = priorityColors.top();
+      priorityColors.pop();
+      std::vector<vertex> new_state = curr_node_.node_state_;
+      int verticesColored = curr_node_.updateState(new_state, vIndex, p.first, true);
+
+      // recursive call
+      stackForSequential.emplace(stackNode(new_state, curr_node_.uncolored_num_ - verticesColored));
+      sequentialColoringHelper(solutionFound, result);
+
+      // Don't go down on the siblings if a solution was found at a node
+      if(solutionFound) { 
+        curr_node_.node_state_ = result;
+        break;
+      }
+    }
+    
+    // merge the vertices which were removed in vertex removal step, update
+    // result
+    curr_node_.mergeRemovedVerticesBack();
+    if(solutionFound)
+      result = curr_node_.node_state_;
   }
 }
 
@@ -512,7 +580,7 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
 
   //if all children return, don't need to wait
   bool finish  = (child_finished_ == child_num_); 
-  finish  |= is_and_node_ ?
+  finish  |= (is_and_node_ ?
     //if it's and node,
     //return success, terminate if finish=num
     //return fail, terminate if one fail
@@ -520,7 +588,7 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
     //if it's or node,
     //return success, terminate one success
     //return fail, terminate all finish
-    (child_succeed_!=0);
+    (child_succeed_!=0));
 
   if(is_and_node_){
     //TODO: call "Merge Subgraph" here

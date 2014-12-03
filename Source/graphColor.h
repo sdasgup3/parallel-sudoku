@@ -11,6 +11,19 @@ extern int vertices_;
 extern int chromaticNum_;
 extern int grainSize;
 
+struct stackNode {
+  std::vector<vertex> node_state_;
+  int uncolored_num_;   //number of uncolored vertex
+  std::stack<int> deletedV;
+  stackNode(std::vector<vertex> state, int c): node_state_(state), uncolored_num_(c){}
+  int getUncoloredNgbr(int);
+  int vertexRemoval(int);
+  int getNextConstrainedVertex();
+  pq_type getValueOrderingOfColors(int);
+  int updateState(std::vector<vertex>&, int, size_t, bool);
+  void mergeRemovedVerticesBack();
+};
+
 class compareColorRank {
   public:
     bool operator()(std::pair<size_t, int> &p1, std::pair<size_t, int>  &p2)
@@ -47,6 +60,7 @@ class Node: public CBase_Node {
     std::string nodeID_;    // unique ID of the node
     std::vector<vertex> node_state_;
     std::stack<int> deletedV;
+    std::stack<stackNode> stackForSequential;
     bool is_root_;
     int vertexColored;    //The vertex colored in this node;Debug purpose
     CProxy_Node parent_;
@@ -83,7 +97,7 @@ class Node: public CBase_Node {
 
     // color the remaining part of graph using sequential algorithm and respond
     // to parent with result
-    void sequentialColoring();
+    void colorLocally();
 
     // color remotely
     // choose a constreint vertex, color it
@@ -103,6 +117,8 @@ class Node: public CBase_Node {
     void getPriorityInfo(UShort &, UInt* &, UInt&, UShort& , UInt*& , UShort& , UInt &);
     inline int _log(int n);
 
+    bool sequentialColoring();
+    void sequentialColoringHelper(bool&, std::vector<vertex>&);
     bool solveBruteForce() ;
     bool solveBruteForceHelper(std::vector<vertex>& , std::vector<int> , int );
 
