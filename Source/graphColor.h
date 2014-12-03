@@ -135,7 +135,6 @@ class counter : public CBase_counter {
 
   void sendCounts() {
     CProxy_counter grp(mygrp);
-    CkPrintf("num %d ", nCharesOnMyPe);
     grp[0].childCount(nCharesOnMyPe);
   }
 
