@@ -157,7 +157,9 @@ class counter : public CBase_counter {
 
   void sendCounts() {
     CProxy_counter grp(mygrp);
-    grp[0].childCount(nCharesOnMyPe);
+    CkPrintf("Chares Spawned On PE %d = %d\n", CkMyPe(),nCharesOnMyPe);
+    //The code will will uncessarily add more time to completion
+    //grp[0].childCount(nCharesOnMyPe);
   }
 
   void childCount(int n) {
@@ -170,8 +172,9 @@ class counter : public CBase_counter {
   DUMMYMSG* getTotalCount() {
     CProxy_counter grp(mygrp);
     grp.sendCounts();
-    threadId = CthSelf();
-    while (waitFor != 0)  CthSuspend(); 
+    //The code will will uncessarily add more time to completion
+    //threadId = CthSelf();
+    //while (waitFor != 0)  CthSuspend(); 
     DUMMYMSG* msg = new DUMMYMSG();
     msg->val = totalCount;
     return msg;

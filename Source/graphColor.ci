@@ -23,9 +23,9 @@ mainmodule Module {
   group counter {
     entry counter();
     entry void registerMe();
-    entry void sendCounts(); 
-    entry void childCount(int ); 
-    entry [sync] DUMMYMSG* getTotalCount();
+    entry [expedited] void sendCounts(); 
+    entry [expedited] void childCount(int ); 
+    entry [sync, expedited] DUMMYMSG* getTotalCount();
   };
 
   chare Node { 
