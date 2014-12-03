@@ -401,16 +401,20 @@ void Node::colorRemotely(){
      std::map<boost::dynamic_bitset<>, std::vector<vertex>> subgraphs;
      //detect subgraphs and create states correspondingly
      if(  detectAndCreateSubgraphs( subgraphs ) ){
-        is_and_node = true;
+
+         //----------debug code below-----------------------
+         CkPrintf("find %d subgraphs in node[%s]\n", subgraphs.size(), nodeID_);
+         //----------debug code above-----------------------
+        is_and_node_ = true;
         child_num_=subgraphs.size();
         //remove vertices accordingly for each subgraph
         for(auto subgraph_entry : subgraphs ){
             //for each subgraph, fire a child node to do the work
+            //parameters
+            //state, isRoot, uncoloredNum, parentProxy, nodeId
             CProxy_Node::ckNew(subgraph_entry.second, false,
-                    subgraph_entry.first.count(), vColored, thisProxy,
-                    counterGroup, nodeID_+std::to_string(child_num_),
-                    newParentPrioBits, newParentPrioPtr, newParentPrioPtrSize,
-                    CK_PE_ANY, opts);
+                    subgraph_entry.first.count(), thisProxy,
+                    nodeID_+std::to_string(child_num_));
         }
         return;
      }
@@ -418,7 +422,6 @@ void Node::colorRemotely(){
   // -----------------------------------------
   // Following code deals with case is_and_node=false
   // -----------------------------------------
-  //TODO: "Grainsize control" requires modify code below
 
   int vIndex = this->getNextConstraintVertex();
   CkAssert(vIndex!=-1);
@@ -542,7 +545,21 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
 
   if(is_and_node_){
     //TODO: call "Merge Subgraph" here
-    //Attention: it's different from merge from stack
+    for(int i=0; i<vertices_; i++ ){
+        //if the vertex is removed from the subgraph
+        //don't need to merge back
+        if(state[i].get_is_onStack()==true ||
+           state[i].get_is_out_of_subgraph()==true)
+            continue;
+        // if the vertex has been colored before
+        // check whether they are matched or not
+        if(node_state_[i].isColored()){
+            CkAssert(node_state_[i].getColor()==state[i].getColor());
+        }
+        //if the color is assigned from children node
+        //assign the color to current node_state_
+        node_state_[i]=state[i];
+    }
   }
 
   if(is_root_ && finish){
@@ -655,28 +672,42 @@ bool Node::detectAndCreateSubgraphs(
         std::map<boost::dynamic_bitset<>, std::vector<vertex>> & subgraphs)
 {
     boost::dynamic_bitset<> init_bitset(vertices_);
+    init_bitset.set();
     //initialize the bitset by marking all removed vertices as 0
     //and existed vertices as 1
+    CkAssert(node_state_.size()==vertices_);
+    for(int i=0; i<vertices_; i++){
+        if(node_state_[i].get_is_onStack()==true ||
+                node_state_[i].get_is_out_of_subgraph()==true)
+            //these vertices have been removed from current graph
+            init_bitset.reset(i);
+    }
+    //keep track of vertices haven't been assigned to any subgraph
     boost::dynamic_bitset<> work_bitset(init_bitset);
+    //record vertices in current computing subgraph
     boost::dynamic_bitset<> subgraph_bitset(vertices_);
     std::list<int> worklist;
 
     while(work_bitset.any()){
+        //start working on getting a new subgraph
         subgraph_bitset.reset();
         worklist.clear();
-        //get an unremoved vertex
+        //get an unremoved and haven't considered vertex
         int first_bit = 0;
         while(!work_bitset.test(first_bit))
             first_bit++;
-        //add it to subgraph
+        //add it to current subgraph
         subgraph_bitset.set(first_bit);
         work_bitset.reset(first_bit);
         worklist.push_back(first_bit);
-        //add its neighbors to subgraph iteratively
+
         do{
+            //add its neighbors to subgraph iteratively
             int i = worklist.front();
             worklist.pop_front();
             for( int neighbor_vertex_index : adjList_[i]){
+                //if the neighbor vertex exists and haven't considered
+                //put it into current subgraph
                 if(work_bitset.test(neighbor_vertex_index)){
                     subgraph_bitset.set(neighbor_vertex_index);
                     work_bitset.reset(neighbor_vertex_index);
@@ -684,18 +715,23 @@ bool Node::detectAndCreateSubgraphs(
                 }
             }
         }while(!worklist.empty());
-        //get one subgraph, create corresponding states and insert
-        //it to map
+
+        //finish getting one subgraph
+        //create corresponding states and insert <bitset, state> to the map
         std::vector<vertex> new_state = node_state_;
+        //for this status different from initial states
+        //we have to mark them as out_of_subgraph
         boost::dynamic_bitset<> remove_bitset = init_bitset ^ subgraph_bitset;
         for(int i=0; i<remove_bitset.size(); i++){
             if(remove_bitset.test(i)){
                 //remove from the list
-                new_state[i]._stat_vertexRemoval=true;
+                new_state[i].set_out_of_subgraph(true);
             }
         }
         subgraphs.insert(std::pair<boost::dynamic_bitset<>, std::vector<vertex>>(
                     subgraph_bitset, new_state));
     }
+
+    //return true, if exists more than 2 subgraphs
     return subgraphs.size()>1  ;
 }
