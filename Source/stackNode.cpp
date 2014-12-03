@@ -6,7 +6,8 @@ int stackNode::getUncoloredNgbr(int vIndex)
   int num = 0;
   for(std::list<int>:: const_iterator it = ngbr.begin(), jt = ngbr.end(); 
       it != jt ; it++) {
-    if(false == node_state_[*it].isColored() && false == node_state_[*it].get_is_onStack()) {
+    if(false == node_state_[*it].isColored() && false == node_state_[*it].get_is_onStack()
+            && node_state_[*it].get_is_out_of_subgraph()==false) {
       num ++;
     }
   }
@@ -16,7 +17,8 @@ int stackNode::getUncoloredNgbr(int vIndex)
 int stackNode::vertexRemoval(int vIndex)
 {
   int vertexRemoved = 0;
-  if(node_state_[vIndex].isColored() || node_state_[vIndex].get_is_onStack()) {
+  if(node_state_[vIndex].isColored() || node_state_[vIndex].get_is_onStack()
+          || node_state_[vIndex].get_is_out_of_subgraph() ) {
     return 0;
   }
   
@@ -44,7 +46,8 @@ int stackNode::getNextConstrainedVertex(){
   cVextexPossColor = chromaticNum_ + 1;
 
   for(int  i = 0 ; i < node_state_.size(); i++){
-    if(false == node_state_[i].isColored() && false == node_state_[i].get_is_onStack()){
+    if(false == node_state_[i].isColored() && false == node_state_[i].get_is_onStack()
+            && node_state_[i].get_is_out_of_subgraph()){
       boost::dynamic_bitset<> possibleColor = node_state_[i].getPossibleColor(); 
       if(cVextexPossColor > possibleColor.count() ) {
         cVertex = i;
@@ -75,7 +78,8 @@ pq_type stackNode::getValueOrderingOfColors(int vIndex)
     int rank = 0 ;
 
     for(std::list<int>::const_iterator jt = neighbours.begin(); jt != neighbours.end(); jt++ ) {
-      if(node_state_[*jt].isColored() || node_state_[*jt].get_is_onStack()) continue;
+      if(node_state_[*jt].isColored() || node_state_[*jt].get_is_onStack()
+              || node_state_[*jt].get_is_out_of_subgraph() ) continue;
       boost::dynamic_bitset<> possibleColorOfNgb  = node_state_[*jt].getPossibleColor();
       int count = possibleColorOfNgb.test(c) ? possibleColorOfNgb.count() -1 : possibleColorOfNgb.count();
       if(0 == count) {
@@ -94,7 +98,8 @@ pq_type stackNode::getValueOrderingOfColors(int vIndex)
 int stackNode::updateState(std::vector<vertex> & state, int vIndex, size_t c, bool doForcedMove){
   int verticesColored = 0;
 
-  if(state[vIndex].isColored() || state[vIndex].get_is_onStack()) {
+  if(state[vIndex].isColored() || state[vIndex].get_is_onStack()
+          || state[vIndex].get_is_out_of_subgraph() ) {
     return 0;
   }
 

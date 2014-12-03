@@ -34,7 +34,7 @@ Main::Main(CkArgMsg* msg):newGraph("no"){
   counterGroup = counterInit();
 
   //print input graph
-  //std::cout << adjList_;  
+  std::cout << adjList_;  
   std::cout << "Number of vertices = "<< vertices_<< std::endl;
   std::cout << "Conservative Chromatic Number = " << chromaticNum_ << std::endl;
   std::cout << "Grain-size = "<< grainSize << std::endl;

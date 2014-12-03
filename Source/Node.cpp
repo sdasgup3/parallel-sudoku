@@ -68,7 +68,8 @@ int Node::getUncoloredNgbr(int vertex)
   int num = 0;
   for(std::list<int>:: const_iterator it = ngbr.begin(), jt = ngbr.end(); 
       it != jt ; it++) {
-    if(false == node_state_[*it].isColored() && false == node_state_[*it].get_is_onStack()) {
+    if(false == node_state_[*it].isColored() && false == node_state_[*it].get_is_onStack()
+            && node_state_[*it].get_is_out_of_subgraph() == false) {
       num ++;
     }
   }
@@ -230,7 +231,8 @@ pq_type Node::getValueOrderingOfColors(int vIndex)
     int rank = 0 ;
 
     for(std::list<int>::const_iterator jt = neighbours.begin(); jt != neighbours.end(); jt++ ) {
-      if(node_state_[*jt].isColored() || node_state_[*jt].get_is_onStack()) continue;
+      if(node_state_[*jt].isColored() || node_state_[*jt].get_is_onStack()
+              || node_state_[*jt].get_is_out_of_subgraph()) continue;
       boost::dynamic_bitset<> possibleColorOfNgb  = node_state_[*jt].getPossibleColor();
       int count = possibleColorOfNgb.test(c) ? possibleColorOfNgb.count() -1 : possibleColorOfNgb.count();
       if(0 == count) {
@@ -257,7 +259,8 @@ pq_type Node::getValueOrderingOfColors(int vIndex)
 int Node::updateState(std::vector<vertex> & state, int vIndex, size_t c, bool doForcedMove){
   int verticesColored = 0;
 
-  if(state[vIndex].isColored() || state[vIndex].get_is_onStack()) {
+  if(state[vIndex].isColored() || state[vIndex].get_is_onStack()
+          || state[vIndex].get_is_out_of_subgraph()){
     return 0;
   }
 
@@ -297,12 +300,12 @@ void Node::printStats()
 void Node::colorLocally()
 {
     //-------------debug code below---------------
-#ifdef DEBUG
+//#ifdef DEBUG
     char *id = new char[nodeID_.size()];
     strcpy(id, nodeID_.c_str());
     CkPrintf("Color locally in node [%s] with uncolored num=%d\n", id, uncolored_num_);
     delete [] id;
-#endif
+//#endif
     //------------debug code above----------------
   // 'vertex removal' and/or 'forced move' helped take out all the remaining
   // vertices, and we have none for the sequential algorithm
@@ -444,7 +447,8 @@ bool Node::solveBruteForce()
 {
   std::vector<int> uncoloredIndices;
   for(int  i = 0 ; i < node_state_.size(); i++){
-    if(false == node_state_[i].isColored() && false == node_state_[i].get_is_onStack()){
+    if(false == node_state_[i].isColored() && false == node_state_[i].get_is_onStack()
+            ){
       uncoloredIndices.push_back(i);
     }
   }
@@ -469,9 +473,17 @@ bool Node::solveBruteForce()
  *   ----------------------------------------*/
 void Node::colorRemotely(){
 
+    //-------------debug code below---------------
+//#ifdef DEBUG
+    char *id = new char[nodeID_.size()];
+    strcpy(id, nodeID_.c_str());
+    CkPrintf("Color remotely in node [%s] with uncolored num=%d\n", id, uncolored_num_);
+    delete [] id;
+//#endif
+    //------------debug code above----------------
+
   //TODO: remove vertex and all other preprocessing operations
   //place here
-
 
     //Detect Subgraphs
     //If have >=2 subgraphs, make this node and_node
@@ -497,7 +509,7 @@ void Node::colorRemotely(){
 //#endif
          //----------debug code above-----------------------
         is_and_node_ = true;
-        child_num_=subgraphs.size();
+        //child_num_=subgraphs.size();
         //remove vertices accordingly for each subgraph
         for(auto subgraph_entry : subgraphs ){
             //for each subgraph, fire a child node to do the work
@@ -507,6 +519,7 @@ void Node::colorRemotely(){
                     subgraph_entry.first.count(), thisProxy,
                     nodeID_+std::to_string(child_num_),
                     0, NULL, 0);
+            child_num_++;
         }
         return;
      }
@@ -559,7 +572,8 @@ void Node::colorRemotely(){
       free(newParentPrioPtr);
     } else {
       CProxy_Node::ckNew(new_state, false, uncolored_num_- verticesColored, 
-          thisProxy, nodeID_ + std::to_string(child_num_), 0, NULL, 0); 
+          thisProxy, nodeID_ + std::to_string(child_num_), 0, NULL, 0);
+      child_num_ ++;
     }
   }
 }
@@ -666,12 +680,16 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
         //assign the color to current node_state_
         node_state_[i]=state[i];
     }
+    CkPrintf("success=%d, finish=%d\n", success, finish);
+    printGraph();
   }
 
   if(is_root_ && finish){
     if(success){
-      node_state_ = state;
+      if(!is_and_node_)
+        node_state_ = state;
       mergeRemovedVerticesBack(deletedV, node_state_);
+      printGraph();
       CkAssert(1 == isColoringValid(node_state_));
 #ifdef DEBUG
       printGraph(true);
@@ -687,7 +705,8 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
     // In one child, successfully colored
     // TODO:: once it succeeds, it should notify other child chares
     // sharing the same parent to stop working
-    node_state_ = state;
+    if(!is_and_node_)
+        node_state_ = state;
     mergeRemovedVerticesBack(deletedV, node_state_);
     parent_.finish(success, node_state_);
   } 
