@@ -4,7 +4,7 @@ TEST=graphColor
 INC=-I${ROOT}/python_kit/intel64/include/python2.7
 LDFLAGS=-lboost_program_options -lpython2.7 -L${ROOT}/python_kit/intel64/lib
 
-OBJS = Main.o  Node.o Utils.o
+OBJS = Main.o  Node.o stackNode.o Utils.o
 PROJ= #-tracemode projections 
 
 TARGET = gc
@@ -19,6 +19,9 @@ Main.o: Main.cpp Module.decl.h graphColor.h vertex.h
 
 Node.o: Node.cpp Module.decl.h graphColor.h
 	$(CHARMC) -c Node.cpp
+
+stackNode.o: stackNode.cpp Module.decl.h graphColor.h
+	$(CHARMC) -c stackNode.cpp
 
 Utils.o: Utils.cpp Utils.h vertex.h
 	$(CHARMC)  -c  Utils.cpp

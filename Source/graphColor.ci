@@ -8,6 +8,7 @@ mainmodule Module {
   readonly int vertices_;
   readonly int chromaticNum_;
   readonly int grainSize;
+  readonly bool doPriority;
   readonly CkChareID mainhandle;
 
   message DUMMYMSG;
@@ -31,7 +32,7 @@ mainmodule Module {
     entry Node(bool, int, CProxy_Node );
     entry Node( std::vector<vertex> , bool , int , CProxy_Node ,  std::string , UShort pBits, UInt pPtr[size], int size);
 
-    entry void finish(bool, std::vector<vertex>);
+    entry [expedited] void finish(bool, std::vector<vertex>);
     entry [threaded] void printStats();
 
     entry void run(){
@@ -46,7 +47,7 @@ mainmodule Module {
          */
 
         if(uncolored_num_ <= grainSize){
-          sequentialColoring();
+          colorLocally();
           return;
         }
 
