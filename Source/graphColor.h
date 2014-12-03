@@ -10,6 +10,7 @@ extern AdjListType adjList_;
 extern int vertices_;
 extern int chromaticNum_;
 extern int grainSize;
+extern bool doPriority;
 
 struct stackNode {
   std::vector<vertex> node_state_;

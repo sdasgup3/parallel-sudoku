@@ -11,6 +11,7 @@ int vertices_;
 int chromaticNum_;
 CkChareID mainhandle;
 int grainSize;
+bool doPriority;
 
 CkGroupID  counterInit()
 {
@@ -37,6 +38,7 @@ Main::Main(CkArgMsg* msg):newGraph("no"){
   std::cout << "Number of vertices = "<< vertices_<< std::endl;
   std::cout << "Conservative Chromatic Number = " << chromaticNum_ << std::endl;
   std::cout << "Grain-size = "<< grainSize << std::endl;
+  std::cout << "doPriority = "<< doPriority << std::endl;
   CProxy_Node node = CProxy_Node::ckNew(true, vertices_, (CProxy_Node)thisProxy);
 }
 
@@ -52,6 +54,7 @@ void Main::parseCommandLine(int argc, char **argv)
   po::options_description desc("Allowed options");
   desc.add_options()
     ("grain-size", po::value<int>(), "Grain-size for state space search (default=1)")
+    ("do-priority", po::value<bool>(), "To do bit vector prioritization while firing chares(default=false)")
     ("newGraph", po::value<std::string>(),"Generate new graph from python (default=no)")
     ("filename", po::value<std::string>(),"Input file");
 
@@ -64,6 +67,13 @@ void Main::parseCommandLine(int argc, char **argv)
       std::cout<<desc<<std::endl;
       CkExit();
     }
+
+    if(vm.count("do-priority")) {
+      doPriority = vm["do-priority"].as<bool>();
+    } else {
+      doPriority = false;
+    }
+
 
     // if parameter was passed in command line, assign it.
     if(vm.count("grain-size"))

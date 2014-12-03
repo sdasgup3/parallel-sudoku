@@ -202,7 +202,7 @@ int Node::getNextConstraintVertex(){
 
 /* ----------------------------------------------
  *  For a vertex id 'vIndex', returns the ordering of 
- *  possible colors, i.e. c1 < c2, such that if we color vIndex with
+ *  possible colors, i.e. c1 > c2, such that if we color vIndex with
  *  c1 then the number of possible colorings of its neighbours 
  *  will be more than the number if vIndex is colored with c2. 
  *  Also, if for a color c, the nghbr of vIndex reduced to
@@ -447,7 +447,7 @@ bool Node::solveBruteForce()
  *  - Test if the `vIndex` vertex is colorable. Return false if not.
  *  - Find the colors possible for vIndex (Value Ordering of Colors)
  *    - The colors will be found in the priority order   
- *    - If for a perticular color option, one of the ngb of
+ *    - If for a particular color option, one of the ngb of
  *      vIndex is reduced to zero available colors, then dont consider that
  *      color. (Impossibility Testing)
  *  - Spawn a new node state in priority order for each possible  color.
@@ -465,11 +465,6 @@ void Node::colorRemotely(){
     //return;
   }
 
-  // -----------------------------------------
-  // Following code deals with case is_and_node=false
-  // -----------------------------------------
-  //TODO: "Grainsize control" requires modify code below
-
   int vIndex = this->getNextConstraintVertex();
   CkAssert(vIndex!=-1);
 
@@ -485,23 +480,37 @@ void Node::colorRemotely(){
 
   while (! priorityColors.empty()) {
 
+    /* priorityColors contains the vertex 
+    *   colors (c1 > c2 > c3 ..) in the order governed by the valueOrdering.
+    *   If we are not concerned about prioritization while
+    *   firing chares, i.e. doPriority == false , we can just spawn a chare for each poped
+    *   element of priorityColors. Else if (doPriority == true)
+    *   and say priorityColors has elements c1: c2:c3 (such that c1 > c2 > c3)
+    *   then we have to fire c1, c2 and c3 with priority Ptr00, Ptr01, Ptr10
+    *   respectively, where Ptr is the priority bits for their parent.
+    */
     std::pair<int,int> p =  priorityColors.top();
     priorityColors.pop();
 
     std::vector<vertex> new_state = node_state_;
-    CkEntryOptions* opts = new CkEntryOptions ();
-    UShort newParentPrioBits; UInt* newParentPrioPtr;
-    UInt newParentPrioPtrSize;
-    getPriorityInfo(newParentPrioBits, newParentPrioPtr, newParentPrioPtrSize, parentBits, parentPtr, childBits, child_num_);
-    opts->setPriority(newParentPrioBits, newParentPrioPtr);
-
     int verticesColored = updateState(new_state, vIndex, p.first, true);
 
-    CProxy_Node child = CProxy_Node::ckNew(new_state, false, uncolored_num_- verticesColored, 
-        thisProxy, nodeID_ + std::to_string(child_num_), newParentPrioBits, newParentPrioPtr, 
-        newParentPrioPtrSize, CK_PE_ANY , opts);
-    child_num_ ++;
-    free(newParentPrioPtr);
+    if(doPriority) {
+      CkEntryOptions* opts = new CkEntryOptions ();
+      UShort newParentPrioBits; UInt* newParentPrioPtr;
+      UInt newParentPrioPtrSize;
+      getPriorityInfo(newParentPrioBits, newParentPrioPtr, newParentPrioPtrSize, parentBits, parentPtr, childBits, child_num_);
+      opts->setPriority(newParentPrioBits, newParentPrioPtr);
+
+      CProxy_Node::ckNew(new_state, false, uncolored_num_- verticesColored, 
+          thisProxy, nodeID_ + std::to_string(child_num_), newParentPrioBits, newParentPrioPtr, 
+          newParentPrioPtrSize, CK_PE_ANY , opts);
+      child_num_ ++;
+      free(newParentPrioPtr);
+    } else {
+      CProxy_Node::ckNew(new_state, false, uncolored_num_- verticesColored, 
+          thisProxy, nodeID_ + std::to_string(child_num_), 0, NULL, 0); 
+    }
   }
 }
 
