@@ -45,6 +45,10 @@ class vertex  {
       return is_out_of_subgraph;
     }
  
+    const bool isOperationPermissible() {
+      return (false == is_onStack && false == is_out_of_subgraph);
+    }
+
     void pup(PUP::er &p){
       p|vertex_id_;
       p|color_;

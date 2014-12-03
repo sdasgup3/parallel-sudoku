@@ -128,9 +128,6 @@ class Node: public CBase_Node {
 
     bool sequentialColoring();
     void sequentialColoringHelper(bool&, std::vector<vertex>&);
-    bool solveBruteForce() ;
-    bool solveBruteForceHelper(std::vector<vertex>& , std::vector<int> , int );
-
 };
 
 class DUMMYMSG : public CMessage_DUMMYMSG {

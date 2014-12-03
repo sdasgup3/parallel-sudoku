@@ -68,10 +68,8 @@ int Node::getUncoloredNgbr(int vertex)
   int num = 0;
   for(std::list<int>:: const_iterator it = ngbr.begin(), jt = ngbr.end(); 
       it != jt ; it++) {
-    if(false == node_state_[*it].isColored() && false == node_state_[*it].get_is_onStack()
-            && node_state_[*it].get_is_out_of_subgraph() == false) {
+    if(false == node_state_[*it].isColored() && true == node_state_[*it].isOperationPermissible())
       num ++;
-    }
   }
   return num;
 }
@@ -83,8 +81,7 @@ int Node::getUncoloredNgbr(int vertex)
 int Node::vertexRemoval(int vertex)
 {
   int vertexRemoved = 0;
-  return 0;
-  if(node_state_[vertex].isColored() || node_state_[vertex].get_is_onStack()) {
+  if(node_state_[vertex].isColored() || !node_state_[vertex].isOperationPermissible()) {
     return 0;
   }
   boost::dynamic_bitset<> possColors = node_state_[vertex].getPossibleColor();    
@@ -190,8 +187,7 @@ int Node::getNextConstraintVertex(){
   cVextexPossColor = chromaticNum_ + 1;
 
   for(int  i = 0 ; i < node_state_.size(); i++){
-    if(false == node_state_[i].isColored() && false == node_state_[i].get_is_onStack()
-            && false == node_state_[i].get_is_out_of_subgraph()){
+    if(false == node_state_[i].isColored() && true == node_state_[i].isOperationPermissible()) {
       boost::dynamic_bitset<> possibleColor = node_state_[i].getPossibleColor(); 
       if(cVextexPossColor > possibleColor.count() ) {
         cVertex = i;
@@ -231,8 +227,7 @@ pq_type Node::getValueOrderingOfColors(int vIndex)
     int rank = 0 ;
 
     for(std::list<int>::const_iterator jt = neighbours.begin(); jt != neighbours.end(); jt++ ) {
-      if(node_state_[*jt].isColored() || node_state_[*jt].get_is_onStack()
-              || node_state_[*jt].get_is_out_of_subgraph()) continue;
+      if(node_state_[*jt].isColored() || !node_state_[*jt].isOperationPermissible()) continue;
       boost::dynamic_bitset<> possibleColorOfNgb  = node_state_[*jt].getPossibleColor();
       int count = possibleColorOfNgb.test(c) ? possibleColorOfNgb.count() -1 : possibleColorOfNgb.count();
       if(0 == count) {
@@ -259,8 +254,7 @@ pq_type Node::getValueOrderingOfColors(int vIndex)
 int Node::updateState(std::vector<vertex> & state, int vIndex, size_t c, bool doForcedMove){
   int verticesColored = 0;
 
-  if(state[vIndex].isColored() || state[vIndex].get_is_onStack()
-          || state[vIndex].get_is_out_of_subgraph()){
+  if(state[vIndex].isColored() || !state[vIndex].isOperationPermissible()){ 
     return 0;
   }
 
@@ -416,43 +410,6 @@ void Node::sequentialColoringHelper(bool& solutionFound, std::vector<vertex>& re
     if(solutionFound)
       result = curr_node_.node_state_;
   }
-}
-
-/*-------------------------------------------
- * At the leaf state when uncolored_num_ <= grain-size
- *  we will try to color the graph using a brute force
- *  strategy.
- *   ----------------------------------------*/
-bool Node::solveBruteForceHelper(std::vector<vertex>& state, std::vector<int> uncoloredIndices, int index )
-{
-  if(index == uncoloredIndices.size()) {
-    return true;
-  }
-  boost::dynamic_bitset<> possibleColor = state[uncoloredIndices[index]].getPossibleColor(); 
-  for(boost::dynamic_bitset<>::size_type c=0; c<possibleColor.size(); c++){
-    if(true == possibleColor.test(c)) {
-      std::vector<vertex> tempState = state;
-      updateState(tempState, uncoloredIndices[index], c, false);
-      if(true == solveBruteForceHelper(tempState, uncoloredIndices, index + 1)) {
-        state = tempState;
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-// recursive sequential algorithm 
-bool Node::solveBruteForce() 
-{
-  std::vector<int> uncoloredIndices;
-  for(int  i = 0 ; i < node_state_.size(); i++){
-    if(false == node_state_[i].isColored() && false == node_state_[i].get_is_onStack()
-            ){
-      uncoloredIndices.push_back(i);
-    }
-  }
-  return solveBruteForceHelper(node_state_, uncoloredIndices, 0);
 }
 
 /*-------------------------------------------
