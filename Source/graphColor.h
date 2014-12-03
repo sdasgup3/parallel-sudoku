@@ -40,6 +40,9 @@ class Node: public CBase_Node {
   private:
     std::string nodeID_;    // unique ID of the node
     std::vector<vertex> node_state_;
+    //assume nodes out of subgraph and on stack -> out of scope
+    //because when we try to color, we don't need to consider them
+    boost::dynamic_bitset<> ignored_vertices;
     std::stack<int> deletedV;
     bool is_root_;
     int vertexColored;    //The vertex colored in this node;Debug purpose

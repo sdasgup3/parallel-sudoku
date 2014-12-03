@@ -11,6 +11,7 @@ class vertex  {
       color_ = -1;
       possible_colors_.set();   //set every bit to 1 
       is_onStack = false;
+      is_out_of_subgraph = false;
       _stat_vertexRemoval = false;
     }
     bool isColored() { return color_ >=0;}
@@ -32,13 +33,23 @@ class vertex  {
         _stat_vertexRemoval = true;
     }
 
+    void set_out_of_subgraph(bool v) {
+      is_out_of_subgraph  = v;
+    }
+
     const bool get_is_onStack() {
       return is_onStack;
     }
+    
+    const bool get_is_out_of_subgraph() {
+      return is_out_of_subgraph;
+    }
+ 
     void pup(PUP::er &p){
       p|vertex_id_;
       p|color_;
       p|is_onStack;
+      p|is_out_of_subgraph;
       p|_stat_vertexRemoval;
 
       if(p.isUnpacking()){
@@ -60,6 +71,7 @@ class vertex  {
     int color_;     // if color<0, it means haven't been colored yet
     boost::dynamic_bitset<> possible_colors_;
     bool is_onStack;
+    bool is_out_of_subgraph;
 };
 
 #endif
