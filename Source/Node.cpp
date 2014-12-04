@@ -281,11 +281,7 @@ int Node::updateState(std::vector<vertex> & state, int vIndex, size_t c, bool do
 void Node::printStats()
 {
   CProxy_counter grp(counterGroup);
-  DUMMYMSG* msg = grp[0].getTotalCount();
-  int totalCharesSpawned = msg->val;
-  CkPrintf("Total Chares Spawned (till first solution) = %d\n", totalCharesSpawned);
-  delete msg;
-
+  CProxy_counter(counterGroup).ckLocalBranch()->getTotalCount();
 }
 /*--------------------------------------------
  * color the remaining graph locally

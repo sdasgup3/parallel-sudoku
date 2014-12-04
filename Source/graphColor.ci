@@ -24,8 +24,6 @@ mainmodule Module {
     entry counter();
     entry void registerMe();
     entry [expedited] void sendCounts(); 
-    entry [expedited] void childCount(int ); 
-    entry [sync, expedited] DUMMYMSG* getTotalCount();
   };
 
   chare Node { 
@@ -33,7 +31,6 @@ mainmodule Module {
     entry Node( std::vector<vertex> , bool , int , CProxy_Node ,  std::string , UShort pBits, UInt pPtr[size], int size);
 
     entry [expedited] void finish(bool, std::vector<vertex>);
-    entry [threaded] void printStats();
 
     entry void run(){
       serial { 
