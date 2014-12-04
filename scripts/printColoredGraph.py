@@ -17,8 +17,8 @@ def createGraph():
   for line in open('coloredGraph.txt'):
     if line.__contains__(':'):
       vertex = int(line.split(':')[0].rstrip())
-      neighbors = [int(x) for x in
-        line.split(':')[1].lstrip().rstrip().rstrip('\n').split(' ')]
+      neighbors = [int(x) if x else -1 for x in
+          line.split(':')[1].lstrip().rstrip().rstrip('\n').split(' ')]
       adjList[vertex] = neighbors
     elif line.__contains__('-'):
       vertexColor.append(int(line.split('-')[1].rstrip('\n')))
@@ -27,7 +27,8 @@ def createGraph():
   listOfEdges=[]
   for k,v in adjList.iteritems():
     for vertex in v:
-      listOfEdges.append((k,vertex))
+      if vertex != -1:
+        listOfEdges.append((k,vertex))
 
   G.add_edges_from(listOfEdges)
 
