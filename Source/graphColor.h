@@ -91,6 +91,7 @@ class Node: public CBase_Node {
     void colorClique3(int i, int j, int k);
     int getUncoloredNgbr(int);
     void mergeRemovedVerticesBack(std::stack<int>, std::vector<vertex> &);
+    void storeColoredGraph();
 
     // update a passed in state
     // by coloring vertex[vIndex] with color c

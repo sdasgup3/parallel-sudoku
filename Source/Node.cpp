@@ -730,6 +730,7 @@ bool Node::isColoringValid(std::vector<vertex> state)
         vertexRemovalEfficiency++;
       });
   
+  storeColoredGraph();
   CkPrintf("Vertices removed by [Vertex Removal] = %d\n", vertexRemovalEfficiency);
   printStats();
   return  1;
@@ -763,7 +764,7 @@ bool Node::detectAndCreateSubgraphs(
        if(!node_state_[i].isOperationPermissible())
             init_bitset.reset(i);
     }
-   // #ifdef DEBUG
+   #ifdef DEBUG
         if(init_bitset.count()!=vertices_){
         std::string s;
          char * id = new char[nodeID_.size()+1];
@@ -775,7 +776,7 @@ bool Node::detectAndCreateSubgraphs(
              delete [] id;
              delete [] bits;
         }
-   // #endif
+   #endif
     //keep track of vertices haven't been assigned to any subgraph
     boost::dynamic_bitset<> work_bitset(init_bitset);
     //record vertices in current computing subgraph
@@ -828,4 +829,24 @@ bool Node::detectAndCreateSubgraphs(
 
     //return true, if exists more than 2 subgraphs
     return subgraphs.size()>1  ;
+}
+
+// stores the colored graph to a file which can be read by a python script to
+// produce a png
+void Node::storeColoredGraph()
+{
+  // should only be called by root chare once a valid coloring is found
+  CkAssert(is_root_);
+
+  std::ofstream myfile;
+  myfile.open("coloredGraph.txt");
+
+  // dump the adjacency list
+  myfile << adjList_;
+
+  // dump the coloring
+  for(int i=0; i<node_state_.size(); i++)
+    myfile << i << "-" << node_state_[i].getColor() << "\n";
+
+  myfile.close();
 }
