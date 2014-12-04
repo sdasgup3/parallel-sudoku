@@ -9,7 +9,6 @@ CkGroupID counterGroup;
 AdjListType adjList_;
 int vertices_;
 int chromaticNum_;
-CkChareID mainhandle;
 int grainSize;
 bool doPriority;
 
@@ -30,7 +29,6 @@ Main::Main(CkArgMsg* msg):newGraph("no"){
  
   chromaticNum_= getConservativeChromaticNum();
   mainProxy= thisProxy;
-  mainhandle=thishandle;
   counterGroup = counterInit();
 
   //print input graph

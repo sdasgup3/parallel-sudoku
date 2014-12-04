@@ -9,7 +9,6 @@ mainmodule Module {
   readonly int chromaticNum_;
   readonly int grainSize;
   readonly bool doPriority;
-  readonly CkChareID mainhandle;
 
   message DUMMYMSG;
 
