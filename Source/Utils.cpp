@@ -67,6 +67,3 @@ std::ostream &operator<<(std::ostream &stream, const AdjListType& map)
     }
   return stream;
 }
-
-
-

@@ -11,6 +11,7 @@ int vertices_;
 int chromaticNum_;
 int grainSize;
 bool doPriority;
+bool baseline;
 
 CkGroupID  counterInit()
 {
@@ -27,16 +28,17 @@ Main::Main(CkArgMsg* msg):newGraph("no"){
   vertices_ = adjList_.size();
   delete msg;
  
-  chromaticNum_= getConservativeChromaticNum();
   mainProxy= thisProxy;
   counterGroup = counterInit();
 
   //print input graph
   //std::cout << adjList_;  
   std::cout << "Number of vertices = "<< vertices_<< std::endl;
-  std::cout << "Conservative Chromatic Number = " << chromaticNum_ << std::endl;
+  std::cout << "Testing coloring with " << chromaticNum_ << " colors"<< std::endl;
   std::cout << "Grain-size = "<< grainSize << std::endl;
   std::cout << "doPriority = "<< doPriority << std::endl;
+  if(baseline)
+    std::cout << "--Baseline run-- "<< std::endl;
   CProxy_Node node = CProxy_Node::ckNew(true, vertices_, (CProxy_Node)thisProxy);
 }
 
@@ -52,9 +54,11 @@ void Main::parseCommandLine(int argc, char **argv)
   po::options_description desc("Allowed options");
   desc.add_options()
     ("grain-size", po::value<int>(), "Grain-size for state space search (default=1)")
+    ("num-colors", po::value<int>(), "Number of colors to test with (default=conservative estimate)")
     ("do-priority", po::value<bool>(), "To do bit vector prioritization while firing chares(default=false)")
     ("newGraph", po::value<std::string>(),"Generate new graph from python (default=no)")
-    ("filename", po::value<std::string>(),"Input file");
+    ("filename", po::value<std::string>(),"Input file")
+    ("baseline", "Trigger execution without optimizations");
 
   po::variables_map vm;
   try
@@ -66,12 +70,21 @@ void Main::parseCommandLine(int argc, char **argv)
       CkExit();
     }
 
+    if(vm.count("baseline"))
+      baseline = true;
+    else
+      baseline = false;
+
     if(vm.count("do-priority")) {
       doPriority = vm["do-priority"].as<bool>();
     } else {
       doPriority = false;
     }
 
+    if(vm.count("num-colors"))
+      chromaticNum_ = vm["num-colors"].as<int>();
+    else
+      chromaticNum_ = getConservativeChromaticNum(); 
 
     // if parameter was passed in command line, assign it.
     if(vm.count("grain-size"))

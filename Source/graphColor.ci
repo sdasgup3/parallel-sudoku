@@ -9,6 +9,7 @@ mainmodule Module {
   readonly int chromaticNum_;
   readonly int grainSize;
   readonly bool doPriority;
+  readonly bool baseline;
 
   message DUMMYMSG;
 
@@ -21,7 +22,6 @@ mainmodule Module {
 
   group counter {
     entry counter();
-    entry void registerMe();
     entry [expedited] void sendCounts(); 
   };
 
@@ -42,7 +42,7 @@ mainmodule Module {
          * stack
          */
 
-        if(uncolored_num_ <= grainSize){
+        if((uncolored_num_ <= grainSize) || (baseline == true)){
           colorLocally();
           return;
         }
@@ -60,7 +60,7 @@ mainmodule Module {
 
         colorRemotely();
       }
-
+    
       /* When  one of the child finishes, either it finds the solution or
        * gets into an dead end, it notifies its parent.  In the former case
        * the parent can either propagate the victory information to its

@@ -24,7 +24,7 @@ int stackNode::vertexRemoval(int vIndex)
   int possColorCount  = possColors.count();
   int uncoloredNgbr   = getUncoloredNgbr(vIndex);
   if(possColorCount > uncoloredNgbr) {
-    node_state_[vIndex].set_is_onStack(true);
+    node_state_[vIndex].set_is_onStack(true, true);
     deletedV.push(vIndex);
     vertexRemoved ++;
     std::list<int> ngbr = adjList_[vIndex];
@@ -123,7 +123,6 @@ void stackNode::mergeRemovedVerticesBack() {
     int vertex = deletedV.top();
     deletedV.pop();
     node_state_[vertex].set_is_onStack(false);
-    node_state_[vertex].set_removal(false);
     boost::dynamic_bitset<> possColor = node_state_[vertex].getPossibleColor();
     size_t c = possColor.find_first();
     CkAssert(c != boost::dynamic_bitset<>::npos);

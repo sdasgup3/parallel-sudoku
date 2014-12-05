@@ -27,9 +27,11 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
   printGraph();
 #endif 
   
+  int count = uncolored_num_;
   for (AdjListType::const_iterator it = adjList_.begin(); it != adjList_.end(); ++it) {
     uncolored_num_ -= vertexRemoval((*it).first);
   } 
+  CkPrintf("Vertices removed by vertex removal in [MainChare] = %d\n", count-uncolored_num_);
 
 #ifdef  DEBUG 
   CkPrintf("Vertex Removal\n");
@@ -55,7 +57,12 @@ Node::Node( std::vector<vertex> state, bool isRoot, int uncol,
     uncolored_num_ -= vertexRemoval((*it).first);
   }
 
-  CProxy_counter(counterGroup).ckLocalBranch()->registerMe();
+  bool canISpawn = CProxy_counter(counterGroup).ckLocalBranch()->registerMe();
+  
+  // group chare denied permission to spawn
+  if(!canISpawn)
+    return;
+  
   thisProxy.run();
 }
 
@@ -278,8 +285,27 @@ int Node::updateState(std::vector<vertex> & state, int vIndex, size_t c, bool do
   return verticesColored;
 }
 
-void Node::printStats()
+// valid coloring found. Print statistics (if any)
+void Node::printStats(std::vector<vertex>& state)
 {
+  CkPrintf("Valid Coloring found. Hurray! Printing stats.\n");
+  int count=0;
+  for_each(state.begin(), state.end(), [&](vertex v){
+      if(v.getStats("vertexRemoval_local"))
+        count++;
+      });
+  CkPrintf("Vertices removed by [Vertex Removal Local] = %d\n", count);
+
+  //reset
+  count = 0;  
+  
+  for_each(state.begin(), state.end(), [&](vertex v){
+      if(v.getStats("vertexRemoval_remote"))
+        count++;
+      });
+  CkPrintf("Vertices removed by [Vertex Removal Remote] = %d\n", count);
+
+  // print total chare count
   CProxy_counter grp(counterGroup);
   CProxy_counter(counterGroup).ckLocalBranch()->getTotalCount();
 }
@@ -289,6 +315,9 @@ void Node::printStats()
  * -----------------------------------------*/
 void Node::colorLocally()
 {
+  // register leaf node
+  CProxy_counter(counterGroup).ckLocalBranch()->registerMeLeaf();
+
     //-------------debug code below---------------
 #ifdef DEBUG
     char *id = new char[nodeID_.size()];
@@ -306,7 +335,7 @@ void Node::colorLocally()
 #ifdef DEBUG
       printGraph(true);
 #endif
-      CkPrintf("Sequential Coloring called from root. No parallelism\n");
+      CkPrintf("Vertex removal step at root removed all nodes\n");
       CkAssert(1 == isColoringValid(node_state_));
 
       CkExit();
@@ -446,10 +475,10 @@ void Node::colorRemotely(){
      if(  detectAndCreateSubgraphs( subgraphs ) ){
 
          //----------debug code below-----------------------
-#ifdef DEUBG
+//#ifdef DEUBG
          char * id = new char[nodeID_.size()+1];
          strcpy(id, nodeID_.c_str());
-         CkPrintf("find %d subgraphs in node[%s]\n", subgraphs.size(), id);
+         CkPrintf("Found %d subgraphs in node[%s]\n", subgraphs.size(), id);
          delete [] id;
          for(auto subgraph_entry : subgraphs ){
              std::string s;
@@ -459,7 +488,7 @@ void Node::colorRemotely(){
              CkPrintf("%s\n", bits);
              delete [] bits;
          }
-#endif
+//#endif
          //----------debug code above-----------------------
         is_and_node_ = true;
         //child_num_=subgraphs.size();
@@ -634,7 +663,6 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
         node_state_[i]=state[i];
     }
     CkPrintf("success=%d, finish=%d\n", success, finish);
-    printGraph();
   }
 
   if(is_root_ && finish){
@@ -642,12 +670,10 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
       if(!is_and_node_)
         node_state_ = state;
       mergeRemovedVerticesBack(deletedV, node_state_);
-      printGraph();
       CkAssert(1 == isColoringValid(node_state_));
 #ifdef DEBUG
       printGraph(true);
 #endif
-
 
       CkExit();
     } else {
@@ -700,7 +726,7 @@ void Node::printGraph(bool final){
 /* --------------------------------------------
  * Checks if the reported coloring is valid.
  * -------------------------------------------*/
-bool Node::isColoringValid(std::vector<vertex> state)
+bool Node::isColoringValid(std::vector<vertex>& state)
 {
   // Only the root chare should check validity of solution
   CkAssert(is_root_); 
@@ -718,17 +744,8 @@ bool Node::isColoringValid(std::vector<vertex> state)
 
   }  
 
-  // valid coloring! Print statistics (if any)
-  CkPrintf("Valid Coloring found. Hurray! Printing stats.\n");
-  int vertexRemovalEfficiency = 0;
-  for_each(state.begin(), state.end(), [&](vertex v){
-      if(v._stat_vertexRemoval)
-        vertexRemovalEfficiency++;
-      });
-  
   storeColoredGraph();
-  CkPrintf("Vertices removed by [Vertex Removal] = %d\n", vertexRemovalEfficiency);
-  printStats();
+  printStats(state);
   return  1;
 }
 

@@ -11,6 +11,7 @@ extern int vertices_;
 extern int chromaticNum_;
 extern int grainSize;
 extern bool doPriority;
+extern bool baseline;
 
 struct stackNode {
   std::vector<vertex> node_state_;
@@ -116,8 +117,8 @@ class Node: public CBase_Node {
     bool mergeToParent(bool, std::vector<vertex>);
 
     //Checks if the reported coloring is valid. 
-    bool isColoringValid(std::vector<vertex>);
-    void printStats();
+    bool isColoringValid(std::vector<vertex>&);
+    void printStats(std::vector<vertex>&);
 
     //detect subgraphs and create corresponding states
     //if only one graph existed, return false
@@ -139,29 +140,49 @@ class DUMMYMSG : public CMessage_DUMMYMSG {
 class counter : public CBase_counter {
   private:
     int nCharesOnMyPe;
+    int nLeafCharesOnMyPe;
     CkGroupID mygrp;
     int waitFor;
     CthThread threadId;
     int totalCount;
+    bool acceptRegistration;
 
   public:
   counter(){
     mygrp = thisgroup;
+    acceptRegistration = true;
     nCharesOnMyPe = 0;
+    nLeafCharesOnMyPe = 0;
     waitFor = CkNumPes();
     totalCount = 0;
   }
 
-  void registerMe(){
-    nCharesOnMyPe++; 
+  void registerMeLeaf(){
+    nLeafCharesOnMyPe++;
+    //if(nLeafCharesOnMyPe % 10 == 0)
+    //  CkPrintf("[Heartbeat] Chares Spawned On PE %d = %d\n", CkMyPe(),nLeafCharesOnMyPe);
+  }
+
+  // return true if the group is still accepting new spawn requests from chares
+  bool registerMe(){
+    if(acceptRegistration)
+    {
+      nCharesOnMyPe++;
+      //if(nCharesOnMyPe % 1000 == 0)
+      //  CkPrintf("[Heartbeat] Chares Spawned On PE %d = %d\n", CkMyPe(),nCharesOnMyPe);
+      return true;
+    }
+    return false;
   }
 
   void sendCounts() {
-    CProxy_counter grp(mygrp);
-    CkPrintf("Chares Spawned On PE %d = %d\n", CkMyPe(),nCharesOnMyPe);
+    acceptRegistration = false;
+    CkPrintf("Chares Spawned On PE %d = %d\n", CkMyPe(), nCharesOnMyPe);
+    CkPrintf("Leaf Chares On PE %d = %d\n", CkMyPe(), nLeafCharesOnMyPe);
   }
 
   void getTotalCount() {
+    acceptRegistration = false;
     CProxy_counter grp(mygrp);
     grp.sendCounts();
   }

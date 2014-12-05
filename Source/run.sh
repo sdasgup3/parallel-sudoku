@@ -5,7 +5,8 @@ TARGET=gc
 
 # Enter the command line parameters here. --help to get a list of allowed
 # options
-PROGRAM_OPTIONS='--newGraph=yes --grain-size=1 --do-priority=false'
+NG='--newGraph=no'
+PROGRAM_OPTIONS='--grain-size=960 --do-priority=true --num-colors=5'
 #set -x
 runreg=false
 
@@ -17,7 +18,7 @@ while getopts ":r:f" opt; do
         echo Testing $file
         echo ================================
         cp $file latestGraph.json
-        ./charmrun +p4 $TARGET --newGraph=no ++local
+        ./charmrun +p4 $TARGET --newGraph=no $PROGRAM_OPTIONS ++local
       done
       runreg=true  
       ;;
@@ -26,7 +27,7 @@ while getopts ":r:f" opt; do
         echo Testing $2
         echo ================================
         cp $2 latestGraph.json
-        ./charmrun +p4 $TARGET --newGraph=no ++local
+        ./charmrun +p4 $TARGET --newGraph=no $PROGRAM_OPTIONS ++local
         runreg=true
       ;;
    \?)
@@ -36,5 +37,5 @@ while getopts ":r:f" opt; do
 done
 
 if [ $runreg = "false" ] ; then
-./charmrun +p4 $TARGET $PROGRAM_OPTIONS ++local
+./charmrun +p4 $TARGET $NG $PROGRAM_OPTIONS ++local
 fi
