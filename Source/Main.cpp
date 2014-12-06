@@ -28,6 +28,9 @@ Main::Main(CkArgMsg* msg):newGraph("no"){
   vertices_ = adjList_.size();
   delete msg;
  
+  if(-1 == chromaticNum_) {
+    chromaticNum_ = getConservativeChromaticNum();
+  }
   mainProxy= thisProxy;
   counterGroup = counterInit();
 
@@ -81,10 +84,11 @@ void Main::parseCommandLine(int argc, char **argv)
       doPriority = false;
     }
 
-    if(vm.count("num-colors"))
+    if(vm.count("num-colors")) {
       chromaticNum_ = vm["num-colors"].as<int>();
-    else
-      chromaticNum_ = getConservativeChromaticNum(); 
+    } else {
+      chromaticNum_ = -1;
+    }
 
     // if parameter was passed in command line, assign it.
     if(vm.count("grain-size"))
@@ -232,8 +236,6 @@ int Main::getConservativeChromaticNum()
     if(retVal < colors[i]) retVal = colors[i];
   }
   return retVal;
-
-
 }
 
 #include "Module.def.h" 
