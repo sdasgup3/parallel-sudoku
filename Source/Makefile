@@ -12,7 +12,7 @@ TEST=	graphColor
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CHARMC) $(LDFLAGS) -language charm++ -o $(TARGET) $(OBJS) $(PROJ) 
+	$(CHARMC) $(LDFLAGS) -language charm++ -balance neighbor -o $(TARGET) $(OBJS) $(PROJ) 
 
 Main.o: Main.cpp Module.decl.h graphColor.h vertex.h 
 	$(CHARMC) $(INC) -c Main.cpp
