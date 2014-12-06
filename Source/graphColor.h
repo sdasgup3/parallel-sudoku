@@ -154,6 +154,7 @@ class counter : public CBase_counter {
     CthThread threadId;
     int totalCount;
     bool acceptRegistration;
+    std::vector<std::string> membersInSpawnOrder;
 
   public:
   counter(){
@@ -172,10 +173,11 @@ class counter : public CBase_counter {
   }
 
   // return true if the group is still accepting new spawn requests from chares
-  bool registerMe(){
+  bool registerMe(std::string id){
     if(acceptRegistration)
     {
       nCharesOnMyPe++;
+      membersInSpawnOrder.push_back(id);
       if(nCharesOnMyPe % 1000 == 0)
         CkPrintf("[Heartbeat] Chares Spawned On PE %d = %d\n", CkMyPe(),nCharesOnMyPe);
       return true;
@@ -185,6 +187,12 @@ class counter : public CBase_counter {
 
   void sendCounts() {
     acceptRegistration = false;
+    std::ofstream fout(std::to_string(CkMyPe()) + ".txt");
+    for(std::vector<std::string>::iterator it = 
+        membersInSpawnOrder.begin(), jt = membersInSpawnOrder.end(); 
+        it != jt; it ++) {
+      fout << *it << "*";
+    }
     CkPrintf("Chares Spawned On PE %d = %d\n", CkMyPe(), nCharesOnMyPe);
     CkPrintf("Leaf Chares On PE %d = %d\n", CkMyPe(), nLeafCharesOnMyPe);
   }

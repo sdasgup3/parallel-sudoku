@@ -36,7 +36,7 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
   printGraph();
 #endif 
 
-  CProxy_counter(counterGroup).ckLocalBranch()->registerMe();
+  CProxy_counter(counterGroup).ckLocalBranch()->registerMe(nodeID_);
   //thisProxy.run();
   run();
 }
@@ -54,7 +54,7 @@ Node::Node( std::vector<vertex> state, bool isRoot, int uncol,
 {
   uncolored_num_ -= vertexRemoval();
 
-  bool canISpawn = CProxy_counter(counterGroup).ckLocalBranch()->registerMe();
+  bool canISpawn = CProxy_counter(counterGroup).ckLocalBranch()->registerMe(nodeID_);
   
   // group chare denied permission to spawn
   if(!canISpawn)
