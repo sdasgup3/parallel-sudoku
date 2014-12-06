@@ -7,7 +7,7 @@ TARGET=gc
 # options
 NG='--newGraph=no'
 #PROGRAM_OPTIONS='--timeout=5 --grain-size=960 --do-priority=true --num-colors=5'
-PROGRAM_OPTIONS='--timeout=5 --grain-size=20 --do-priority=false'
+PROGRAM_OPTIONS='--timeout=5 --grain-size=20 --do-priority=true'
 #set -x
 runreg=false
 
@@ -28,7 +28,7 @@ while getopts ":r:f" opt; do
         echo Testing $2
         echo ================================
         cp $2 latestGraph.json
-        ./charmrun +p4 $TARGET --newGraph=no $PROGRAM_OPTIONS ++local
+        ./charmrun +p4   $TARGET --newGraph=no $PROGRAM_OPTIONS ++local  +LBTopo ring
         runreg=true
       ;;
    \?)
