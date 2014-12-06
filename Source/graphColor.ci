@@ -10,6 +10,7 @@ mainmodule Module {
   readonly int grainSize;
   readonly bool doPriority;
   readonly bool baseline;
+  readonly double timeout;
 
   message DUMMYMSG;
 
@@ -31,6 +32,7 @@ mainmodule Module {
 
     entry [expedited] void finish(bool, std::vector<vertex>);
 
+    entry void rerun();
     entry void run(){
       serial { 
         //-----DEBUG USE BELOW--------

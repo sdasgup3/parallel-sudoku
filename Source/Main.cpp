@@ -12,6 +12,7 @@ int chromaticNum_;
 int grainSize;
 bool doPriority;
 bool baseline;
+double timeout;
 
 CkGroupID  counterInit()
 {
@@ -36,6 +37,7 @@ Main::Main(CkArgMsg* msg):newGraph("no"){
   std::cout << "Number of vertices = "<< vertices_<< std::endl;
   std::cout << "Testing coloring with " << chromaticNum_ << " colors"<< std::endl;
   std::cout << "Grain-size = "<< grainSize << std::endl;
+  std::cout << "Sequential Algorithm Timeout = "<< timeout << std::endl;
   std::cout << "doPriority = "<< doPriority << std::endl;
   if(baseline)
     std::cout << "--Baseline run-- "<< std::endl;
@@ -58,6 +60,7 @@ void Main::parseCommandLine(int argc, char **argv)
     ("do-priority", po::value<bool>(), "To do bit vector prioritization while firing chares(default=false)")
     ("newGraph", po::value<std::string>(),"Generate new graph from python (default=no)")
     ("filename", po::value<std::string>(),"Input file")
+    ("timeout", po::value<int>(), "Timeout for sequential algorithm (default=10s)")
     ("baseline", "Trigger execution without optimizations");
 
   po::variables_map vm;
@@ -69,6 +72,11 @@ void Main::parseCommandLine(int argc, char **argv)
       std::cout<<desc<<std::endl;
       CkExit();
     }
+
+    if(vm.count("timeout"))
+      timeout = vm["timeout"].as<int>();
+    else
+      timeout = 10;
 
     if(vm.count("baseline"))
       baseline = true;

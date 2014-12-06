@@ -28,9 +28,7 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
 #endif 
   
   int count = uncolored_num_;
-  for (AdjListType::const_iterator it = adjList_.begin(); it != adjList_.end(); ++it) {
-    uncolored_num_ -= vertexRemoval((*it).first);
-  } 
+  uncolored_num_ -= vertexRemoval();
   CkPrintf("Vertices removed by vertex removal in [MainChare] = %d\n", count-uncolored_num_);
 
 #ifdef  DEBUG 
@@ -39,7 +37,8 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
 #endif 
 
   CProxy_counter(counterGroup).ckLocalBranch()->registerMe();
-  thisProxy.run();
+  //thisProxy.run();
+  run();
 }
 
 /* --------------------------------------------
@@ -53,9 +52,7 @@ Node::Node( std::vector<vertex> state, bool isRoot, int uncol,
     child_succeed_(0), is_and_node_(false), parentBits(pBits), parentPtr(pPtr)
 
 {
-  for (AdjListType::const_iterator it = adjList_.begin(); it != adjList_.end(); ++it) {
-    uncolored_num_ -= vertexRemoval((*it).first);
-  }
+  uncolored_num_ -= vertexRemoval();
 
   bool canISpawn = CProxy_counter(counterGroup).ckLocalBranch()->registerMe();
   
@@ -63,7 +60,8 @@ Node::Node( std::vector<vertex> state, bool isRoot, int uncol,
   if(!canISpawn)
     return;
   
-  thisProxy.run();
+  //thisProxy.run();
+  run();
 }
 
 /*  For a vertex 'vertex', return the number of nodes
@@ -81,29 +79,48 @@ int Node::getUncoloredNgbr(int vertex)
   return num;
 }
 
-/*  Remove uncolored vertices recursively if the number of 
+/*  Remove uncolored vertices if the number of 
  *  is possible colorings is more than its 
- *  uncolored (and undeleted ) nghbrs.
+ *  uncolored (and undeleted ) nghbrs. Worklist based algorithm
  */
-int Node::vertexRemoval(int vertex)
-{
+
+int Node::vertexRemoval()
+{ 
   int vertexRemoved = 0;
-  if(node_state_[vertex].isColored() || !node_state_[vertex].isOperationPermissible()) {
-    return 0;
+  std::set<int> worklist;
+
+  // populate the initial worklist
+  for(auto& I:adjList_)
+  {
+    if(node_state_[I.first].isColored() || !node_state_[I.first].isOperationPermissible())
+      continue;
+    worklist.insert(I.first);
   }
-  boost::dynamic_bitset<> possColors = node_state_[vertex].getPossibleColor();    
-  int possColorCount  = possColors.count();
-  int uncoloredNgbr   = getUncoloredNgbr(vertex);
-  if(possColorCount > uncoloredNgbr) {
-    node_state_[vertex].set_is_onStack(true);
-    deletedV.push(vertex);
-    vertexRemoved ++;
-    std::list<int> ngbr = adjList_[vertex];
-    for(std::list<int>:: const_iterator it = ngbr.begin(), jt = ngbr.end(); 
-        it != jt ; it++) {
-      vertexRemoved += vertexRemoval(*it);
+
+  while(!worklist.empty())
+  {
+    int vertex = *(worklist.begin());
+    worklist.erase(worklist.begin());
+
+    boost::dynamic_bitset<> possColors = node_state_[vertex].getPossibleColor();    
+    int possColorCount  = possColors.count();
+    int uncoloredNgbr   = getUncoloredNgbr(vertex);
+    if(possColorCount > uncoloredNgbr) {
+      node_state_[vertex].set_is_onStack(true);
+      deletedV.push(vertex);
+      vertexRemoved ++;
+
+      // add the neighbors to worklist
+      for(auto& I:adjList_[vertex])
+      {
+        if(node_state_[I].isColored() || !node_state_[I].isOperationPermissible())
+          continue;
+        worklist.insert(I);
+      }
     }
-  }
+  } // while
+
+  //  return total number of vertices put on stack
   return vertexRemoved;
 }
 
@@ -246,7 +263,8 @@ pq_type Node::getValueOrderingOfColors(int vIndex)
     if(false == impossColoring) {
       priorityColors.push(std::pair<size_t,int>(c,rank));
     }
-  }
+  } 
+
   return priorityColors;
 }
 
@@ -345,7 +363,16 @@ void Node::colorLocally()
     return;
   }
  
-  if(sequentialColoring()){
+  bool wait = false;
+  bool success = sequentialColoring(wait);
+
+  // sequential coloring timed out. Return without sending any message to
+  // parent. Sending of the response to the parent would be done in rerun()
+  if(wait)
+    return;
+  
+  // if coloring was found
+  if(success){
     mergeRemovedVerticesBack(deletedV, node_state_);
 
     if(is_root_){
@@ -369,72 +396,83 @@ void Node::colorLocally()
   }
 }
 
-bool Node::sequentialColoring()
+bool Node::sequentialColoring(bool& wait)
 {
+  sequentialStart = CkTimer();
+
   // stackForSequential = Stack which holds stackNodes objects. Each stackNode
   // object represents a node of the state space search. stackNode class is
-  // similar to the node class
-  stackForSequential.emplace(stackNode(node_state_, uncolored_num_));
+  // similar to the node class. Second item in the pair is the stack of vertices
+  // that were removed (in order) leading upto this point in the state space
+  // search
+  stackForSequential.emplace(std::make_pair(stackNode(node_state_, uncolored_num_), std::stack<int>()));
   bool solutionFound = false; 
   
-  // if a solution is found in the recursive sequentialColoringHelper function,
+  // if a solution is found in sequentialColoringHelper function,
   // the vertices in node_state_ are updated (colored)
-  sequentialColoringHelper(solutionFound, node_state_);
+  sequentialColoringHelper(wait, solutionFound, node_state_);
   return solutionFound;
 }
 
-void Node::sequentialColoringHelper(bool& solutionFound, std::vector<vertex>& result)
+// non-recursive algorithm with adaptive grain size control
+void Node::sequentialColoringHelper(bool& wait, bool& solutionFound, std::vector<vertex>& result)
 {
-  CkAssert(!stackForSequential.empty());
-  
-  stackNode curr_node_ = stackForSequential.top();
-  stackForSequential.pop();
-  if(!solutionFound)
+  while(!stackForSequential.empty())
   {
-    // vertex removal step
-    for (AdjListType::const_iterator it = adjList_.begin(); it != adjList_.end(); ++it) {
-      curr_node_.uncolored_num_ -= curr_node_.vertexRemoval((*it).first);
-    }
-
-    // coloring found, merge the vertices we removed in the vertex removal step,
-    // store the result, and return
-    if(curr_node_.uncolored_num_==0)
+    sequentialCurr = CkTimer();
+    
+    // Check if the sequential algorithm has run for 'timeout' seconds. If yes,
+    // then return and call rerun() entry method. That would execute the
+    // remaining stack.
+    if(sequentialCurr - sequentialStart > timeout)
     {
-      solutionFound = true;
-      curr_node_.mergeRemovedVerticesBack();
-      result = curr_node_.node_state_;
+#ifdef DEBUG
+      CkPrintf("Timeout in sequential coloring. Stack size=%d\n", stackForSequential.size());
+#endif
+      thisProxy.rerun();
+      wait = true;
       return;
     }
 
-    // get next contrained vertex, apply value ordering. The order specified by
-    // the priority queue leads to LIFO DFS of the state space
+    stackNode curr_node_ = stackForSequential.top().first;
+    std::stack<int> removedVertices = stackForSequential.top().second;
+    stackForSequential.pop();  // remove from stack
+
+    // vertex removal step
+    curr_node_.uncolored_num_ -= curr_node_.vertexRemoval(removedVertices);
+
+    // coloring found
+    if(curr_node_.uncolored_num_==0)
+    {
+      solutionFound = true;
+      curr_node_.mergeRemovedVerticesBack(removedVertices);
+      result = curr_node_.node_state_;
+      return;
+    }
+  
     int vIndex = curr_node_.getNextConstrainedVertex();
     CkAssert(vIndex!=-1);
 
+    // Value Ordering
+    // temporary stack to invert the priority queue ordering
+    std::stack<stackNode> tmp;
     pq_type priorityColors = curr_node_.getValueOrderingOfColors(vIndex);
     while(!priorityColors.empty()){
       std::pair<int,int> p = priorityColors.top();
       priorityColors.pop();
       std::vector<vertex> new_state = curr_node_.node_state_;
       int verticesColored = curr_node_.updateState(new_state, vIndex, p.first, true);
-
-      // recursive call
-      stackForSequential.emplace(stackNode(new_state, curr_node_.uncolored_num_ - verticesColored));
-      sequentialColoringHelper(solutionFound, result);
-
-      // Don't go down on the siblings if a solution was found at a node
-      if(solutionFound) { 
-        curr_node_.node_state_ = result;
-        break;
-      }
+      CkAssert(verticesColored >= 1);
+      tmp.emplace(stackNode(new_state, curr_node_.uncolored_num_ - verticesColored));
     }
-    
-    // merge the vertices which were removed in vertex removal step, update
-    // result
-    curr_node_.mergeRemovedVerticesBack();
-    if(solutionFound)
-      result = curr_node_.node_state_;
+
+    while(!tmp.empty())
+    {
+      stackForSequential.push(std::make_pair(tmp.top(), removedVertices));
+      tmp.pop();
+    }
   }
+
 }
 
 /*-------------------------------------------
@@ -539,6 +577,7 @@ void Node::colorRemotely(){
 
     std::vector<vertex> new_state = node_state_;
     int verticesColored = updateState(new_state, vIndex, p.first, true);
+    CkAssert(verticesColored >= 1);
 
     if(doPriority) {
       CkEntryOptions* opts = new CkEntryOptions ();
@@ -862,4 +901,39 @@ void Node::storeColoredGraph()
     myfile << i << "-" << node_state_[i].getColor() << "\n";
 
   myfile.close();
+}
+
+void Node::rerun()
+{
+  bool wait = false;
+  bool solutionFound = false;
+  sequentialStart = CkTimer();
+  sequentialColoringHelper(wait, solutionFound, node_state_);
+
+  if(wait)
+    return;
+
+  if(solutionFound){
+    mergeRemovedVerticesBack(deletedV, node_state_);
+
+    if(is_root_){
+      CkAssert(1 == isColoringValid(node_state_));
+#ifdef DEBUG
+      printGraph(true);
+#endif
+
+      CkExit();
+    } else {
+      parent_.finish(true, node_state_);
+    }
+  } else {
+    if(is_root_){
+      CkPrintf("Fail to color!\n");
+      CkExit();
+    } else {
+      mergeRemovedVerticesBack(deletedV, node_state_);
+      parent_.finish(false, node_state_);
+    }
+  }
+
 }

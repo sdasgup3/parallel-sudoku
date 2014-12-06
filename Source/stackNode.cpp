@@ -13,28 +13,46 @@ int stackNode::getUncoloredNgbr(int vIndex)
   return num;
 }
 
-int stackNode::vertexRemoval(int vIndex)
-{
+int stackNode::vertexRemoval(std::stack<int>& removedVertices)
+{ 
   int vertexRemoved = 0;
-  if(node_state_[vIndex].isColored() || !node_state_[vIndex].isOperationPermissible()){ 
-    return 0;
+  std::set<int> worklist;
+
+  // populate the initial worklist
+  for(auto& I:adjList_)
+  {
+    if(node_state_[I.first].isColored() || !node_state_[I.first].isOperationPermissible())
+      continue;
+    worklist.insert(I.first);
   }
-  
-  boost::dynamic_bitset<> possColors = node_state_[vIndex].getPossibleColor();    
-  int possColorCount  = possColors.count();
-  int uncoloredNgbr   = getUncoloredNgbr(vIndex);
-  if(possColorCount > uncoloredNgbr) {
-    node_state_[vIndex].set_is_onStack(true, true);
-    deletedV.push(vIndex);
-    vertexRemoved ++;
-    std::list<int> ngbr = adjList_[vIndex];
-    for(std::list<int>:: const_iterator it = ngbr.begin(), jt = ngbr.end(); 
-        it != jt ; it++) {
-      vertexRemoved += vertexRemoval(*it);
+
+  while(!worklist.empty())
+  {
+    int vertex = *(worklist.begin());
+    worklist.erase(worklist.begin());
+
+    boost::dynamic_bitset<> possColors = node_state_[vertex].getPossibleColor();    
+    int possColorCount  = possColors.count();
+    int uncoloredNgbr   = getUncoloredNgbr(vertex);
+    if(possColorCount > uncoloredNgbr) {
+      node_state_[vertex].set_is_onStack(true, true);
+      //deletedV.push(vertex);
+      removedVertices.push(vertex);
+      vertexRemoved ++;
+
+      // add the neighbors to worklist
+      for(auto& I:adjList_[vertex])
+      {
+        if(node_state_[I].isColored() || !node_state_[I].isOperationPermissible())
+          continue;
+        worklist.insert(I);
+      }
     }
-  }           
+  } // while
+
+  //  return total number of vertices put on stack
   return vertexRemoved;
-} 
+}
 
 int stackNode::getNextConstrainedVertex(){
 
@@ -118,10 +136,10 @@ int stackNode::updateState(std::vector<vertex> & state, int vIndex, size_t c, bo
   return verticesColored;
 }
 
-void stackNode::mergeRemovedVerticesBack() {
-  while(!deletedV.empty()) {
-    int vertex = deletedV.top();
-    deletedV.pop();
+void stackNode::mergeRemovedVerticesBack(std::stack<int>& removedVertices) {
+  while(!removedVertices.empty()) {
+    int vertex = removedVertices.top();
+    removedVertices.pop();
     node_state_[vertex].set_is_onStack(false);
     boost::dynamic_bitset<> possColor = node_state_[vertex].getPossibleColor();
     size_t c = possColor.find_first();

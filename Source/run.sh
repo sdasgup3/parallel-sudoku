@@ -6,7 +6,7 @@ TARGET=gc
 # Enter the command line parameters here. --help to get a list of allowed
 # options
 NG='--newGraph=no'
-PROGRAM_OPTIONS='--grain-size=960 --do-priority=true --num-colors=5'
+PROGRAM_OPTIONS='--timeout=5 --grain-size=960 --do-priority=true --num-colors=5'
 #set -x
 runreg=false
 

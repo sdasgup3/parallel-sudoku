@@ -12,6 +12,7 @@ extern int chromaticNum_;
 extern int grainSize;
 extern bool doPriority;
 extern bool baseline;
+extern double timeout;
 
 struct stackNode {
   std::vector<vertex> node_state_;
@@ -19,11 +20,11 @@ struct stackNode {
   std::stack<int> deletedV;
   stackNode(std::vector<vertex> state, int c): node_state_(state), uncolored_num_(c){}
   int getUncoloredNgbr(int);
-  int vertexRemoval(int);
+  int vertexRemoval(std::stack<int>&);
   int getNextConstrainedVertex();
   pq_type getValueOrderingOfColors(int);
   int updateState(std::vector<vertex>&, int, size_t, bool);
-  void mergeRemovedVerticesBack();
+  void mergeRemovedVerticesBack(std::stack<int>&);
 };
 
 class compareColorRank {
@@ -65,7 +66,7 @@ class Node: public CBase_Node {
     //because when we try to color, we don't need to consider them
     boost::dynamic_bitset<> ignored_vertices;
     std::stack<int> deletedV;
-    std::stack<stackNode> stackForSequential;
+    std::stack<std::pair<stackNode, std::stack<int> > > stackForSequential;
     bool is_root_;
     int vertexColored;    //The vertex colored in this node;Debug purpose
     CProxy_Node parent_;
@@ -78,6 +79,10 @@ class Node: public CBase_Node {
     UShort parentBits;          //Number of priority bits used 
     UInt* parentPtr;
 
+    //timers
+    double sequentialStart;
+    double sequentialCurr;
+
   public:
     // default constructor creats root node
     Node(bool isRoot, int n, CProxy_Node parent);
@@ -88,6 +93,7 @@ class Node: public CBase_Node {
     int getNextConstraintVertex();
     pq_type getValueOrderingOfColors(int);
     void preColor();
+    int vertexRemoval();
     int vertexRemoval(int);
     void colorClique3(int i, int j, int k);
     int getUncoloredNgbr(int);
@@ -128,8 +134,10 @@ class Node: public CBase_Node {
     void getPriorityInfo(UShort &, UInt* &, UInt&, UShort& , UInt*& , UShort& , UInt &);
     inline int _log(int n);
 
-    bool sequentialColoring();
-    void sequentialColoringHelper(bool&, std::vector<vertex>&);
+    bool sequentialColoring(bool&);
+    void sequentialColoringHelper(bool&, bool&, std::vector<vertex>&);
+
+    void rerun();
 };
 
 class DUMMYMSG : public CMessage_DUMMYMSG {
@@ -168,8 +176,8 @@ class counter : public CBase_counter {
     if(acceptRegistration)
     {
       nCharesOnMyPe++;
-      //if(nCharesOnMyPe % 1000 == 0)
-      //  CkPrintf("[Heartbeat] Chares Spawned On PE %d = %d\n", CkMyPe(),nCharesOnMyPe);
+      if(nCharesOnMyPe % 1000 == 0)
+        CkPrintf("[Heartbeat] Chares Spawned On PE %d = %d\n", CkMyPe(),nCharesOnMyPe);
       return true;
     }
     return false;
