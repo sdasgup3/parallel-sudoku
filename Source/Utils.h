@@ -20,9 +20,14 @@
 
 // forward declaration
 class compareColorRank;
+class compareSubgraphRank;
 
 typedef std::map<int, std::list<int> > AdjListType;
 typedef std::priority_queue <std::pair<size_t,int>, std::vector<std::pair<size_t,int> >, compareColorRank> pq_type;
+
+typedef std::priority_queue <boost::dynamic_bitset<>,
+	std::vector<boost::dynamic_bitset<>>, compareSubgraphRank> pq_subgraph_type;
+
 typedef unsigned int   UInt;
 typedef unsigned short UShort;
 

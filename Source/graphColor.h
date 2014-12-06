@@ -35,6 +35,15 @@ class compareColorRank {
     }
 };
 
+class compareSubgraphRank {
+  public:
+    bool operator()(boost::dynamic_bitset<> &p1, boost::dynamic_bitset<> &p2)
+    {
+      return p1.count() < p2.count();
+    }
+};
+
+
 class priorityMsg : public CMessage_priorityMsg {
   public:
     UInt* parentPtr;
@@ -128,8 +137,8 @@ class Node: public CBase_Node {
 
     //detect subgraphs and create corresponding states
     //if only one graph existed, return false
-    bool detectAndCreateSubgraphs(
-       std::map<boost::dynamic_bitset<>, std::vector<vertex>> & subgraphs);
+    bool detectAndCreateSubgraphs(boost::dynamic_bitset<> init_bitset,
+       pq_subgraph_type & subgraphs);
 
     void getPriorityInfo(UShort &, UInt* &, UInt&, UShort& , UInt*& , UShort& , UInt &);
     inline int _log(int n);

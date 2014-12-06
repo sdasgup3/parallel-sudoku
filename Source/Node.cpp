@@ -505,40 +505,80 @@ void Node::colorRemotely(){
   //TODO: remove vertex and all other preprocessing operations
   //place here
 
+
+    //-----------------------------------------------
     //Detect Subgraphs
     //If have >=2 subgraphs, make this node and_node
     //and spawn children to color each subgraphs
-     std::map<boost::dynamic_bitset<>, std::vector<vertex>> subgraphs;
+    //----------------------------------------------
+ 
+    boost::dynamic_bitset<> init_bitset(vertices_);
+    init_bitset.set();
+    //initialize the bitset by marking all removed vertices as 0
+    //and existed vertices as 1
+    CkAssert(node_state_.size()==vertices_);
+    for(int i=0; i<vertices_; i++){
+       //these vertices have been removed from current graph
+       if(!node_state_[i].isOperationPermissible())
+            init_bitset.reset(i);
+    }
+    pq_subgraph_type prioritySubgraphs;
      //detect subgraphs and create states correspondingly
-     if(  detectAndCreateSubgraphs( subgraphs ) ){
+     if(  detectAndCreateSubgraphs( init_bitset, prioritySubgraphs ) ){
 
          //----------debug code below-----------------------
 //#ifdef DEUBG
          char * id = new char[nodeID_.size()+1];
          strcpy(id, nodeID_.c_str());
-         CkPrintf("Found %d subgraphs in node[%s]\n", subgraphs.size(), id);
+         CkPrintf("Found %d subgraphs in node[%s]\n", prioritySubgraphs.size(), id);
          delete [] id;
-         for(auto subgraph_entry : subgraphs ){
-             std::string s;
-             boost::to_string(subgraph_entry.first, s);
-             char * bits = new char[s.size()+1];
-             strcpy(bits, s.c_str());
-             CkPrintf("%s\n", bits);
-             delete [] bits;
-         }
 //#endif
          //----------debug code above-----------------------
         is_and_node_ = true;
         //child_num_=subgraphs.size();
         //remove vertices accordingly for each subgraph
-        for(auto subgraph_entry : subgraphs ){
+	int numChildrenStates = prioritySubgraphs.size();
+	UShort childBits = _log(numChildrenStates);
+        while( ! prioritySubgraphs.empty() ){
             //for each subgraph, fire a child node to do the work
             //parameters
+	    boost::dynamic_bitset<> subgraph_bitset = prioritySubgraphs.top();
+	    prioritySubgraphs.pop();
+
+	    //finish getting one subgraph
+       	    //create corresponding states and insert <bitset, state> to the map
+            std::vector<vertex> new_state = node_state_;
+            //for this status different from initial states
+            //we have to mark them as out_of_subgraph
+            boost::dynamic_bitset<> remove_bitset = init_bitset ^ subgraph_bitset;
+	    for(int i=0; i<remove_bitset.size(); i++){
+            	if(remove_bitset.test(i)){
+                    //remove from the list
+                    new_state[i].set_out_of_subgraph(true);
+            	}
+            }
+		
+
+	    if(doPriority){
+	    	CkEntryOptions* opts = new CkEntryOptions();
+		UShort newParentPrioBits; UInt* newParentPrioPtr;
+		UInt newParentPrioPtrSize;
+		getPriorityInfo(newParentPrioBits, newParentPrioPtr, newParentPrioPtrSize,
+			parentBits, parentPtr, childBits, child_num_);
+		opts->setPriority(newParentPrioBits, newParentPrioPtr);
+                CProxy_Node::ckNew(new_state, false,
+                    subgraph_bitset.count(), thisProxy,
+                    nodeID_+std::to_string(child_num_),
+                    newParentPrioBits, newParentPrioPtr, newParentPrioPtrSize,
+		    CK_PE_ANY, opts);
+		free(newParentPrioPtr);
+	    } else {
             //state, isRoot, uncoloredNum, parentProxy, nodeId
-            CProxy_Node::ckNew(subgraph_entry.second, false,
-                    subgraph_entry.first.count(), thisProxy,
+            CProxy_Node::ckNew(new_state, false,
+                    subgraph_bitset.count(), thisProxy,
                     nodeID_+std::to_string(child_num_),
                     0, NULL, 0);
+	    }
             child_num_++;
         }
         return;
@@ -803,19 +843,9 @@ int Node::_log(int n)
 //detectAndCreateSubgraphs
 // - return true if it consists more than one subgraphs
 //---------------------------------------------------------
-bool Node::detectAndCreateSubgraphs(
-        std::map<boost::dynamic_bitset<>, std::vector<vertex>> & subgraphs)
+bool Node::detectAndCreateSubgraphs(boost::dynamic_bitset<> init_bitset,
+	pq_subgraph_type & prioritySubgraphs)
 {
-    boost::dynamic_bitset<> init_bitset(vertices_);
-    init_bitset.set();
-    //initialize the bitset by marking all removed vertices as 0
-    //and existed vertices as 1
-    CkAssert(node_state_.size()==vertices_);
-    for(int i=0; i<vertices_; i++){
-       //these vertices have been removed from current graph
-       if(!node_state_[i].isOperationPermissible())
-            init_bitset.reset(i);
-    }
    #ifdef DEBUG
         if(init_bitset.count()!=vertices_){
         std::string s;
@@ -863,24 +893,11 @@ bool Node::detectAndCreateSubgraphs(
             }
         }while(!worklist.empty());
 
-        //finish getting one subgraph
-        //create corresponding states and insert <bitset, state> to the map
-        std::vector<vertex> new_state = node_state_;
-        //for this status different from initial states
-        //we have to mark them as out_of_subgraph
-        boost::dynamic_bitset<> remove_bitset = init_bitset ^ subgraph_bitset;
-        for(int i=0; i<remove_bitset.size(); i++){
-            if(remove_bitset.test(i)){
-                //remove from the list
-                new_state[i].set_out_of_subgraph(true);
-            }
-        }
-        subgraphs.insert(std::pair<boost::dynamic_bitset<>, std::vector<vertex>>(
-                    subgraph_bitset, new_state));
+	prioritySubgraphs.push(subgraph_bitset);
     }
 
     //return true, if exists more than 2 subgraphs
-    return subgraphs.size()>1  ;
+    return prioritySubgraphs.size()>1  ;
 }
 
 // stores the colored graph to a file which can be read by a python script to

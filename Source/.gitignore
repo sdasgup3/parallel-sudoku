@@ -8,3 +8,7 @@ charmrun
 log
 run.sh
 Makefile
+numt.*
+nodelist
+run_script
+charmrun.*
