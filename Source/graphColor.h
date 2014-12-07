@@ -163,6 +163,7 @@ class counter : public CBase_counter {
     CthThread threadId;
     int totalCount;
     bool acceptRegistration;
+    std::vector<std::string> andStateNodeInfo;
 
   public:
   counter(){
@@ -176,13 +177,30 @@ class counter : public CBase_counter {
 
   void registerMeLeaf(){
     nLeafCharesOnMyPe++;
-    //if(nLeafCharesOnMyPe % 10 == 0)
-    //  CkPrintf("[Heartbeat] Chares Spawned On PE %d = %d\n", CkMyPe(),nLeafCharesOnMyPe);
+    /*
+    if(nLeafCharesOnMyPe % 10 == 0)
+      CkPrintf("[Heartbeat] Chares Spawned On PE %d = %d\n", CkMyPe(),nLeafCharesOnMyPe);
+    */
   }
 
   // return true if the group is still accepting new spawn requests from chares
-  bool registerMe(){
-    if(acceptRegistration)
+  bool registerMe(std::string chareId){
+
+    bool amIChildOfFalseAndNode = false;
+    for(std::string& andChareId:andStateNodeInfo) {
+      if(std::string::npos != chareId.find(andChareId.c_str(),0,andChareId.length())) {
+        amIChildOfFalseAndNode = true;
+      }
+    }
+
+    if(false == acceptRegistration) {
+      std::cout << "Permis Denied (soln found)\n" << endl;
+    } 
+    if(true == amIChildOfFalseAndNode) {
+      std::cout << "Permis Denied (and parent falsified)\n" << endl;
+    }
+
+    if(acceptRegistration && false == amIChildOfFalseAndNode)
     {
       nCharesOnMyPe++;
       if(nCharesOnMyPe % 1000 == 0)
@@ -191,6 +209,17 @@ class counter : public CBase_counter {
     }
     return false;
   }
+
+  void registerAndStateNodeStatHelper(std::string andStateNodeID_) {
+    andStateNodeInfo.push_back(andStateNodeID_);
+  }
+
+  void registerAndStateNodeStat(std::string andStateNodeID_) {
+    std::cout<< "Registering Failed And Node"<< endl;
+    CProxy_counter grp(mygrp);
+    grp.registerAndStateNodeStatHelper(andStateNodeID_);
+  }
+
 
   void sendCounts() {
     acceptRegistration = false;

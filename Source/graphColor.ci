@@ -24,6 +24,7 @@ mainmodule Module {
   group counter {
     entry counter();
     entry [expedited] void sendCounts(); 
+    entry [expedited] void registerAndStateNodeStatHelper(std::string); 
   };
 
   chare Node { 
@@ -48,17 +49,6 @@ mainmodule Module {
           colorLocally();
           return;
         }
-
-        if(is_root_){
-          //TODO:
-          // add "preprocess" function calls here
-          // Please set up is_and_node_=true if it creates subgraphs
-          // it means all children should reply
-          // default is false, only requires 1 success reply 
-        }
-
-        //TODO: should we check threshold again?
-        //because preprocess may reduce the uncolored number
 
         colorRemotely();
       }
