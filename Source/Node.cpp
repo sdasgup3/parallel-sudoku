@@ -17,7 +17,8 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
   child_succeed_(0), is_and_node_(false), parentBits(1), parentPtr(NULL)
 
 {
-  CkAssert(isRoot);  // nodeID=1, since this constructor is only called for root chare
+  programStart = CkTimer();
+  CkAssert(isRoot);  // nodeID=0, since this constructor is only called for root chare
   vertex v = vertex(chromaticNum_);
   node_state_ = std::vector<vertex>(vertices_, v);
 
@@ -304,9 +305,14 @@ int Node::updateState(std::vector<vertex> & state, int vIndex, size_t c, bool do
 }
 
 // valid coloring found. Print statistics (if any)
-void Node::printStats(std::vector<vertex>& state)
+void Node::printStats(std::vector<vertex>& state, bool success)
 {
-  CkPrintf("Valid Coloring found. Hurray! Printing stats.\n");
+  if(success)
+    CkPrintf("Valid Coloring found. Hurray! Printing stats.\n");
+  else
+    CkPrintf("Failed to color\n");
+
+  CkPrintf("Program time (s) = %f\n", programEnd-programStart);
   int count=0;
   for_each(state.begin(), state.end(), [&](vertex v){
       if(v.getStats("vertexRemoval_local"))
@@ -387,7 +393,8 @@ void Node::colorLocally()
     }
   } else {
     if(is_root_){
-      CkPrintf("Fail to color!\n");
+      programEnd = CkTimer();
+      printStats(node_state_, false);
       CkExit();
     } else {
       mergeRemovedVerticesBack(deletedV, node_state_);
@@ -399,7 +406,6 @@ void Node::colorLocally()
 bool Node::sequentialColoring(bool& wait)
 {
   sequentialStart = CkTimer();
-
   // stackForSequential = Stack which holds stackNodes objects. Each stackNode
   // object represents a node of the state space search. stackNode class is
   // similar to the node class. Second item in the pair is the stack of vertices
@@ -756,7 +762,8 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
 
       CkExit();
     } else {
-      CkPrintf("Fail to color!\n");
+      programEnd = CkTimer();
+      printStats(node_state_, false);
       CkExit();
     }
   } else if(!is_root_ && finish){
@@ -823,6 +830,7 @@ bool Node::isColoringValid(std::vector<vertex>& state)
 
   }  
 
+  programEnd = CkTimer();
   storeColoredGraph();
   printStats(state);
   return  1;
@@ -945,7 +953,8 @@ void Node::rerun()
     }
   } else {
     if(is_root_){
-      CkPrintf("Fail to color!\n");
+      programEnd = CkTimer();
+      printStats(node_state_, false);
       CkExit();
     } else {
       mergeRemovedVerticesBack(deletedV, node_state_);

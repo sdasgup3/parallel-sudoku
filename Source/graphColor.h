@@ -17,7 +17,6 @@ extern double timeout;
 struct stackNode {
   std::vector<vertex> node_state_;
   int uncolored_num_;   //number of uncolored vertex
-  std::stack<int> deletedV;
   stackNode(std::vector<vertex> state, int c): node_state_(state), uncolored_num_(c){}
   int getUncoloredNgbr(int);
   int vertexRemoval(std::stack<int>&);
@@ -91,6 +90,8 @@ class Node: public CBase_Node {
     //timers
     double sequentialStart;
     double sequentialCurr;
+    double programStart;
+    double programEnd;
 
   public:
     // default constructor creats root node
@@ -133,7 +134,7 @@ class Node: public CBase_Node {
 
     //Checks if the reported coloring is valid. 
     bool isColoringValid(std::vector<vertex>&);
-    void printStats(std::vector<vertex>&);
+    void printStats(std::vector<vertex>&, bool success=true);
 
     //detect subgraphs and create corresponding states
     //if only one graph existed, return false

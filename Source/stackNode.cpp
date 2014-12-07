@@ -36,7 +36,6 @@ int stackNode::vertexRemoval(std::stack<int>& removedVertices)
     int uncoloredNgbr   = getUncoloredNgbr(vertex);
     if(possColorCount > uncoloredNgbr) {
       node_state_[vertex].set_is_onStack(true, true);
-      //deletedV.push(vertex);
       removedVertices.push(vertex);
       vertexRemoved ++;
 
