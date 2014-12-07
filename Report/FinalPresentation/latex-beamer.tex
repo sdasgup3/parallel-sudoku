@@ -1,0 +1,812 @@
+%\documentclass{beamer}
+\documentclass[mathserif,10pt]{beamer}
+
+\usepackage{beamerthemesplit}
+\usepackage{graphics}
+\usepackage{epsfig}
+\usepackage{algorithm}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{framed}
+\usepackage{pstricks}
+\usepackage{pst-node,pst-tree}
+\usepackage{pst-rel-points}
+\usepackage{flexiprogram}
+\usepackage[UKenglish]{babel}
+\usepackage{hyperref}
+\usepackage{pst-coil}
+\usepackage{color}
+\usepackage{epsfig}
+\usepackage{tikz}
+%\usepackage{multirow}
+
+\usefonttheme{serif}
+
+\newcommand{\cmt}[1]{}
+\newcommand{\epsilonset}{\ensuremath{\{\epsilon\}}}
+\newcommand{\epsilonpairset}{\ensuremath{\{\epsilon,\epsilon\}}}
+\newcommand{\num}[1]{\ensuremath{|#1|}}
+\newcommand{\upath}{\ensuremath{\mathcal{U}}}
+\newcommand{\mb}[1]{\mbox{{\tt #1}}}
+\newcommand{\ttf}[1]{{\tt #1}}
+\newcommand{\rtarrow}{$\rightarrow$}
+\newcommand{\Tree}{{\tt Tree}}
+\newcommand{\Dag}{{\tt Dag}}
+\newcommand{\Cycle}{{\tt Cycle}}
+\newcommand{\p}{\ensuremath{p}}
+\newcommand{\q}{\ensuremath{q}}
+\newcommand{\s}{\ensuremath{s}}
+\newcommand{\myr}{\ensuremath{r}}
+\newcommand{\shape}{\mbox{shape}}
+\newcommand{\drct}{\ensuremath{D}}
+\newcommand{\indrct}{\ensuremath{I}}
+\newcommand{\heap}{\ensuremath{\mathcal{H}}}
+\newcommand{\fields}{\ensuremath{\mathcal{F}}}
+\newcommand{\DFM}[2]{\ensuremath{D_F[#1,#2]}}
+\newcommand{\IFM}[2]{\ensuremath{I_F[#1,#2]}}
+\newcommand{\nat}{\ensuremath{\mathcal{N}}}
+\newcommand{\fieldD}[2]{\ensuremath{{#1}_{#2}^\drct}}
+\newcommand{\fieldI}[3]{\ensuremath{{#1}_{#2}^{\indrct#3}}}
+\newcommand{\subC}{\mbox{\scalebox{0.6}{\Cycle}}}
+\newcommand{\subD}{\mbox{\scalebox{0.6}{\Dag}}}
+\newcommand{\false}{\textbf{False}}
+\newcommand{\true}{\textbf{True}}
+%\noindent
+
+\setcounter{tocdepth}{1}
+\lstset{language=[ANSI]C}
+\lstset{% general command to set parameter(s)
+basicstyle=\footnotesize\tt, % print whole listing small
+identifierstyle=, % nothing happens
+commentstyle=\color{red}, % white comments
+showstringspaces=false, % no special string spaces
+lineskip=1pt,
+captionpos=b,
+frame=single,
+breaklines=true
+%\insertauthor[width={3cm},center,respectlinebreaks]
+}
+\lstset{classoffset=0,
+morekeywords={},keywordstyle=\color{black},
+classoffset=1,
+classoffset=0}% restore default
+
+%\usetheme{Warsaw}
+\usetheme{CambridgeUS}
+%\usetheme{Antibes}
+%\usecolortheme{lily}
+%\useinnertheme{rectangles} 
+%\useoutertheme{infolines} 
+%\setbeamercolor{alerted text}{fg=cyan}
+%\beamertemplatetransparentcovereddynamicmedium
+%\definecolor{bbrown}{rgb}{.6588,.4,.1647}
+%\definecolor{blueviolet}{rgb}{.098039216,.050980392,.929411765}
+%\definecolor{periwinkle}{rgb}{.423529412,.458823529,.988235294}
+%\mode<presentation>
+%{ \usetheme{boxes} }
+\usecolortheme{dolphin}
+
+\title{Graph Coloring Using State Space Search}
+\author[Presented by: Group 1]{{\textbf{Sandeep, Tanmay, Mengjia, Novi}} }
+\date{December 09, 2014}
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+\usebeamertemplate{mytheme}
+
+\AtBeginSection[]
+{
+\begin{frame}<beamer>
+\frametitle{Outline}
+\tableofcontents[currentsection]
+\end{frame}
+}
+
+\section{Introduction}
+\subsection{Introduction}
+\frame
+{
+	\frametitle{\subsecname}
+	\uncover<1>{\textbf{Shape Analysis : } Class of techniques that statically approximate the
+      run-time structures created on the heap.}
+}
+
+\cmt{ 
+\subsection{Application}
+\frame
+{
+	\frametitle{\subsecname}
+		
+	\begin{figure}
+  	\begin{center}
+  
+    \scalebox{.80}{
+		\begin{tabular}[htbp]{ | c | c  |}
+    	\hline
+    	& \multirow{3}{*}{ \input{code_treeadd_colored_rw}} \\
+      \includegraphics[scale=0.6]{tree_grph}
+      & \\
+     (a) Heap structure & 
+     (b Function traversing the data structure. \\
+     \hline
+    \end{tabular}
+	}
+  	\end{center}
+	\end{figure}
+
+	\begin{center}
+	(p.shape $==$ Tree) $\Rightarrow$ {\tt S2} and {\tt S4} can be executed in parallel.
+  	\end{center}
+}
+
+\subsection{Programming Model}
+\frame
+{
+	\frametitle{\subsecname}
+	
+\begin{figure}
+  \begin{center}
+  
+    \scalebox{.8}{\begin{tabular}{ | c | c | c | c |}
+   \hline
+   & Before execution & Statement & After execution \\
+   \hline
+    Allocations & \input{allocation_before} & \ttf{p = malloc()} & \input{allocation_after}\\
+    \hline
+    \multirow{3}{*}{Pointer Assignments} & \input{fig_ptrassgn_1} & \ttf{p = q} & \input{fig_ptrassgn_1_after} \\
+    \cline{2-4}
+    & \input{fig_ptrassgn_2} & \ttf{p = q\rtarrow{f}} & \input{fig_ptrassgn_2_after} \\
+    \cline{2-4}
+    & \input{allocation_after} & \ttf{p = NULL} & \input{allocation_before} \\
+     \hline
+     \multirow{2}{*}{Structure updates} & \input{ptr_strup_1} & \ttf{p\rtarrow{f} = NULL} & \input{ptr_strup_1_after} \\
+     \cline{2-4}
+     & \input{ptr_strup_2} & \ttf{p\rtarrow{f} = q} & \input{ptr_strup_2_after} \\
+     \hline
+    \end{tabular}}
+  \end{center}
+\end{figure}
+}
+
+\section{Related Work}
+\subsection{Related Work}
+\frame
+{
+	\frametitle{\subsecname}
+	\begin{itemize}
+	\item Work done by Ghiya et. al\footnote{Rakesh Ghiya and Laurie J. Hendren. Is it a Tree, a DAG, or a Cyclic graph? 
+	a shape analysis for heap-directed pointers in C. In Proceedings of the 23rd ACM
+	SIGPLAN-SIGACT symposium on Principles of programming languages, pages 1-15, January 1996.}
+	
+	\begin{itemize}
+	\item Keeps interference and direction matrices between any two 
+			pointer variables.
+	\item Infer the shape of the structures as Tree, DAG or Cycle
+	\item Conservatively identify the shapes.
+	\end{itemize}
+	\end{itemize}
+}
+\frame
+{
+	\frametitle{\subsecname}
+	\begin{itemize}
+	\item Work done by Sagiv et. al \footnote{Mooly Sagiv, Thomas Reps, and ReinhardWilhelm. Parametric shape analysis via
+	3-valued logic. POPL 1999, pages 105-118, 1999.}
+	
+	\begin{itemize}
+	\item Introduce the concepts of abstraction and re-materialization.
+	\item Potentially exponential run-time in the number of predicates.
+	\end{itemize}
+	\end{itemize}
+		
+}
+\cmt{
+\frame
+{
+	\frametitle{\subsecname}
+	\begin{itemize}
+	\item Work done by Marron et. al \footnote{Mark Marron, Deepak Kapur, Darko Stefanovic, and Manuel Hermenegildo. A
+static heap analysis for shape and connectivity: unified memory analysis: the base
+framework. LCPC'06, pages 345-363, 2006.}
+	
+	\begin{itemize}
+	\item Presents a data flow framework that uses heap graphs to model data flow values.
+	\item The analysis uses technique similar to re-materialization, but the re-materialization is approximate and 
+	may result in loss of precision.
+	\end{itemize}
+	\end{itemize}
+		
+}
+}
+
+\section{Motivation}
+\subsection{Motivation}
+\frame
+{
+	\frametitle{\subsecname}
+
+	\cmt{For each pointer variable, our analysis computes the shape
+attribute of the data structure pointed to by the variable.} 
+We define the shape attribute $\p.\shape$
+for a pointer $\p$ as follows:
+%%
+\begin{eqnarray*}
+  \p.\shape = \left\{ \begin{array}{@{}rl@{}}
+    \Cycle & \mbox{If a cycle can be reached from $\p$} \\ 
+    \Dag & \mbox{Else if a DAG can be reached from $\p$} \\
+    \Tree & \mbox{Otherwise} \\
+  \end{array} \right.
+\end{eqnarray*}
+	\begin{center}
+      \includegraphics[scale=0.6]{Figure/figure_1}
+	\end{center}
+%%
+\cmt{
+where the heap is visualized as a directed graph, and cycle
+and DAG have there natural graph-theoretic meanings.	}
+}
+
+\frame
+{
+	\frametitle{\subsecname}
+	
+\begin{figure}
+  \begin{center}
+  
+    \scalebox{.8}{\begin{tabular}{ | l | c | c | c |c | c | }
+   \hline
+   \multirow{2}{*}{Statements} & \multirow{2}{*}{Heap Structure} & \multicolumn{2}{c|}{Actual Shape} &  \multicolumn{2}{c|}{Field Insensitive} \\
+   \cline{3-6} 
+   &  & p.shape & q.shape & p.shape & q.shape  \\
+   \hline
+	 &&&&& \\
+    {\tt S1.} \ttf{p = malloc()} & \multirow{2}{*}{\input{motiv_1_fig_S1.tex}} &  \multirow{2}{*}{Tree} & \multirow{2}{*}{Tree} & \multirow{2}{*}{Tree} & \multirow{2}{*}{Tree} \\
+    {\tt S2.} \ttf{q = malloc()} &  &  &&&\\
+	 &&&&& \\
+    \hline
+	\pause
+	 &&&&& \\
+	{\tt S3.} \ttf{p$\rightarrow$f = q} &  \input{motiv_1_fig_S3.tex} & Tree & Tree & Tree & Tree\\
+	 &&&&& \\
+     \hline
+	\pause
+	 &&&&& \\
+	{\tt S4.} \ttf{p$\rightarrow$h = q} &  \input{motiv_1_fig_S4.tex} & Dag & Tree & Dag & Tree \\
+	 &&&&& \\
+     \hline
+    \end{tabular}}
+  \end{center}
+\end{figure}
+}
+
+\frame
+{
+	\frametitle{\subsecname}
+	
+\begin{figure}
+  \begin{center}
+  
+    \scalebox{.8}{\begin{tabular}{ | l | c | c | c |c | c | }
+   \hline
+   \multirow{2}{*}{Statements} & \multirow{2}{*}{Heap Structure} & \multicolumn{2}{c|}{Actual Shape} &  \multicolumn{2}{c|}{Field Insensitive} \\
+   \cline{3-6} 
+   &  & p.shape & q.shape & p.shape & q.shape  \\
+   \hline
+	 &&&&& \\
+	{\tt S5.} \ttf{q$\rightarrow$g = p} &  \input{motiv_1_fig_S5.tex} & Cycle & Cycle & Cycle & Cycle\\
+	 &&&&& \\
+     \hline
+	\pause
+	 &&&&& \\
+	{\tt S6.} \ttf{q$\rightarrow$g = null} &  \input{motiv_1_fig_S6.tex} & Dag & Tree & Cycle & Cycle \\
+	 &&&&& \\
+     \hline
+	\pause
+	 &&&&& \\
+	{\tt S7.} \ttf{p$\rightarrow$h = null} &  \input{motiv_1_fig_S7.tex} & Tree & Tree & Cycle & Cycle \\
+	 &&&&& \\
+     \hline
+    \end{tabular}}
+  \end{center}
+\end{figure}
+}
+
+\frame
+{
+	\frametitle{\subsecname}
+	
+	Field insensitive shape analysis algorithms use conservative
+	kill information. 
+	\cmt{and hence they are, in general, unable to
+	infer the shape transition from cycle to DAG or from DAG to
+	Tree.}
+	\input{motiv_fig_1.tex}
+}
+
+\section{Our Analysis}
+\subsection{Our Analysis}
+\frame
+{
+	\frametitle{\subsecname}
+	\begin{itemize}
+	\item {\blue \textbf{Path Length Unbounded}}: \pause Approximate any path between two variables by the first field that is dereferenced on the path. 
+	\pause
+	\item  {\blue \textbf{Path Count Unbounded}}: \pause Use k-limiting to approximate the number of paths starting at a given field.
+	\end{itemize}
+}
+\frame
+{
+	\frametitle{\subsecname}
+	
+	Our analysis remembers the path information using the following:
+	\begin{itemize}
+	\item  {\blue $D_F$}: Modified direction matrix. \cmt{ that stores the first fields of the paths between two pointers.}
+	\pause
+	\item {\blue $I_F$}: Modified interference matrix. \cmt{ that stores the pairs of first fields corresponding to the pairs of interfering paths.}
+	\pause
+	\item {\blue Boolean Variables}: For $f \in \fields, \p, \q \in \heap$, \\ 
+			\begin{center}
+			$f_{pq}$ == \true\ $ \Rightarrow$  $f$ field of $\p$ points directly to $\q$. 
+			\end{center}
+	
+	\cmt{Field connectivity information: Remember the fields directly connecting two pointer variables.}
+	\end{itemize}
+}
+
+\cmt{ NOT INCLUDED
+\subsection{Notion of Path}
+\frame
+{
+	\frametitle{\subsecname}
+	\begin{itemize}
+	\item A path from $\p$ to $\q$ is the sequence of pointer fields that need to be traversed in 
+			the heap to reach from $\p$ to $\q$.
+	\item Path length may be unbounded, so we consider only the first field of a path.
+	\item For a path of length one (direct path) ($f_\drct$); For a path of length greater than one
+			(indirect path) ($f_\indrct$).
+	\item Possible to have multiple indirect paths starting with the same field : k-limiting, beyond k treat the number 
+			of paths to be $\infty$.
+	\end{itemize}
+}
+}
+
+\frame
+{
+	\frametitle{\subsecname}
+	\input{defn_fig_0.tex}
+	Assuming the limit $k \geq 3$, the path information between $\p$ and $\s$ can be represented by the set:
+	$\{g^\drct, f^{\indrct\infty}, h^{\indrct 3} \}$. 
+	If $k < 3$, then the set becomes: 
+	$\{ g^\drct, f^{\indrct\infty}, h^{\indrct\infty} \}$
+}
+
+\cmt{ NOT INCLUDED
+\subsection{Direction Matrix : $D_F$}
+\frame
+{
+	\frametitle{\subsecname}
+	\begin{definition}
+\label{DFM_matrix}
+Field sensitive Direction matrix
+$D_F$ is a matrix that stores information 
+about paths between two pointer variables.
+Given $\p, \q \in
+\heap, f \in \fields$:
+\begin{eqnarray*}
+  \epsilon & \in \DFM{p}{p}& \mbox{ where $\epsilon$
+    denotes the empty path.} \\
+  f^\drct  &\in  \DFM{p}{q} & \mbox{ if there is a direct
+    path $f$ from $\p$ to $\q$.}\\
+  f^{\indrct m} & \in  \DFM{p}{q} & 
+  \mbox{\begin{tabular}[t]{p{70mm}}if there are $m$ indirect
+      paths starting with field $f$ from $\p$ to $\q$ and $m
+      \leq k.$
+    \end{tabular}
+  } \\
+  f^{\indrct\infty} & \in  \DFM{p}{q} &
+  \mbox{\begin{tabular}[t]{p{70mm}}if there are $m$ indirect
+      paths starting with field $f$ from $\p$ to $\q$ and $m >
+      k.$
+  \end{tabular}}  
+\end{eqnarray*}
+\end{definition}
+}
+
+\subsection{Abstraction : $D_F$}
+\frame
+{
+	\frametitle{\subsecname}
+	Let \nat\ denote the set of natural numbers. We define the
+following partial order for approximate paths used by our
+analysis. For $ f \in \fields,\ m,n \in \nat,\ n \leq m$:
+$$
+\epsilon \sqsubseteq \epsilon, \quad 
+f^\drct \sqsubseteq  f^\drct,  \quad
+f^{\indrct\infty}  \sqsubseteq  f^{\indrct\infty}, \quad
+f^{\indrct m} \sqsubseteq f^{\indrct\infty}, \quad
+f^{\indrct n} \sqsubseteq f^{\indrct m} \enspace .
+$$
+The partial order is extended to set of paths $S_{P_1},
+S_{P_2}$ as:
+\begin{eqnarray*}
+  S_{P_1} \sqsubseteq S_{P_2} &\Leftrightarrow& \forall \alpha \in
+  S_{P_1}, \exists \beta \in S_{P_2}\ s.t. \alpha \sqsubseteq \beta \enspace .
+\end{eqnarray*}
+}
+
+\subsection{Interference Matrix : $I_F$}
+\frame
+{
+	\frametitle{\subsecname}
+	\cmt{Two pointers $\p,\q \in \heap$ are said to
+interfere if there exists $\s \in \heap$ such that both
+$\p$ and $\q$ have paths reaching $\s$. Note that $\s$ could
+be $\p$ (or $\q$) itself, in which case the path from $\p$
+(from $\q$) is $\epsilon$.}
+
+%FIELD SENSITIVE DIRECTION MATRIX 
+\begin{definition}\label{IFM_matrix}
+Field sensitive Interference matrix $I_F$ between
+two pointers captures the ways in which these pointers are
+interfering.  For $\p, \q, \s \in \heap, \p \not= \q$,
+the following relation holds for $D_F$ and $I_F$: 
+\begin{eqnarray*}
+  \DFM{p}{s} \times \DFM{q}{s} &\sqsubseteq&
+  \IFM{p}{q} \enspace . \label {eq:rel-df-if}
+\end{eqnarray*}
+\end{definition}
+}
+
+\subsection{Abstraction : $I_F$}
+\frame
+{
+	\frametitle{\subsecname}
+	For pair of paths:
+\begin{eqnarray*}
+  (\alpha, \beta) \sqsubseteq (\alpha', \beta') 
+  \Leftrightarrow 
+   (\alpha \sqsubseteq \alpha')  \wedge
+  (\beta \sqsubseteq  \beta')
+\end{eqnarray*}
+For set of pairs of paths $R_{P_1}, R_{P_2}$:
+\begin{eqnarray*}
+  R_{P_1} \sqsubseteq R_{P_2} \Leftrightarrow \forall
+  (\alpha, \beta) \in
+  R_{P_1}, \exists (\alpha', \beta') \in
+  R_{P_2}\ s.t. (\alpha, \beta) \sqsubseteq (\alpha', \beta')
+\end{eqnarray*}
+}
+}
+
+\subsection{Example : $D_F \mbox{ and } I_F$}
+\frame
+{
+	\frametitle{\subsecname}
+	\input{defn_fig_1.tex}
+}	
+
+\subsection{Boolean Functions}
+\frame
+{
+	\frametitle{\subsecname}
+	\begin{itemize}
+	\item For each variable $\p \in \heap$, our analysis use attributes $\p_{\subD}$ and $\p_{\subC}$ to store boolean functions. \\
+	\begin{center}
+			$\p_{\subD} == \true \Rightarrow \p$ can reach a Dag  in the heap.\\
+			$\p_{\subC} == \true \Rightarrow \p$ can reach a Cycle  in the heap. 
+	\end{center}
+	\pause
+	\item The boolean functions consist of the values from:
+		\begin{itemize}
+			\item $D_F$
+			\item $I_F$ 
+			\item Boolean variables
+		\end{itemize}	
+	\pause
+	\item An Example:
+	$$
+			\p_{\subC} = f_{\p\q} \wedge \num{D_F[\q,\p]} \geq 1
+	$$		
+	\end{itemize}
+}
+
+\frame
+{
+	\frametitle{\subsecname}
+	\cmt{\begin{itemize}
+	\item The shape of \p, \p.\shape, can be obtained by evaluating the functions for the attributes $\p_{\subC}$ and
+          $\p_{\subD}$, and using following Table.}
+		  \begin{table}
+			\caption{Determining shape from boolean
+			  attributes}
+			\begin{center}
+			%\begin{tabular*}{0.75\textwidth}{@{\extracolsep{\fill}} cccc|c }
+			\begin{tabular}{|cc|cc|c| }
+			\hline
+			$\p_{\subC}$ &$\quad$ & $\p_{\subD}$ &$\quad$& $\p.\shape$ \\ 
+			\hline
+			\true  && Don't Care  && Cycle        \\ 
+			\false  && \true          && DAG    \\ 
+			\false  && \false          && Tree   \\ 
+			\hline
+			\end{tabular}
+			\end{center}
+		\end{table}
+
+	\cmt{\end{itemize}}
+}
+
+\subsection{Analysis Framework}
+\frame
+{
+	\frametitle{\subsecname}
+	
+	\begin{itemize}
+	\item Forward data flow analysis framework. \cmt{ where the data flow values are the $D_F$, $I_F$ and 
+	the boolean variables.}
+	\pause
+	\item On demand evaluation of boolean functions.
+	\cmt{We do not evaluate the boolean functions immediately, but associate
+the unevaluated functions with the statements. When we want to find out the shape at a given
+statement, only then we evaluate the function using the $D_F$ and $I_F$ matrices, and the values of
+boolean variables at that statement.}
+	\cmt{\pause
+	\item Field connectivity information is updated directly by the statement.}
+	\end{itemize}
+}
+
+\subsection{Motivational Example Revisited}
+\frame
+{
+	\frametitle{\subsecname}
+	
+\begin{figure}
+  \begin{center}
+  
+    \scalebox{.80}{\begin{tabular}{ |@{}l@{ }|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|  }
+   \hline
+   \multirow{2}{*}{Statements} & \multirow{2}{*}{Heap Structure} & \multirow{2}{*}{Boolean Functions} &  \multicolumn{2}{@{}c@{}|}{Shape Inference}  \\
+   \cline{4-5} 
+   &  &  &   p.shape & q.shape  \\
+   \hline
+	 &&&& \\
+    {\tt S1.} \ttf{p = malloc()} & \multirow{2}{*}{\input{motiv_1_fig_S1.tex}} &  
+																				$\begin{array}{@{}c@{}}
+																					p_{\subC} = \false  \qquad q_{\subC} = \false \\ 
+																					p_{\subD} = \false  \qquad q_{\subD} = \false 
+																				\end{array}$
+																				& \multirow{2}{*}{Tree} & \multirow{2}{*}{Tree} \\
+    {\tt S2.} \ttf{q = malloc()} &    &&&\\
+	 &&&& \\
+    \hline
+	\pause
+	 &&&& \\
+	{\tt S3.} \ttf{p$\rightarrow$f = q} &  \input{motiv_1_fig_S3.tex} & 
+																				$\begin{array}{@{}c@{}}
+																					p_{\subC} = (f_{\p\q} \wedge \num{D_F[q,p]} \geq 1) \\ \\
+																					q_{\subC} = f_{\p\q} \wedge \num{D_F[q,p]} \geq 1 \\ \\
+																					p_{\subD} = f_{\p\q} \wedge \num{I_F[\p,\q]} > 1 \\ \\
+																					f_{\p\q} = \true
+																				\end{array}$
+																	  & Tree & Tree\\
+	 &&&& \\
+     \hline
+	\pause
+	 &&&& \\
+	{\tt S4.} \ttf{p$\rightarrow$h = q} &  \input{motiv_1_fig_S4.tex} & 
+																				$\begin{array}{@{}c@{}}
+																					\p_{\subD} = (f_{\p\q} \wedge \num{I_F[\p,\q]} > 1) \vee (h_{\p\q} \wedge \num{I_F[\p,\q]} > 1) \\ \\
+																					f_{\p\q} = \true \qquad h_{\p\q} = \true
+																				\end{array}$
+																	  & Dag & Tree\\
+	 &&&& \\
+     \hline
+    \end{tabular}}
+  \end{center}
+\end{figure}
+}
+\frame
+{
+	\frametitle{\subsecname}
+	
+\begin{figure}
+  \begin{center}
+  
+    \scalebox{.80}{\begin{tabular}{ |@{}l@{ }|@{}c@{}|@{}c@{}|@{}c@{}|@{}c@{}|  }
+   \hline
+   \multirow{2}{*}{Statements} & \multirow{2}{*}{Heap Structure} & \multirow{2}{*}{Boolean Functions} &  \multicolumn{2}{@{}c@{}|}{Shape Inference}  \\
+   \cline{4-5} 
+   &  &  &   p.shape & q.shape  \\
+     \hline
+	 &&&& \\
+	{\tt S5.} \ttf{q$\rightarrow$g = p} &  \input{motiv_1_fig_S5.tex} 	& 
+																				$\begin{array}{@{}c@{}}
+																					\p_{\subC} = (g_{\q\p} \wedge \num{D_F[\p,\q]} \geq 1) \\ \\
+																					\p_{\subD} = (f_{\p\q} \wedge \num{I_F[\p,\q]} > 1) \vee (h_{\p\q} \wedge \num{I_F[\p,\q]} > 1) \\ \\
+																					f_{\p\q} = \true \qquad h_{\p\q} = \true \qquad g_{\q\p} = \true 
+																				\end{array}$
+	
+																		& Cycle & Cycle\\
+	 &&&& \\
+     \hline
+	 \pause
+	 &&&& \\
+	{\tt S6.} \ttf{q$\rightarrow$g = null} &  \input{motiv_1_fig_S6.tex} 	& 
+																				$\begin{array}{@{}c@{}}
+																					\p_{\subC} = (g_{\q\p} \wedge \num{D_F[\p,\q]} \geq 1) \\ \\
+																					\p_{\subD} = (f_{\p\q} \wedge \num{I_F[\p,\q]} > 1) \vee (h_{\p\q} \wedge \num{I_F[\p,\q]} > 1) \\ \\
+																					f_{\p\q} = \true \qquad h_{\p\q} = \true \qquad g_{\q\p} = \false 
+																				\end{array}$
+	
+																		& Dag & Tree\\
+	 &&&& \\
+     \hline
+	 \pause
+	 &&&& \\
+	{\tt S7.} \ttf{p$\rightarrow$h = null} &  \input{motiv_1_fig_S7.tex} 	& 
+																				$\begin{array}{@{}c@{}}
+																					\p_{\subC} = (g_{\q\p} \wedge \num{D_F[\p,\q]} \geq 1) \\ \\
+																					\p_{\subD} = (f_{\p\q} \wedge \num{I_F[\p,\q]} > 1) \vee (h_{\p\q} \wedge \num{I_F[\p,\q]} > 1) \\ \\
+																					f_{\p\q} = \true \qquad h_{\p\q} = \false \qquad g_{\q\p} = \false 
+																				\end{array}$
+	
+																		& Tree & Tree\\
+	 &&&& \\
+     \hline
+    \end{tabular}}
+  \end{center}
+\end{figure}
+}
+
+\section{Properties}
+\subsection{Need for Boolean Variables}
+\frame
+{
+	\frametitle{\subsecname}
+
+	\input{properties_fig_1.tex}
+	\[ \upath \quad=\quad \epsilonset \cup \bigcup_{f\in\fields} \{f^{\drct},
+f^{\indrct\infty}\} \]
+	After {\tt S2},
+	\begin{eqnarray*}
+   \mb{r}_{\subD} = (f_{pq} \wedge (|\IFM{r}{q}| > 1))
+   	&\qquad& f_{pq} = \true
+ 	\end{eqnarray*}
+}
+
+\subsection{Storage Requirement}
+\frame
+{
+	\frametitle{\subsecname}
+	\begin{eqnarray*}
+\mbox{Space requirement for } D_F &:&  O(n^{2}* m) \\
+\mbox{Space requirement for } I_F &:& O(n^{2} * m^2) \\
+\mbox{Height and width of the expression tree} &:& \mbox{Polynomial in number} \\
+												&& \mbox{of pointer instructions} \\
+												&& \mbox{executed}
+\end{eqnarray*}
+}
+
+\section{Test Results}
+\subsection{Inserting an internal node in a singly linked list.}
+\frame
+{
+	\frametitle{\subsecname}
+
+	\newcommand{\on}{p} 
+	\newcommand{\nn}{r}
+
+\begin{figure}
+\centering
+\scalebox{0.80}{
+\begin{tabular}{@{}ll@{}}
+  {\small\tt
+    \begin{tabular}[b]{l}
+      S1. \on$\rightarrow$f = q; \\
+      S2. \nn = malloc(); \\
+      S3. \nn$\rightarrow$f = q;  \\
+      S4. \on$\rightarrow$f = \nn;  
+    \end{tabular}
+  } &
+  \scalebox{0.80}{
+    \begin{tabular}[b]{|c||c|c|c|}
+      \hline
+          {\bf After} & Actual Shape & Field Insensitive
+          Analysis & Field Sensitive Analysis \\ 
+          \hline \hline
+	  {\tt S1}       & Tree		  & Tree    & Tree \\ \hline
+	  {\tt S2}       & Tree		  & Tree    & Tree \\ \hline
+	  {\tt S3}       & Tree		  & Tree    & Tree \\ \hline
+	  {\tt S4}       & Tree		  & DAG(at {\tt \on})    & Tree \\ \hline
+    \end{tabular}
+  } \\
+  \multicolumn{2}{c}{\scalebox{1.00}{(a) Insertion of an
+      internal node in a singly linked list }}
+	  \end{tabular}}
+	  \end{figure}
+	  Boolean function generated after {\tt S4}:
+\begin{eqnarray*}
+  \p_{\subD} &=&   (f_{\p\q} \wedge (\num{I_F[\p\q]} > 1)) 
+  \vee  (f_{\p\myr} \wedge (\num{I_F[\p\myr]} > 1)), \\
+  f_{\p\myr} &=& \true, \qquad\qquad  f_{\p\q} = \false \enspace. 
+\end{eqnarray*}
+}
+\subsection{Recursively Swapping Binary Tree.}
+\frame
+{
+	\frametitle{\subsecname}
+
+	\newcommand{\on}{p} 
+	\newcommand{\nn}{r}
+
+\begin{figure}
+\centering
+\scalebox{0.80}{
+\begin{tabular}{@{}ll@{}}
+{\small \tt
+    \begin{tabular}[b]{l}
+      mirror(tree T) \{ \\
+      S1.    L  = T->left; \\
+      S2.    R = T->right; \\
+      S3.    mirror(L); \\
+      S4.    mirror(R); \\
+      S5.    T->left = R; \\
+      S6.    T->right = L; \\
+      \}  
+    \end{tabular}
+  } &
+  \scalebox{0.80}{
+    \begin{tabular}[b]{|c||c|c|c|}
+      \hline
+          {\bf After} & Actual Shape & Field Insensitive
+          Analysis & Field Sensitive Analysis \\ 
+          \hline \hline
+	  {\tt S1}       & Tree		  & Tree    & Tree \\ \hline
+	  {\tt S2}       & Tree		  & Tree    & Tree \\ \hline
+	  {\tt S5}       & Dag (at T)	  & Dag (at T)    & Dag (at T) \\ \hline
+	  {\tt S6}       & Tree		  & Dag (at T)    & Tree \\ \hline
+    \end{tabular}
+  } \\
+  \multicolumn{2}{c}{\scalebox{1.00}{(c) Computing mirror
+      image of a  binary tree.}}
+\end{tabular}}
+\end{figure}
+
+Boolean functions generated after {\tt S5}:
+\begin{eqnarray*}
+  T_{\subD} &=&   (left_{T,R} \wedge \num{I_F[T,R]} > 1) \\ 
+  left_{T,R} &=& \true 
+\end{eqnarray*}
+}
+
+\section{Future Work}
+\subsection{Future Work}
+\frame
+{
+	\frametitle{\subsecname}
+	\begin{itemize}
+	\item We use a very simple inter procedural framework to handle
+function calls, that computes safe approximate summaries to
+reach fix point .  Our next challenge is to develop a better
+inter procedural analysis to handle function calls more
+precisely. 
+	\item To extend our shape analysis
+technique to handle more of frequently occurring programming
+patterns.
+     \item To develop a prototype model using
+GCC framework to show the effectiveness on large
+benchmarks. 
+	\end{itemize}
+}
+
+\begin{frame}[plain]
+
+	\begin{center}
+	\Huge{\emph{\blue Thank You }}
+	\end{center}
+\end{frame}
+}
+\end{document}
+
