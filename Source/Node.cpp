@@ -524,7 +524,8 @@ void Node::colorRemotely(){
   }
   pq_subgraph_type prioritySubgraphs;
   //detect subgraphs and create states correspondingly
-  if(  detectAndCreateSubgraphs( init_bitset, prioritySubgraphs ) ){
+    if(  detectAndCreateSubgraphs( init_bitset, prioritySubgraphs ) )
+    {
 
     //----------debug code below-----------------------
     //#ifdef DEUBG
@@ -551,6 +552,14 @@ void Node::colorRemotely(){
       //for this status different from initial states
       //we have to mark them as out_of_subgraph
       boost::dynamic_bitset<> remove_bitset = init_bitset ^ subgraph_bitset;
+#ifdef DEBUG
+      std::string s;
+      boost::to_string(subgraph_bitset, s);
+      char * bits = new char[s.size()+1];
+      strcpy(bits, s.c_str());
+      CkPrintf("subgraph bitset: %s\n", bits);
+      delete [] bits;
+#endif
       for(int i=0; i<remove_bitset.size(); i++){
         if(remove_bitset.test(i)){
           //remove from the list
@@ -729,25 +738,29 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
     for(int i=0; i<vertices_; i++ ){
       //if the vertex is removed from the subgraph
       //don't need to merge back
-      if(state[i].get_is_onStack()==true ||
-          state[i].get_is_out_of_subgraph()==true)
-        continue;
-      // if the vertex has been colored before
-      // check whether they are matched or not
-      if(node_state_[i].isColored()){
-        CkAssert(node_state_[i].getColor()==state[i].getColor());
+      if(state[i].isOperationPermissible()){
+        // if the vertex has been colored before
+        // check whether they are matched or not
+        if(node_state_[i].isColored()){
+          CkAssert(node_state_[i].getColor()==state[i].getColor());
+        }
+        //if the color is assigned from children node
+        //assign the color to current node_state_
+      	updateState(node_state_, i, state[i].getColor(), false);
       }
-      //if the color is assigned from children node
-      //assign the color to current node_state_
-      node_state_[i]=state[i];
     }
-    CkPrintf("success=%d, finish=%d\n", success, finish);
+#ifdef DEBUG
+    printGraph();
+    CkPrintf("child_succeed=%d, success=%d, finish=%d\n",
+    	child_succeed_, success, finish);
+#endif
+  } else {
+    if(child_succeed_)
+  	  node_state_ = state;
   }
 
   if(is_root_ && finish){
     if(success){
-      if(!is_and_node_)
-        node_state_ = state;
       mergeRemovedVerticesBack(deletedV, node_state_);
       CkAssert(1 == isColoringValid(node_state_));
 #ifdef DEBUG
@@ -763,8 +776,6 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
     // In one child, successfully colored
     // TODO:: once it succeeds, it should notify other child chares
     // sharing the same parent to stop working
-    if(!is_and_node_)
-      node_state_ = state;
     mergeRemovedVerticesBack(deletedV, node_state_);
     parent_.finish(success, node_state_);
   } 
@@ -814,11 +825,17 @@ bool Node::isColoringValid(std::vector<vertex>& state)
 
     int iColor = state[(*it).first].getColor();
 
-    if(iColor >= chromaticNum_ || iColor == -1 ) return 0; 
+    if(iColor >= chromaticNum_ || iColor == -1 ){
+        CkPrintf("fail due to using invalid colors.\n");
+    	return 0; 
+    }
 
     for(std::list<int>::const_iterator jt = it->second.begin(); jt != it->second.end(); jt++ ) {
       int jColor = state[*jt].getColor();
-      if(jColor >= chromaticNum_ || -1 == jColor || iColor == jColor) return 0; 
+      if(jColor >= chromaticNum_ || -1 == jColor || iColor == jColor){
+         CkPrintf("fail due to %d and %d has same color\n", it->first, *jt);
+      	 return 0; 
+      }
     }
 
   }  
