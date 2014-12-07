@@ -1,0 +1,117 @@
+%\documentclass{beamer}
+\documentclass[mathserif,10pt]{beamer}
+
+\usepackage{beamerthemesplit}
+\usepackage{graphics}
+\usepackage{epsfig}
+\usepackage{algorithm}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{framed}
+\usepackage{pstricks}
+\usepackage{pst-node,pst-tree}
+\usepackage{pst-rel-points}
+\usepackage{flexiprogram}
+\usepackage[UKenglish]{babel}
+\usepackage{hyperref}
+\usepackage{pst-coil}
+\usepackage{color}
+\usepackage{epsfig}
+\usepackage{tikz}
+%\usepackage{multirow}
+
+\usefonttheme{serif}
+
+\newcommand{\cmt}[1]{}
+\newcommand{\epsilonset}{\ensuremath{\{\epsilon\}}}
+\newcommand{\epsilonpairset}{\ensuremath{\{\epsilon,\epsilon\}}}
+\newcommand{\num}[1]{\ensuremath{|#1|}}
+\newcommand{\upath}{\ensuremath{\mathcal{U}}}
+\newcommand{\mb}[1]{\mbox{{\tt #1}}}
+\newcommand{\ttf}[1]{{\tt #1}}
+\newcommand{\rtarrow}{$\rightarrow$}
+\newcommand{\Tree}{{\tt Tree}}
+\newcommand{\Dag}{{\tt Dag}}
+\newcommand{\Cycle}{{\tt Cycle}}
+\newcommand{\p}{\ensuremath{p}}
+\newcommand{\q}{\ensuremath{q}}
+\newcommand{\s}{\ensuremath{s}}
+\newcommand{\myr}{\ensuremath{r}}
+\newcommand{\shape}{\mbox{shape}}
+\newcommand{\drct}{\ensuremath{D}}
+\newcommand{\indrct}{\ensuremath{I}}
+\newcommand{\heap}{\ensuremath{\mathcal{H}}}
+\newcommand{\fields}{\ensuremath{\mathcal{F}}}
+\newcommand{\DFM}[2]{\ensuremath{D_F[#1,#2]}}
+\newcommand{\IFM}[2]{\ensuremath{I_F[#1,#2]}}
+\newcommand{\nat}{\ensuremath{\mathcal{N}}}
+\newcommand{\fieldD}[2]{\ensuremath{{#1}_{#2}^\drct}}
+\newcommand{\fieldI}[3]{\ensuremath{{#1}_{#2}^{\indrct#3}}}
+\newcommand{\subC}{\mbox{\scalebox{0.6}{\Cycle}}}
+\newcommand{\subD}{\mbox{\scalebox{0.6}{\Dag}}}
+\newcommand{\false}{\textbf{False}}
+\newcommand{\true}{\textbf{True}}
+%\noindent
+
+\setcounter{tocdepth}{1}
+\lstset{language=[ANSI]C}
+\lstset{% general command to set parameter(s)
+basicstyle=\footnotesize\tt, % print whole listing small
+identifierstyle=, % nothing happens
+commentstyle=\color{red}, % white comments
+showstringspaces=false, % no special string spaces
+lineskip=1pt,
+captionpos=b,
+frame=single,
+breaklines=true
+%\insertauthor[width={3cm},center,respectlinebreaks]
+}
+\lstset{classoffset=0,
+morekeywords={},keywordstyle=\color{black},
+classoffset=1,
+classoffset=0}% restore default
+
+%\usetheme{Warsaw}
+\usetheme{CambridgeUS}
+%\usetheme{Antibes}
+%\usecolortheme{lily}
+%\useinnertheme{rectangles} 
+%\useoutertheme{infolines} 
+%\setbeamercolor{alerted text}{fg=cyan}
+%\beamertemplatetransparentcovereddynamicmedium
+%\definecolor{bbrown}{rgb}{.6588,.4,.1647}
+%\definecolor{blueviolet}{rgb}{.098039216,.050980392,.929411765}
+%\definecolor{periwinkle}{rgb}{.423529412,.458823529,.988235294}
+%\mode<presentation>
+%{ \usetheme{boxes} }
+\usecolortheme{dolphin}
+
+\title{Graph Coloring Using State Space Search}
+\author[Presented by: Group 1]{{\textbf{Sandeep, Tanmay, Mengjia, Novi}} }
+\date{December 09, 2014}
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+\usebeamertemplate{mytheme}
+
+\AtBeginSection[]
+{
+\begin{frame}<beamer>
+\frametitle{Outline}
+\tableofcontents[currentsection]
+\end{frame}
+}
+
+\section{Introduction}
+\subsection{Introduction}
+\frame
+{
+	\frametitle{\subsecname}
+	\uncover<1>{\textbf{Shape Analysis : } Class of techniques that statically approximate the
+      run-time structures created on the heap.}
+}
+
+\end{document}
+

@@ -18,7 +18,7 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
 
 {
   programStart = CkTimer();
-  CkAssert(isRoot);  // nodeID=0, since this constructor is only called for root chare
+  CkAssert(isRoot);  
   vertex v = vertex(chromaticNum_);
   node_state_ = std::vector<vertex>(vertices_, v);
 
@@ -37,8 +37,7 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
   printGraph();
 #endif 
 
-  CProxy_counter(counterGroup).ckLocalBranch()->registerMe();
-  //thisProxy.run();
+  CProxy_counter(counterGroup).ckLocalBranch()->registerMe(nodeID_);
   run();
 }
 
@@ -51,17 +50,15 @@ Node::Node( std::vector<vertex> state, bool isRoot, int uncol,
   nodeID_(nodeID), parent_(parent), uncolored_num_(uncol), node_state_(state), 
   is_root_(isRoot), child_num_(0), child_finished_(0),
   child_succeed_(0), is_and_node_(false), parentBits(pBits), parentPtr(pPtr)
-
 {
   uncolored_num_ -= vertexRemoval();
 
-  bool canISpawn = CProxy_counter(counterGroup).ckLocalBranch()->registerMe();
+  bool canISpawn = CProxy_counter(counterGroup).ckLocalBranch()->registerMe(nodeID_);
 
   // group chare denied permission to spawn
   if(!canISpawn)
     return;
 
-  //thisProxy.run();
   run();
 }
 
@@ -119,7 +116,7 @@ int Node::vertexRemoval()
         worklist.insert(I);
       }
     }
-  } // while
+  } 
 
   //  return total number of vertices put on stack
   return vertexRemoved;
@@ -342,16 +339,13 @@ void Node::colorLocally()
   // register leaf node
   CProxy_counter(counterGroup).ckLocalBranch()->registerMeLeaf();
 
-  //-------------debug code below---------------
 #ifdef DEBUG
   char *id = new char[nodeID_.size()];
   strcpy(id, nodeID_.c_str());
   CkPrintf("Color locally in node [%s] with uncolored num=%d\n", id, uncolored_num_);
   delete [] id;
 #endif
-  //------------debug code above----------------
-  // 'vertex removal' and/or 'forced move' helped take out all the remaining
-  // vertices, and we have none for the sequential algorithm
+
   if(0 == uncolored_num_) {
     mergeRemovedVerticesBack(deletedV, node_state_);
 
@@ -377,7 +371,6 @@ void Node::colorLocally()
   if(wait)
     return;
 
-  // if coloring was found
   if(success){
     mergeRemovedVerticesBack(deletedV, node_state_);
 
@@ -499,18 +492,12 @@ void Node::sequentialColoringHelper(bool& wait, bool& solutionFound, std::vector
  *   ----------------------------------------*/
 void Node::colorRemotely(){
 
-  //-------------debug code below---------------
 #ifdef DEBUG
   char *id = new char[nodeID_.size()];
   strcpy(id, nodeID_.c_str());
   CkPrintf("Color remotely in node [%s] with uncolored num=%d\n", id, uncolored_num_);
   delete [] id;
 #endif
-  //------------debug code above----------------
-
-  //TODO: remove vertex and all other preprocessing operations
-  //place here
-
 
   //-----------------------------------------------
   //Detect Subgraphs
@@ -528,38 +515,38 @@ void Node::colorRemotely(){
     if(!node_state_[i].isOperationPermissible())
       init_bitset.reset(i);
   }
+  CkPrintf("d0: %d %d\n", init_bitset.test(4), init_bitset.test(176));
   pq_subgraph_type prioritySubgraphs;
   //detect subgraphs and create states correspondingly
-  if(  detectAndCreateSubgraphs( init_bitset, prioritySubgraphs ) ){
+  if(detectAndCreateSubgraphs( init_bitset, prioritySubgraphs ) ){
 
-    //----------debug code below-----------------------
     //#ifdef DEUBG
     char * id = new char[nodeID_.size()+1];
     strcpy(id, nodeID_.c_str());
     CkPrintf("Found %d subgraphs in node[%s]\n", prioritySubgraphs.size(), id);
     delete [] id;
     //#endif
-    //----------debug code above-----------------------
+    //
     is_and_node_ = true;
-    //child_num_=subgraphs.size();
-    //remove vertices accordingly for each subgraph
+
     int numChildrenStates = prioritySubgraphs.size();
     UShort childBits = _log(numChildrenStates);
     while( ! prioritySubgraphs.empty() ){
-      //for each subgraph, fire a child node to do the work
-      //parameters
       boost::dynamic_bitset<> subgraph_bitset = prioritySubgraphs.top();
       prioritySubgraphs.pop();
 
-      //finish getting one subgraph
-      //create corresponding states and insert <bitset, state> to the map
       std::vector<vertex> new_state = node_state_;
-      //for this status different from initial states
-      //we have to mark them as out_of_subgraph
       boost::dynamic_bitset<> remove_bitset = init_bitset ^ subgraph_bitset;
+#ifdef DEBUG
+      std::string s;
+      boost::to_string(subgraph_bitset, s);
+      char * bits = new char[s.size()+1];
+      strcpy(bits, s.c_str());
+      CkPrintf("subgraph bitset: %s\n", bits);
+      delete [] bits;
+#endif
       for(int i=0; i<remove_bitset.size(); i++){
         if(remove_bitset.test(i)){
-          //remove from the list
           new_state[i].set_out_of_subgraph(true);
         }
       }
@@ -579,7 +566,6 @@ void Node::colorRemotely(){
             CK_PE_ANY, opts);
         free(newParentPrioPtr);
       } else {
-        //state, isRoot, uncoloredNum, parentProxy, nodeId
         CProxy_Node::ckNew(new_state, false,
             subgraph_bitset.count(), thisProxy,
             nodeID_+std::to_string(child_num_),
@@ -700,9 +686,9 @@ void Node::getPriorityInfo(UShort & newParentPrioBits, UInt* &newParentPrioPtr, 
  * - merge the part sent by child
  * - respond to parent
  * - decide whether to wait for more child or not
- * TODO:
- *  current implementation doesn't need to merge the graph
- *  but will be needed with later optimization
+ * -  if it's and node, success means all children succeed
+ * -  if it's or node, success means at least one child succeed
+ * -  if all children return, don't need to wait
  * -------------------------------------------------*/
 bool Node::mergeToParent(bool res, std::vector<vertex> state)
 {
@@ -713,53 +699,46 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
   }
 
   bool success = is_and_node_ ?
-    //if it's and node, success means all children succeed
     child_succeed_==child_num_ :
-    //if it's or node, success means at least one child succeed
     (child_succeed_!=0);
 
-  //if all children return, don't need to wait
   bool finish  = (child_finished_ == child_num_); 
   finish  |= (is_and_node_ ?
-      //if it's and node,
-      //return success, terminate if finish=num
-      //return fail, terminate if one fail
       (child_succeed_!=child_finished_) :
-      //if it's or node,
-      //return success, terminate one success
-      //return fail, terminate all finish
       (child_succeed_!=0));
 
   if(is_and_node_){
-    //TODO: call "Merge Subgraph" here
     for(int i=0; i<vertices_; i++ ){
       //if the vertex is removed from the subgraph
       //don't need to merge back
-      if(state[i].get_is_onStack()==true ||
-          state[i].get_is_out_of_subgraph()==true)
-        continue;
-      // if the vertex has been colored before
-      // check whether they are matched or not
-      if(node_state_[i].isColored()){
-        CkAssert(node_state_[i].getColor()==state[i].getColor());
+      if(state[i].isOperationPermissible()){
+        // if the vertex has been colored before
+        // check whether they are matched or not
+        if(node_state_[i].isColored()){
+          CkAssert(node_state_[i].getColor()==state[i].getColor());
+        }
+        //if the color is assigned from children node
+        //assign the color to current node_state_
+      	updateState(node_state_, i, state[i].getColor(), false);
       }
-      //if the color is assigned from children node
-      //assign the color to current node_state_
-      node_state_[i]=state[i];
     }
-    CkPrintf("success=%d, finish=%d\n", success, finish);
+#ifdef DEBUG
+    printGraph();
+    CkPrintf("child_succeed=%d, success=%d, finish=%d\n",
+    	child_succeed_, success, finish);
+#endif
+  } else {
+    if(child_succeed_)
+  	  node_state_ = state;
   }
 
   if(is_root_ && finish){
     if(success){
-      if(!is_and_node_)
-        node_state_ = state;
       mergeRemovedVerticesBack(deletedV, node_state_);
-      CkAssert(1 == isColoringValid(node_state_));
 #ifdef DEBUG
       printGraph(true);
 #endif
-
+      CkAssert(1 == isColoringValid(node_state_));
       CkExit();
     } else {
       programEnd = CkTimer();
@@ -767,11 +746,6 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
       CkExit();
     }
   } else if(!is_root_ && finish){
-    // In one child, successfully colored
-    // TODO:: once it succeeds, it should notify other child chares
-    // sharing the same parent to stop working
-    if(!is_and_node_)
-      node_state_ = state;
     mergeRemovedVerticesBack(deletedV, node_state_);
     parent_.finish(success, node_state_);
   } 
@@ -811,21 +785,27 @@ void Node::printGraph(bool final){
 
 /* --------------------------------------------
  * Checks if the reported coloring is valid.
+ * Only the root chare should check validity of solution
  * -------------------------------------------*/
 bool Node::isColoringValid(std::vector<vertex>& state)
 {
-  // Only the root chare should check validity of solution
   CkAssert(is_root_); 
 
   for (AdjListType::const_iterator it = adjList_.begin(); it != adjList_.end(); ++it) {
 
     int iColor = state[(*it).first].getColor();
 
-    if(iColor >= chromaticNum_ || iColor == -1 ) return 0; 
+    if(iColor >= chromaticNum_ || iColor == -1 ){
+        CkPrintf("fail due to using invalid colors.\n");
+    	return 0; 
+    }
 
     for(std::list<int>::const_iterator jt = it->second.begin(); jt != it->second.end(); jt++ ) {
       int jColor = state[*jt].getColor();
-      if(jColor >= chromaticNum_ || -1 == jColor || iColor == jColor) return 0; 
+      if(jColor >= chromaticNum_ || -1 == jColor || iColor == jColor){
+         CkPrintf("fail due to %d and %d has same color\n", it->first, *jt);
+      	 return 0; 
+      }
     }
 
   }  
@@ -891,8 +871,6 @@ bool Node::detectAndCreateSubgraphs(boost::dynamic_bitset<> init_bitset,
       int i = worklist.front();
       worklist.pop_front();
       for( int neighbor_vertex_index : adjList_[i]){
-        //if the neighbor vertex exists and haven't considered
-        //put it into current subgraph
         if(work_bitset.test(neighbor_vertex_index)){
           subgraph_bitset.set(neighbor_vertex_index);
           work_bitset.reset(neighbor_vertex_index);
@@ -904,7 +882,6 @@ bool Node::detectAndCreateSubgraphs(boost::dynamic_bitset<> init_bitset,
     prioritySubgraphs.push(subgraph_bitset);
   }
 
-  //return true, if exists more than 2 subgraphs
   return prioritySubgraphs.size()>1  ;
 }
 
