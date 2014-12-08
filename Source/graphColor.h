@@ -196,10 +196,10 @@ class counter : public CBase_counter {
     }
 
     if(false == acceptRegistration) {
-      std::cout << "Permis Denied (soln found)\n" << endl;
+      std::cout << "Perm Denied (soln found)\n" << endl;
     } 
     if(true == amIChildOfFalseAndNode) {
-      std::cout << "Permis Denied (and parent falsified)\n" << endl;
+      std::cout << "Perm Denied (And ancestor falsified)\n" << endl;
     }
 
     if(acceptRegistration && false == amIChildOfFalseAndNode)

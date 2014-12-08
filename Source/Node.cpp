@@ -708,6 +708,10 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
       (child_succeed_!=child_finished_) :
       (child_succeed_!=0));
 
+  if(is_and_node_ && !success && finish) {
+    CProxy_counter(counterGroup).ckLocalBranch()->registerAndStateNodeStat(nodeID_);
+  }
+
   if(is_and_node_ && child_succeed_){
     for(int i=0; i<vertices_; i++ ){
       //if the vertex is removed from the subgraph
