@@ -31,6 +31,7 @@ class vertex  {
     void setColor(int c) { color_ = c; possible_colors_.reset(); }
 
     void removePossibleColor(int c){
+    	CkAssert(c<possible_colors_.size());
         if(!isColored())
             possible_colors_.reset(c);
     }

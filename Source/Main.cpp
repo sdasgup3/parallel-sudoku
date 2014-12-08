@@ -11,6 +11,7 @@ int vertices_;
 int chromaticNum_;
 int grainSize;
 bool doPriority;
+bool doSubgraph;
 bool baseline;
 double timeout;
 
@@ -42,6 +43,7 @@ Main::Main(CkArgMsg* msg):newGraph("no"){
   std::cout << "Grain-size = "<< grainSize << std::endl;
   std::cout << "Sequential Algorithm Timeout = "<< timeout << std::endl;
   std::cout << "doPriority = "<< doPriority << std::endl;
+  std::cout << "doSubgraph = " << doSubgraph << std::endl;
   if(baseline)
     std::cout << "--Baseline run-- "<< std::endl;
   CProxy_Node node = CProxy_Node::ckNew(true, vertices_, (CProxy_Node)thisProxy);
@@ -61,6 +63,7 @@ void Main::parseCommandLine(int argc, char **argv)
     ("grain-size", po::value<int>(), "Grain-size for state space search (default=1)")
     ("num-colors", po::value<int>(), "Number of colors to test with (default=conservative estimate)")
     ("do-priority", po::value<bool>(), "To do bit vector prioritization while firing chares(default=false)")
+    ("do-subgraph", po::value<bool>(), "To enable subgraph and-or-tree(default=true)")
     ("newGraph", po::value<std::string>(),"Generate new graph from python (default=no)")
     ("filename", po::value<std::string>(),"Input file")
     ("timeout", po::value<int>(), "Timeout for sequential algorithm (default=10s)")
@@ -90,6 +93,12 @@ void Main::parseCommandLine(int argc, char **argv)
       doPriority = vm["do-priority"].as<bool>();
     } else {
       doPriority = false;
+    }
+
+    if(vm.count("do-subgraph")){
+      doSubgraph = vm["do-subgraph"].as<bool>();
+    }else {
+      doSubgraph = true;
     }
 
     if(vm.count("num-colors")) {
