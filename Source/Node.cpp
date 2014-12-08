@@ -708,7 +708,7 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
       (child_succeed_!=child_finished_) :
       (child_succeed_!=0));
 
-  if(is_and_node_){
+  if(is_and_node_ && child_succeed_){
     for(int i=0; i<vertices_; i++ ){
       //if the vertex is removed from the subgraph
       //don't need to merge back
@@ -717,10 +717,11 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
         // check whether they are matched or not
         if(node_state_[i].isColored()){
           CkAssert(node_state_[i].getColor()==state[i].getColor());
-        }
+        } else {
         //if the color is assigned from children node
-        //assign the color to current node_state_
-      	updateState(node_state_, i, state[i].getColor(), false);
+        //assign the color to current node_state
+      	  updateState(node_state_, i, state[i].getColor(), false);
+	}
       }
     }
 #ifdef DEBUG
