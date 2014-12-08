@@ -41,3 +41,23 @@ Program time (s) = 0.011998, 0.009998, 0.011999
 --do-subgraph=false --num-colors=6
 result:
 Program time (s) = 24.531271, 42.253576, killed due to memory*2, 35.293634
+
+  
+e4.json (KILL chase for successful OR node)
+500 vertices, edgeDensity 7
+Run with (1 node, 12 PEs):
+--timeout=10 --newGraph=no --grain-size=480 --do-priority=true --num-colors=6
+To remove the feature , do the following modification in graphColor.h
+//if(acceptRegistration && false == amIChildOfFalseAndNode)  
+if(false == amIChildOfFalseAndNode)  
+
+Results:
+With:
+Start: 14:55:05  End:15:01:09: Program time= 167.853483: Kill chase time: (End
+           - start - Program Time) = 196.146517
+Without:
+Start: 15:02:59 End: 15:06:23: Program time (s) = 95.908420:
+Kill Chase Time: 108.091580
+
+
+
