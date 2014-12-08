@@ -515,7 +515,6 @@ void Node::colorRemotely(){
     if(!node_state_[i].isOperationPermissible())
       init_bitset.reset(i);
   }
-  CkPrintf("d0: %d %d\n", init_bitset.test(4), init_bitset.test(176));
   pq_subgraph_type prioritySubgraphs;
   //detect subgraphs and create states correspondingly
   if(detectAndCreateSubgraphs( init_bitset, prioritySubgraphs ) ){
@@ -526,7 +525,7 @@ void Node::colorRemotely(){
     CkPrintf("Found %d subgraphs in node[%s]\n", prioritySubgraphs.size(), id);
     delete [] id;
     //#endif
-    //
+
     is_and_node_ = true;
 
     int numChildrenStates = prioritySubgraphs.size();
