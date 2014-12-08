@@ -11,6 +11,9 @@ Run with (1 node, 12 PEs):
 --timeout=30 --newGraph=no --grain-size=960 --do-priority=true --num-colors=5
 
 
+****************************************************************************
+***  Effect of having AND chares or handling independent subgraphs
+*****************************************************************************
 example3_v_1000_e_6000_imbalance_subgraphs.json
 1000 vertices, edgeDensity 5
 chromaticNum=6
@@ -18,9 +21,9 @@ Run with (2 node, 16 PEs):
 --timeout=5 --newGraph=no --grain-size=960 --do-priority=true
 --do-subgraph=true --num-colors=6
 result:
-Program time (s) = 0.011998
+Program time (s) = 0.011998, 0.009998, 0.011999
 --timeout=5 --newGraph=no --grain-size=960 --do-priority=true
 --do-subgraph=false --num-colors=6
 result:
-Program time (s) = 24.531271
+Program time (s) = 24.531271, 42.253576, killed due to memory*2, 35.293634
 
