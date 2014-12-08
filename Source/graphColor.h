@@ -11,6 +11,7 @@ extern int vertices_;
 extern int chromaticNum_;
 extern int grainSize;
 extern bool doPriority;
+extern bool doSubgraph;
 extern bool baseline;
 extern double timeout;
 

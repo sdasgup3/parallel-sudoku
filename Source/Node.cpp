@@ -504,7 +504,9 @@ void Node::colorRemotely(){
   //If have >=2 subgraphs, make this node and_node
   //and spawn children to color each subgraphs
   //----------------------------------------------
-
+  //only if some vertices are removed, otherwise
+  //no new subgraphs will be created
+  if(doSubgraph && (!deletedV.empty() || is_root_)){
   boost::dynamic_bitset<> init_bitset(vertices_);
   init_bitset.set();
   //initialize the bitset by marking all removed vertices as 0
@@ -574,7 +576,7 @@ void Node::colorRemotely(){
     }
     return;
   }
-
+  }
   // -----------------------------------------
   // Following code deals with case is_and_node=false
   // -----------------------------------------

@@ -9,6 +9,7 @@ mainmodule Module {
   readonly int chromaticNum_;
   readonly int grainSize;
   readonly bool doPriority;
+  readonly bool doSubgraph;
   readonly bool baseline;
   readonly double timeout;
 
