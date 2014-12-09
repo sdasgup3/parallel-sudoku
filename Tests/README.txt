@@ -61,3 +61,16 @@ Kill Chase Time: 108.091580
 
 
 
+--newGraph=no --timeout=10 --grain-size=260 --do-priority=true --num-colors=4 --do-subgraph=false
+on e3.json 
+24:Program time (s) = 0.214967
+20:Program time (s) = 0.261960
+16:Program time (s) = 0.331950
+12:Program time (s) = 0.412937
+8:Program time (s) = 0.564914
+4:Program time (s) = 1.032843
+1:Program time (s) = 3.582455
+
+
+
+
