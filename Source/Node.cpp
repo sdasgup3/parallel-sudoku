@@ -506,7 +506,7 @@ void Node::colorRemotely(){
   //----------------------------------------------
   //only if some vertices are removed, otherwise
   //no new subgraphs will be created
-  if(doSubgraph && (!deletedV.empty() || is_root_)){
+  if(doSubgraph){
   boost::dynamic_bitset<> init_bitset(vertices_);
   init_bitset.set();
   //initialize the bitset by marking all removed vertices as 0
@@ -712,8 +712,8 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
     CProxy_counter(counterGroup).ckLocalBranch()->registerAndStateNodeStat(nodeID_);
   }
 
-  if(is_and_node_ && child_succeed_){
-    for(int i=0; i<vertices_; i++ ){
+  if(is_and_node_ && res){
+   for(int i=0; i<vertices_; i++ ){
       //if the vertex is removed from the subgraph
       //don't need to merge back
       if(state[i].isOperationPermissible()){
@@ -724,7 +724,9 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
         } else {
         //if the color is assigned from children node
         //assign the color to current node_state
-      	  updateState(node_state_, i, state[i].getColor(), false);
+	  CkAssert(state[i].getColor()<chromaticNum_);
+      	  int ret = updateState(node_state_, i, state[i].getColor(), false);
+	  CkAssert(ret!=0);
 	}
       }
     }
@@ -733,9 +735,8 @@ bool Node::mergeToParent(bool res, std::vector<vertex> state)
     CkPrintf("child_succeed=%d, success=%d, finish=%d\n",
     	child_succeed_, success, finish);
 #endif
-  } else {
-    if(child_succeed_)
-  	  node_state_ = state;
+  } else if(!is_and_node_ && res){
+	node_state_ = state;
   }
 
   if(is_root_ && finish){
