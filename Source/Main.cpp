@@ -25,19 +25,43 @@ Main::Main(CkArgMsg* msg):newGraph("no"){
 
   parseCommandLine(msg->argc, msg->argv);
 
-  /* reads the adjacency list from python */
-  readDataFromPython(msg->argc, msg->argv);
-  vertices_ = adjList_.size();
-  delete msg;
- 
-  if(-1 == chromaticNum_) {
-    chromaticNum_ = getConservativeChromaticNum();
+  if(filename.empty()) {
+    /* reads the adjacency list from python */
+    readDataFromPython(msg->argc, msg->argv);
+    //This is under assumption that the vertices are numbered from 0 to vertices_ - 1
+    vertices_ = adjList_.size();
+   
+    if(-1 == chromaticNum_) {
+      chromaticNum_ = getConservativeChromaticNum();
+    } 
+  } else {
+    /* This is required to read from standard graphs inputs*/
+    parseInputFile(filename);
+    //The vertices are numbered from 1 to vertices_ - 1
+    vertices_ = adjList_.size();
+    std::cout << adjList_.size();
+    grainSize = vertices_ - 10;
+
+    if(-1 == chromaticNum_) {
+      if (vertices_ % 2 == 0)
+        chromaticNum_ = vertices_ -1;
+      else
+        chromaticNum_ = vertices_;
+    }
   }
+  CkAssert(-1 != chromaticNum_);
+  delete msg;
+
+  //std::cout<< adjList_;
+
   mainProxy= thisProxy;
   counterGroup = counterInit();
 
-  //print input graph
-  //std::cout << adjList_;  
+  std::cout << "\nRun Configuration\n"; 
+  std::cout << "====================================" << std::endl;
+  if(!filename.empty()) {
+  std::cout << "filename = "<< filename<< std::endl;
+  }
   std::cout << "Number of vertices = "<< vertices_<< std::endl;
   std::cout << "Testing coloring with " << chromaticNum_ << " colors"<< std::endl;
   std::cout << "Grain-size = "<< grainSize << std::endl;
@@ -46,6 +70,9 @@ Main::Main(CkArgMsg* msg):newGraph("no"){
   std::cout << "doSubgraph = " << doSubgraph << std::endl;
   if(baseline)
     std::cout << "--Baseline run-- "<< std::endl;
+  std::cout << "====================================" << std::endl;
+
+
   CProxy_Node node = CProxy_Node::ckNew(true, vertices_, (CProxy_Node)thisProxy);
 }
 
@@ -115,6 +142,9 @@ void Main::parseCommandLine(int argc, char **argv)
 
     if(vm.count("newGraph"))          
       newGraph.assign(vm["newGraph"].as<std::string>());
+
+    if(vm.count("filename"))          
+      filename.assign(vm["filename"].as<std::string>());
   }
   catch(po::error& e)
   {

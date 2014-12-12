@@ -17,6 +17,7 @@ Node::Node(bool isRoot, int n, CProxy_Node parent) :
   child_succeed_(0), is_and_node_(false), parentBits(1), parentPtr(NULL)
 
 {
+  __sdag_init();
   programStart = CkTimer();
   CkAssert(isRoot);  
   vertex v = vertex(chromaticNum_);
@@ -51,6 +52,7 @@ Node::Node( std::vector<vertex> state, bool isRoot, int uncol,
   is_root_(isRoot), child_num_(0), child_finished_(0),
   child_succeed_(0), is_and_node_(false), parentBits(pBits), parentPtr(pPtr)
 {
+  __sdag_init();
   uncolored_num_ -= vertexRemoval();
 
   bool canISpawn = CProxy_counter(counterGroup).ckLocalBranch()->registerMe(nodeID_);
@@ -294,7 +296,9 @@ int Node::updateState(std::vector<vertex> & state, int vIndex, size_t c, bool do
         it!=adjList_[vIndex].end(); it++){
       boost::dynamic_bitset<> possColor = state[(*it)].getPossibleColor();
       if(1 == possColor.count()) {
-        verticesColored += updateState(state, (*it), possColor.find_first(), doForcedMove);
+        size_t c = possColor.find_first();
+        CkAssert(c != boost::dynamic_bitset<>::npos && c < chromaticNum_);
+        verticesColored += updateState(state, (*it), c, doForcedMove);
       }
     }
   }
@@ -460,6 +464,7 @@ void Node::sequentialColoringHelper(bool& wait, bool& solutionFound, std::vector
       std::pair<int,int> p = priorityColors.top();
       priorityColors.pop();
       std::vector<vertex> new_state = curr_node_.node_state_;
+      CkAssert(p.first < chromaticNum_);
       int verticesColored = curr_node_.updateState(new_state, vIndex, p.first, true);
       CkAssert(verticesColored >= 1);
       tmp.emplace(stackNode(new_state, curr_node_.uncolored_num_ - verticesColored));
@@ -609,6 +614,7 @@ void Node::colorRemotely(){
     priorityColors.pop();
 
     std::vector<vertex> new_state = node_state_;
+    CkAssert(p.first < chromaticNum_);
     int verticesColored = updateState(new_state, vIndex, p.first, true);
     CkAssert(verticesColored >= 1);
 
@@ -767,7 +773,7 @@ void Node::mergeRemovedVerticesBack(std::stack<int> deletedV, std::vector<vertex
     node_state_[vertex].set_is_onStack(false);
     boost::dynamic_bitset<> possColor = node_state_[vertex].getPossibleColor();
     size_t c = possColor.find_first();
-    CkAssert(c != boost::dynamic_bitset<>::npos);
+    CkAssert(c != boost::dynamic_bitset<>::npos && c < chromaticNum_);
 #ifdef DEBUG
     CkPrintf("Popped vertex %d color %d\n", vertex,c);
 #endif

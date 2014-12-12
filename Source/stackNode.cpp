@@ -84,7 +84,7 @@ pq_type stackNode::getValueOrderingOfColors(int vIndex)
 
   std::list<int> neighbours = adjList_[vIndex];
 
-  for(boost::dynamic_bitset<>::size_type c=0; c<possibleColor.size(); c++){
+  for(boost::dynamic_bitset<>::size_type c=0; c < possibleColor.size(); c++){
     if(false == possibleColor.test(c)) {
       continue;
     }
@@ -128,7 +128,9 @@ int stackNode::updateState(std::vector<vertex> & state, int vIndex, size_t c, bo
         it!=adjList_[vIndex].end(); it++){
       boost::dynamic_bitset<> possColor = state[(*it)].getPossibleColor();
       if(1 == possColor.count()) {
-        verticesColored += updateState(state, (*it), possColor.find_first(), doForcedMove);
+        size_t c = possColor.find_first();
+        CkAssert(c != boost::dynamic_bitset<>::npos && c < chromaticNum_);
+        verticesColored += updateState(state, (*it), c, doForcedMove);
       }
     }
   }

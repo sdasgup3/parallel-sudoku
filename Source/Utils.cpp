@@ -1,11 +1,12 @@
 #include"Utils.h"
+extern AdjListType adjList_;
+extern int chromaticNum_;
 
 
 using namespace std;
 
 //---------functions below implemented in Main.h/cpp----------------
-/*
-void parseInputFile(char* filename, AdjListType& adjList_)
+void parseInputFile(string filename)
 {
   ifstream fin;
   fin.open(filename); // open a file
@@ -15,33 +16,48 @@ void parseInputFile(char* filename, AdjListType& adjList_)
   }
   
   string str(""); 
+  string skip(""); 
 
   for (; std::getline(fin, str);) {
+
     stringstream ss(str); 
-    string startV, endV;
+    if(std::string::npos != str.find("max degree"))  {
+
+      char * cstr = new char [str.length()+1];
+      std::strcpy (cstr, str.c_str());
+      std::strtok(cstr,":");
+      char* token = (char *)strtok(NULL,":");
+
+      chromaticNum_ = atoi(token);
+      continue;
+    }
+    if(std::string::npos != str.find("p edge"))  {
+      break;
+    }
+  }
+
+  int u , v ;
+  for (; std::getline(fin, str);) {
+    stringstream ss(str); 
+    string startV, endV, token;
 
     if(ss.str() == "") {
       continue;
     }
 
-    ss >> startV;
-    ss >> endV;
+    ss >> token >> startV >> endV ;
 
+    assert(0 == token.compare("e") && "malformed graph input");
     assert(startV != "" && endV != "" && "Error is File Format!!");
 
-#ifdef DEBUG
-    cout << startV << " " << endV << endl;
-#endif    
-
-    int u = atoi(startV.c_str());
-    int v = atoi(endV.c_str());
-    insertHelper(adjList_, u, v);
-    insertHelper(adjList_, v, u);
+    u = atoi(startV.c_str());
+    v = atoi(endV.c_str());
+    insertHelper(u - 1 , v - 1); // As the input graphs has vertices from 1 to ...
   }
 
 }
 
-void insertHelper(AdjListType& adjList_, const int& u, const int& v)
+void insertHelper(const int& u, const int& v)
 {
     AdjListType::iterator it = adjList_.find(u);
     if (it != adjList_.end()) {
@@ -52,7 +68,6 @@ void insertHelper(AdjListType& adjList_, const int& u, const int& v)
       adjList_.insert(AdjListType::value_type(u, list));
     }
 }
-*/
 
 std::ostream &operator<<(std::ostream &stream, const AdjListType& map)
 {

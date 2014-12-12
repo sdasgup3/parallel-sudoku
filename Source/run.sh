@@ -5,8 +5,9 @@ TARGET=gc
 
 # Enter the command line parameters here. --help to get a list of allowed
 # options
-NG='--newGraph=no'
-PROGRAM_OPTIONS='--timeout=5 --grain-size=960 --do-priority=true --num-colors=5'
+NG='--newGraph=yes'
+#PROGRAM_OPTIONS='--timeout=5 --grain-size=90 --do-priority=true --num-colors=5'
+PROGRAM_OPTIONS='--timeout=5  --do-priority=true --do-subgraph=true  --filename=/home/dsand/MpiProgramming/graph_files/anna.col'
 #set -x
 runreg=false
 

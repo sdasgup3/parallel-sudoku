@@ -1,6 +1,6 @@
 #ifndef _VERTEX_H
 #define _VERTEX_H
- 
+
 #include "Utils.h"
 #include "pup_stl.h"
 
@@ -9,7 +9,7 @@ typedef struct {
   bool vertexRemoval_remote = false;
   bool vertexRemoval_local = false;
   // add more here..
-  
+
   void pup(PUP::er &p){
     p|vertexRemoval_remote;
     p|vertexRemoval_local;
@@ -26,18 +26,21 @@ class vertex  {
       is_onStack = false;
       is_out_of_subgraph = false;
     }
+
     bool isColored() { return color_ >=0;}
     int getColor() { return color_; }
     void setColor(int c) { color_ = c; possible_colors_.reset(); }
 
-    void removePossibleColor(int c){
-    	CkAssert(c<possible_colors_.size());
-        if(!isColored())
-            possible_colors_.reset(c);
+    void removePossibleColor(int c)
+    {
+      CkAssert(c < possible_colors_.size());
+      if(!isColored()) {
+        possible_colors_.reset(c);
+      }
     }
 
     const boost::dynamic_bitset<> getPossibleColor(){
-        return possible_colors_;
+      return possible_colors_;
     }
 
     void set_is_onStack(bool v, bool isLocal=false) {
@@ -50,7 +53,7 @@ class vertex  {
           _stats.vertexRemoval_remote=true;
       }
     }
-    
+
     void set_out_of_subgraph(bool v) {
       is_out_of_subgraph  = v;
     }
@@ -58,15 +61,15 @@ class vertex  {
     const bool get_is_onStack() {
       return is_onStack;
     }
-    
+
     const bool get_is_out_of_subgraph() {
       return is_out_of_subgraph;
     }
- 
+
     const bool isOperationPermissible() {
       return (false == is_onStack && false == is_out_of_subgraph);
     }
-    
+
     const bool getStats(std::string name)
     { 
       if(name.compare("vertexRemoval_local")==0)
@@ -86,13 +89,13 @@ class vertex  {
       p|_stats;
 
       if(p.isUnpacking()){
-          std::string s; 
-          p|s;
-          possible_colors_ = boost::dynamic_bitset<>(s);
+        std::string s; 
+        p|s;
+        possible_colors_ = boost::dynamic_bitset<>(s);
       } else {
-          std::string s;
-          boost::to_string(possible_colors_, s);
-          p|s;
+        std::string s;
+        boost::to_string(possible_colors_, s);
+        p|s;
       }
     }
 

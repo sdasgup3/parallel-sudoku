@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string>
+#include <cstring>
 #include <sstream>
 #include <fstream>
 #include <iostream>
@@ -17,6 +18,7 @@
 #include <string>
 #include <boost/dynamic_bitset.hpp>
 #include <inttypes.h>
+
 
 // forward declaration
 class compareColorRank;
@@ -35,7 +37,8 @@ typedef unsigned short UShort;
 class vertex;
 
 std::ostream &operator<<(std::ostream &stream, const AdjListType& map);
-void insertHelper(AdjListType& adjList_, const int& u, const int& v);
+void parseInputFile(std::string filename);
+void insertHelper(const int& u, const int& v);
 
 
 #endif
