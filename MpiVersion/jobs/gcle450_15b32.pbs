@@ -1,0 +1,12 @@
+#PBS -S /bin/bash
+#PBS -A CS6965
+#PBS -l nodes=2:ppn=16,walltime=01:00:00
+# Create scratch directory
+HOME=/uufs/chpc.utah.edu/common/home/u0082100/cs5965/assignment1/
+cd $HOME
+#Execute Job
+source /uufs/kingspeak.peaks/sys/pkg/mvapich2/1.9i/etc/mvapich2.sh
+mpirun -np 32 -machinefile $PBS_NODEFILE ./graphcoloring strong le450_15b.col le450_15b.np=32 >> le450_15b.log.32
+
+mv le450_15b.* $HOME/jobs
+rm $HOME/jobs/gc*.pbs.*

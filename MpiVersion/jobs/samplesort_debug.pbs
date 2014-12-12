@@ -1,0 +1,19 @@
+#PBS -S /bin/bash
+#PBS -A owner-guest
+#PBS -l nodes=1:ppn=16,walltime=1:00:00
+# Create scratch directory
+HOME=/uufs/chpc.utah.edu/common/home/u0082100/
+mkdir -p /uufs/chpc.utah.edu/common/home/ci-water4-0/CS6965/$USER/$PBS_JOBID
+# Change to working directory
+cd /uufs/chpc.utah.edu/common/home/ci-water4-0/CS6965/$USER/$PBS_JOBID
+# Copy executable file to scratch directory
+cp ${HOME}/cs5965/assignment1/samplesortdisk /uufs/chpc.utah.edu/common/home/ci-water4-0/CS6965/$USER/$PBS_JOBID
+#Execute Job
+source /uufs/kingspeak.peaks/sys/pkg/mvapich2/1.9i/etc/mvapich2.sh
+mpirun -np 16 -machinefile $PBS_NODEFILE ./samplesortdisk sort_data_debug.dat sort_data_debug.out >> output.log
+# Copy files back home and cleanup
+cp output.log ${HOME}/cs5965/assignment1/jobs
+#cat sort_data_debug.out.* > ${HOME}/cs5965/assignment1/jobs/sort_data_debug.out
+
+rm -rf /uufs/chpc.utah.edu/common/home/ci-water4-0/CS6965/$USER/$PBS_JOBID
+rm -rf /uufs/chpc.utah.edu/common/home/u0082100/cs5965/assignment1/jobs/samplesort_debug.pbs.*
