@@ -1,13 +1,13 @@
 =================================
 Testing anna.col
 ================================
-Charmrun> started all node programs in 0.010 seconds.
+Charmrun> started all node programs in 0.013 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.000 seconds.
+Charm++> cpu topology info is gathered in 0.008 seconds.
 138
 Run Configuration
 ====================================
@@ -22,27 +22,27 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 138
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000529
+Program time (s) = 0.000500
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 138
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
 Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
+Chares Spawned On PE 1 = 0
+Leaf Chares On PE 1 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
 =================================
 Testing david.col
 ================================
-Charmrun> started all node programs in 0.007 seconds.
+Charmrun> started all node programs in 0.011 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.008 seconds.
+Charm++> cpu topology info is gathered in 0.006 seconds.
 87
 Run Configuration
 ====================================
@@ -57,273 +57,17 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 87
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000357
+Program time (s) = 0.001515
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 87
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
+Chares Spawned On PE 3 = 0
+Leaf Chares On PE 3 = 0
 Chares Spawned On PE 1 = 0
 Leaf Chares On PE 1 = 0
 Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
-=================================
-Testing DSJC1000.9.col
-================================
-Charmrun> started all node programs in 0.014 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.007 seconds.
-999
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/DSJC1000.9.col
-Number of vertices = 999
-Testing coloring with 999 colors
-Grain-size = 989
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 999
-Vertex removal step at root removed all nodes
-fail due to 999 and 366 has same color
-[0] Assertion "1 == isColoringValid(node_state_)" failed in file Node.cpp line 361.
-------------- Processor 0 Exiting: Called CmiAbort ------------
-Reason: 
-[0] Stack Traceback:
-  [0:0] CmiAbort+0x5b  [0x5e4254]
-  [0:1] __cmi_assert+0x42  [0x5ee515]
-  [0:2] _ZN4Node12colorLocallyEv+0x13f  [0x509e3f]
-  [0:3] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:4] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:5] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:6] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:7]   [0x523d38]
-  [0:8]   [0x523e54]
-  [0:9]   [0x5250d3]
-  [0:10] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:11] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:12] CsdScheduleForever+0xad  [0x5eb454]
-  [0:13] CsdScheduler+0x16  [0x5eb385]
-  [0:14]   [0x5e939e]
-  [0:15] ConverseInit+0x32e  [0x5e985b]
-  [0:16] main+0x3f  [0x5142e2]
-  [0:17] __libc_start_main+0xf5  [0x7f08dd3b9ec5]
-  [0:18]   [0x4f01ff]
-Fatal error on PE 0> 
-=================================
-Testing flat1000_76_0.col
-================================
-Charmrun> started all node programs in 0.013 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.000 seconds.
-997
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/flat1000_76_0.col
-Number of vertices = 997
-Testing coloring with 997 colors
-Grain-size = 987
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 997
-Vertex removal step at root removed all nodes
-fail due to 997 and 628 has same color
-[0] Assertion "1 == isColoringValid(node_state_)" failed in file Node.cpp line 361.
-------------- Processor 0 Exiting: Called CmiAbort ------------
-Reason: 
-[0] Stack Traceback:
-  [0:0] CmiAbort+0x5b  [0x5e4254]
-  [0:1] __cmi_assert+0x42  [0x5ee515]
-  [0:2] _ZN4Node12colorLocallyEv+0x13f  [0x509e3f]
-  [0:3] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:4] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:5] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:6] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:7]   [0x523d38]
-  [0:8]   [0x523e54]
-  [0:9]   [0x5250d3]
-  [0:10] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:11] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:12] CsdScheduleForever+0xad  [0x5eb454]
-  [0:13] CsdScheduler+0x16  [0x5eb385]
-  [0:14]   [0x5e939e]
-  [0:15] ConverseInit+0x32e  [0x5e985b]
-  [0:16] main+0x3f  [0x5142e2]
-  [0:17] __libc_start_main+0xf5  [0x7fd1ef79dec5]
-  [0:18]   [0x4f01ff]
-Fatal error on PE 0> 
-=================================
-Testing fpsol2.i.1.col
-================================
-Charmrun> started all node programs in 0.022 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
-210
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/fpsol2.i.1.col
-Number of vertices = 210
-Testing coloring with 209 colors
-Grain-size = 200
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 125
-terminate called after throwing an instance of 'std::bad_alloc'
-  what():  std::bad_alloc
-------------- Processor 0 Exiting: Caught Signal ------------
-Signal: unknown signal
-[0] Stack Traceback:
-  [0:0] +0x36c30  [0x7fd27d5efc30]
-  [0:1] gsignal+0x39  [0x7fd27d5efbb9]
-  [0:2] abort+0x148  [0x7fd27d5f2fc8]
-  [0:3] _ZN9__gnu_cxx27__verbose_terminate_handlerEv+0x155  [0x7fd27defb6b5]
-  [0:4] +0x5e836  [0x7fd27def9836]
-  [0:5] +0x5e863  [0x7fd27def9863]
-  [0:6] +0x5eaa2  [0x7fd27def9aa2]
-  [0:7] +0xb0262  [0x7fd27df4b262]
-  [0:8]   [0x50ff92]
-  [0:9] _ZN4Node24sequentialColoringHelperERbS0_RSt6vectorI6vertexSaIS2_EE+0x8d1  [0x506601]
-  [0:10] _ZN4Node18sequentialColoringERb+0x575  [0x506c45]
-  [0:11] _ZN4Node12colorLocallyEv+0xcf  [0x509dcf]
-  [0:12] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:13] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:14] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:15] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:16]   [0x523d38]
-  [0:17]   [0x523e54]
-  [0:18]   [0x5250d3]
-  [0:19] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:20] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:21] CsdScheduleForever+0xad  [0x5eb454]
-  [0:22] CsdScheduler+0x16  [0x5eb385]
-  [0:23]   [0x5e939e]
-  [0:24] ConverseInit+0x32e  [0x5e985b]
-  [0:25] main+0x3f  [0x5142e2]
-  [0:26] __libc_start_main+0xf5  [0x7fd27d5daec5]
-  [0:27]   [0x4f01ff]
-Fatal error on PE 0> unknown signal
-=================================
-Testing fpsol2.i.2.col
-================================
-Charmrun> started all node programs in 0.011 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.003 seconds.
-212
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/fpsol2.i.2.col
-Number of vertices = 212
-Testing coloring with 211 colors
-Grain-size = 202
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 173
-terminate called after throwing an instance of 'std::bad_alloc'
-  what():  std::bad_alloc
-------------- Processor 0 Exiting: Caught Signal ------------
-Signal: unknown signal
-[0] Stack Traceback:
-  [0:0] +0x36c30  [0x7fe3cc4abc30]
-  [0:1] gsignal+0x39  [0x7fe3cc4abbb9]
-  [0:2] abort+0x148  [0x7fe3cc4aefc8]
-  [0:3] _ZN9__gnu_cxx27__verbose_terminate_handlerEv+0x155  [0x7fe3ccdb76b5]
-  [0:4] +0x5e836  [0x7fe3ccdb5836]
-  [0:5] +0x5e863  [0x7fe3ccdb5863]
-  [0:6] +0x5eaa2  [0x7fe3ccdb5aa2]
-  [0:7] +0xb0262  [0x7fe3cce07262]
-  [0:8]   [0x50ff92]
-  [0:9] _ZN4Node24sequentialColoringHelperERbS0_RSt6vectorI6vertexSaIS2_EE+0x8d1  [0x506601]
-  [0:10] _ZN4Node18sequentialColoringERb+0x575  [0x506c45]
-  [0:11] _ZN4Node12colorLocallyEv+0xcf  [0x509dcf]
-  [0:12] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:13] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:14] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:15] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:16]   [0x523d38]
-  [0:17]   [0x523e54]
-  [0:18]   [0x5250d3]
-  [0:19] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:20] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:21] CsdScheduleForever+0xad  [0x5eb454]
-  [0:22] CsdScheduler+0x16  [0x5eb385]
-  [0:23]   [0x5e939e]
-  [0:24] ConverseInit+0x32e  [0x5e985b]
-  [0:25] main+0x3f  [0x5142e2]
-  [0:26] __libc_start_main+0xf5  [0x7fe3cc496ec5]
-  [0:27]   [0x4f01ff]
-Fatal error on PE 0> unknown signal
-=================================
-Testing fpsol2.i.3.col
-================================
-Charmrun> started all node programs in 0.011 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.004 seconds.
-206
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/fpsol2.i.3.col
-Number of vertices = 206
-Testing coloring with 205 colors
-Grain-size = 196
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 176
-[0] Assertion "c < possible_colors_.size()" failed in file vertex.h line 36.
-------------- Processor 0 Exiting: Called CmiAbort ------------
-Reason: 
-[0] Stack Traceback:
-  [0:0] CmiAbort+0x5b  [0x5e4254]
-  [0:1] __cmi_assert+0x42  [0x5ee515]
-  [0:2]   [0x509a94]
-  [0:3] _ZN4Node24mergeRemovedVerticesBackESt5stackIiSt5dequeIiSaIiEEERSt6vectorI6vertexSaIS6_EE+0xc2  [0x509bf2]
-  [0:4] _ZN4Node12colorLocallyEv+0x16e  [0x509e6e]
-  [0:5] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:6] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:7] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:8] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:9]   [0x523d38]
-  [0:10]   [0x523e54]
-  [0:11]   [0x5250d3]
-  [0:12] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:13] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:14] CsdScheduleForever+0xad  [0x5eb454]
-  [0:15] CsdScheduler+0x16  [0x5eb385]
-  [0:16]   [0x5e939e]
-  [0:17] ConverseInit+0x32e  [0x5e985b]
-  [0:18] main+0x3f  [0x5142e2]
-  [0:19] __libc_start_main+0xf5  [0x7ffbb3524ec5]
-  [0:20]   [0x4f01ff]
-Fatal error on PE 0> 
 =================================
 Testing games120.col
 ================================
@@ -333,7 +77,7 @@ Warning> Randomization of stack pointer is turned on in kernel, thread migration
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.011 seconds.
+Charm++> cpu topology info is gathered in 0.005 seconds.
 120
 Run Configuration
 ====================================
@@ -348,19 +92,19 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 120
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000384
+Program time (s) = 0.000538
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 120
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
 Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
+Chares Spawned On PE 1 = 0
+Leaf Chares On PE 1 = 0
 =================================
-Testing homer.col
+Testing huck.col
 ================================
 Charmrun> started all node programs in 0.011 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
@@ -368,54 +112,7 @@ Warning> Randomization of stack pointer is turned on in kernel, thread migration
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
-556
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/homer.col
-Number of vertices = 556
-Testing coloring with 555 colors
-Grain-size = 546
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 551
-------------- Processor 0 Exiting: Caught Signal ------------
-Signal: segmentation violation
-Suggestion: Try running with '++debug', or linking with '-memory paranoid' (memory paranoid requires '+netpoll' at runtime).
-[0] Stack Traceback:
-  [0:0] +0x36c30  [0x7fba5c12ec30]
-  [0:1]   [0x509aaf]
-  [0:2] _ZN4Node24mergeRemovedVerticesBackESt5stackIiSt5dequeIiSaIiEEERSt6vectorI6vertexSaIS6_EE+0xc2  [0x509bf2]
-  [0:3] _ZN4Node12colorLocallyEv+0x16e  [0x509e6e]
-  [0:4] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:5] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:6] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:7] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:8]   [0x523d38]
-  [0:9]   [0x523e54]
-  [0:10]   [0x5250d3]
-  [0:11] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:12] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:13] CsdScheduleForever+0xad  [0x5eb454]
-  [0:14] CsdScheduler+0x16  [0x5eb385]
-  [0:15]   [0x5e939e]
-  [0:16] ConverseInit+0x32e  [0x5e985b]
-  [0:17] main+0x3f  [0x5142e2]
-  [0:18] __libc_start_main+0xf5  [0x7fba5c119ec5]
-  [0:19]   [0x4f01ff]
-Fatal error on PE 0> segmentation violation
-=================================
-Testing huck.col
-================================
-Charmrun> started all node programs in 0.008 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.003 seconds.
+Charm++> cpu topology info is gathered in 0.005 seconds.
 74
 Run Configuration
 ====================================
@@ -430,131 +127,19 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 74
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000257
+Program time (s) = 0.000396
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 74
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
+Chares Spawned On PE 2 = 0
+Leaf Chares On PE 2 = 0
 Chares Spawned On PE 1 = 0
 Leaf Chares On PE 1 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
-Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
 =================================
-Testing inithx.i.1.col
-================================
-Charmrun> started all node programs in 0.008 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.001 seconds.
-309
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/inithx.i.1.col
-Number of vertices = 309
-Testing coloring with 309 colors
-Grain-size = 299
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 209
-terminate called after throwing an instance of 'std::bad_alloc'
-  what():  std::bad_alloc
-------------- Processor 0 Exiting: Caught Signal ------------
-Signal: unknown signal
-[0] Stack Traceback:
-  [0:0] +0x36c30  [0x7ff9d3f6bc30]
-  [0:1] gsignal+0x39  [0x7ff9d3f6bbb9]
-  [0:2] abort+0x148  [0x7ff9d3f6efc8]
-  [0:3] _ZN9__gnu_cxx27__verbose_terminate_handlerEv+0x155  [0x7ff9d48776b5]
-  [0:4] +0x5e836  [0x7ff9d4875836]
-  [0:5] +0x5e863  [0x7ff9d4875863]
-  [0:6] +0x5eaa2  [0x7ff9d4875aa2]
-  [0:7] _Znwm+0x7d  [0x7ff9d4875f8d]
-  [0:8] _ZN9stackNode13vertexRemovalERSt5stackIiSt5dequeIiSaIiEEE+0x413  [0x5103b3]
-  [0:9] _ZN4Node24sequentialColoringHelperERbS0_RSt6vectorI6vertexSaIS2_EE+0x109  [0x505e39]
-  [0:10] _ZN4Node18sequentialColoringERb+0x575  [0x506c45]
-  [0:11] _ZN4Node12colorLocallyEv+0xcf  [0x509dcf]
-  [0:12] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:13] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:14] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:15] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:16]   [0x523d38]
-  [0:17]   [0x523e54]
-  [0:18]   [0x5250d3]
-  [0:19] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:20] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:21] CsdScheduleForever+0xad  [0x5eb454]
-  [0:22] CsdScheduler+0x16  [0x5eb385]
-  [0:23]   [0x5e939e]
-  [0:24] ConverseInit+0x32e  [0x5e985b]
-  [0:25] main+0x3f  [0x5142e2]
-  [0:26] __libc_start_main+0xf5  [0x7ff9d3f56ec5]
-  [0:27]   [0x4f01ff]
-Fatal error on PE 0> unknown signal
-=================================
-Testing inithx.i.2.col
-================================
-Charmrun> started all node programs in 0.008 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.001 seconds.
-299
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/inithx.i.2.col
-Number of vertices = 299
-Testing coloring with 299 colors
-Grain-size = 289
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 265
-terminate called after throwing an instance of 'std::bad_alloc'
-  what():  std::bad_alloc
-------------- Processor 0 Exiting: Caught Signal ------------
-Signal: unknown signal
-[0] Stack Traceback:
-  [0:0] +0x36c30  [0x7f8ba7374c30]
-  [0:1] gsignal+0x39  [0x7f8ba7374bb9]
-  [0:2] abort+0x148  [0x7f8ba7377fc8]
-  [0:3] _ZN9__gnu_cxx27__verbose_terminate_handlerEv+0x155  [0x7f8ba7c806b5]
-  [0:4] +0x5e836  [0x7f8ba7c7e836]
-  [0:5] +0x5e863  [0x7f8ba7c7e863]
-  [0:6] +0x5eaa2  [0x7f8ba7c7eaa2]
-  [0:7] _Znwm+0x7d  [0x7f8ba7c7ef8d]
-  [0:8] _ZN9stackNode13vertexRemovalERSt5stackIiSt5dequeIiSaIiEEE+0x413  [0x5103b3]
-  [0:9] _ZN4Node24sequentialColoringHelperERbS0_RSt6vectorI6vertexSaIS2_EE+0x109  [0x505e39]
-  [0:10] _ZN4Node18sequentialColoringERb+0x575  [0x506c45]
-  [0:11] _ZN4Node12colorLocallyEv+0xcf  [0x509dcf]
-  [0:12] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:13] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:14] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:15] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:16]   [0x523d38]
-  [0:17]   [0x523e54]
-  [0:18]   [0x5250d3]
-  [0:19] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:20] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:21] CsdScheduleForever+0xad  [0x5eb454]
-  [0:22] CsdScheduler+0x16  [0x5eb385]
-  [0:23]   [0x5e939e]
-  [0:24] ConverseInit+0x32e  [0x5e985b]
-  [0:25] main+0x3f  [0x5142e2]
-  [0:26] __libc_start_main+0xf5  [0x7f8ba735fec5]
-  [0:27]   [0x4f01ff]
-Fatal error on PE 0> unknown signal
-=================================
-Testing inithx.i.3.col
+Testing miles1000.col
 ================================
 Charmrun> started all node programs in 0.011 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
@@ -562,103 +147,7 @@ Warning> Randomization of stack pointer is turned on in kernel, thread migration
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.003 seconds.
-275
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/inithx.i.3.col
-Number of vertices = 275
-Testing coloring with 275 colors
-Grain-size = 265
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 252
-[0] Assertion "c < possible_colors_.size()" failed in file vertex.h line 36.
-------------- Processor 0 Exiting: Called CmiAbort ------------
-Reason: 
-[0] Stack Traceback:
-  [0:0] CmiAbort+0x5b  [0x5e4254]
-  [0:1] __cmi_assert+0x42  [0x5ee515]
-  [0:2]   [0x509a94]
-  [0:3] _ZN4Node24mergeRemovedVerticesBackESt5stackIiSt5dequeIiSaIiEEERSt6vectorI6vertexSaIS6_EE+0xc2  [0x509bf2]
-  [0:4] _ZN4Node12colorLocallyEv+0x16e  [0x509e6e]
-  [0:5] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:6] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:7] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:8] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:9]   [0x523d38]
-  [0:10]   [0x523e54]
-  [0:11]   [0x5250d3]
-  [0:12] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:13] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:14] CsdScheduleForever+0xad  [0x5eb454]
-  [0:15] CsdScheduler+0x16  [0x5eb385]
-  [0:16]   [0x5e939e]
-  [0:17] ConverseInit+0x32e  [0x5e985b]
-  [0:18] main+0x3f  [0x5142e2]
-  [0:19] __libc_start_main+0xf5  [0x7f6fd045aec5]
-  [0:20]   [0x4f01ff]
-Fatal error on PE 0> 
-=================================
-Testing jean.col
-================================
-Charmrun> started all node programs in 0.014 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.014 seconds.
-77
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/jean.col
-Number of vertices = 77
-Testing coloring with 77 colors
-Grain-size = 67
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 74
-[0] Assertion "c < possible_colors_.size()" failed in file vertex.h line 36.
-------------- Processor 0 Exiting: Called CmiAbort ------------
-Reason: 
-[0] Stack Traceback:
-  [0:0] CmiAbort+0x5b  [0x5e4254]
-  [0:1] __cmi_assert+0x42  [0x5ee515]
-  [0:2]   [0x509a94]
-  [0:3] _ZN4Node24mergeRemovedVerticesBackESt5stackIiSt5dequeIiSaIiEEERSt6vectorI6vertexSaIS6_EE+0xc2  [0x509bf2]
-  [0:4] _ZN4Node12colorLocallyEv+0x16e  [0x509e6e]
-  [0:5] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:6] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:7] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:8] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:9]   [0x523d38]
-  [0:10]   [0x523e54]
-  [0:11]   [0x5250d3]
-  [0:12] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:13] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:14] CsdScheduleForever+0xad  [0x5eb454]
-  [0:15] CsdScheduler+0x16  [0x5eb385]
-  [0:16]   [0x5e939e]
-  [0:17] ConverseInit+0x32e  [0x5e985b]
-  [0:18] main+0x3f  [0x5142e2]
-  [0:19] __libc_start_main+0xf5  [0x7f880dc74ec5]
-  [0:20]   [0x4f01ff]
-Fatal error on PE 0> 
-=================================
-Testing miles1000.col
-================================
-Charmrun> started all node programs in 0.007 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.005 seconds.
+Charm++> cpu topology info is gathered in 0.001 seconds.
 128
 Run Configuration
 ====================================
@@ -673,27 +162,27 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 128
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000976
+Program time (s) = 0.001508
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 128
 Chares Spawned On PE 0 = 1
-Leaf Chares On PE 0 = 1
 Chares Spawned On PE 2 = 0
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
-Leaf Chares On PE 2 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
+Leaf Chares On PE 0 = 1
+Leaf Chares On PE 2 = 0
+Chares Spawned On PE 1 = 0
+Leaf Chares On PE 1 = 0
 =================================
 Testing miles1500.col
 ================================
-Charmrun> started all node programs in 0.012 seconds.
+Charmrun> started all node programs in 0.011 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.003 seconds.
+Charm++> cpu topology info is gathered in 0.002 seconds.
 128
 Run Configuration
 ====================================
@@ -708,7 +197,7 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 128
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000000
+Program time (s) = 0.003139
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 128
 Chares Spawned On PE 0 = 1
@@ -720,57 +209,9 @@ Leaf Chares On PE 3 = 0
 Chares Spawned On PE 1 = 0
 Leaf Chares On PE 1 = 0
 =================================
-Testing miles250.col
-================================
-Charmrun> started all node programs in 0.008 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.005 seconds.
-125
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/miles250.col
-Number of vertices = 125
-Testing coloring with 125 colors
-Grain-size = 115
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 122
-[0] Assertion "c < possible_colors_.size()" failed in file vertex.h line 36.
-------------- Processor 0 Exiting: Called CmiAbort ------------
-Reason: 
-[0] Stack Traceback:
-  [0:0] CmiAbort+0x5b  [0x5e4254]
-  [0:1] __cmi_assert+0x42  [0x5ee515]
-  [0:2]   [0x509a94]
-  [0:3] _ZN4Node24mergeRemovedVerticesBackESt5stackIiSt5dequeIiSaIiEEERSt6vectorI6vertexSaIS6_EE+0xc2  [0x509bf2]
-  [0:4] _ZN4Node12colorLocallyEv+0x16e  [0x509e6e]
-  [0:5] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:6] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:7] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:8] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:9]   [0x523d38]
-  [0:10]   [0x523e54]
-  [0:11]   [0x5250d3]
-  [0:12] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:13] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:14] CsdScheduleForever+0xad  [0x5eb454]
-  [0:15] CsdScheduler+0x16  [0x5eb385]
-  [0:16]   [0x5e939e]
-  [0:17] ConverseInit+0x32e  [0x5e985b]
-  [0:18] main+0x3f  [0x5142e2]
-  [0:19] __libc_start_main+0xf5  [0x7f002e6c6ec5]
-  [0:20]   [0x4f01ff]
-Fatal error on PE 0> 
-=================================
 Testing miles500.col
 ================================
-Charmrun> started all node programs in 0.009 seconds.
+Charmrun> started all node programs in 0.013 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
@@ -791,7 +232,7 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 128
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000573
+Program time (s) = 0.000000
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 128
 Chares Spawned On PE 0 = 1
@@ -805,13 +246,13 @@ Leaf Chares On PE 3 = 0
 =================================
 Testing miles750.col
 ================================
-Charmrun> started all node programs in 0.010 seconds.
+Charmrun> started all node programs in 0.011 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.004 seconds.
+Charm++> cpu topology info is gathered in 0.003 seconds.
 128
 Run Configuration
 ====================================
@@ -826,7 +267,7 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 128
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000741
+Program time (s) = 0.000752
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 128
 Chares Spawned On PE 0 = 1
@@ -838,251 +279,7 @@ Leaf Chares On PE 3 = 0
 Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
 =================================
-Testing mulsol.i.1.col
-================================
-Charmrun> started all node programs in 0.007 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
-100
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/mulsol.i.1.col
-Number of vertices = 100
-Testing coloring with 99 colors
-Grain-size = 90
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 80
-terminate called after throwing an instance of 'std::bad_alloc'
-  what():  std::bad_alloc
-------------- Processor 0 Exiting: Caught Signal ------------
-Signal: unknown signal
-[0] Stack Traceback:
-  [0:0] +0x36c30  [0x7f8b6ca9ec30]
-  [0:1] gsignal+0x39  [0x7f8b6ca9ebb9]
-  [0:2] abort+0x148  [0x7f8b6caa1fc8]
-  [0:3] _ZN9__gnu_cxx27__verbose_terminate_handlerEv+0x155  [0x7f8b6d3aa6b5]
-  [0:4] +0x5e836  [0x7f8b6d3a8836]
-  [0:5] +0x5e863  [0x7f8b6d3a8863]
-  [0:6] +0x5eaa2  [0x7f8b6d3a8aa2]
-  [0:7] +0xb0262  [0x7f8b6d3fa262]
-  [0:8] _ZN9stackNode13vertexRemovalERSt5stackIiSt5dequeIiSaIiEEE+0x50b  [0x5104ab]
-  [0:9] _ZN4Node24sequentialColoringHelperERbS0_RSt6vectorI6vertexSaIS2_EE+0x109  [0x505e39]
-  [0:10] _ZN4Node18sequentialColoringERb+0x575  [0x506c45]
-  [0:11] _ZN4Node12colorLocallyEv+0xcf  [0x509dcf]
-  [0:12] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:13] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:14] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:15] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:16]   [0x523d38]
-  [0:17]   [0x523e54]
-  [0:18]   [0x5250d3]
-  [0:19] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:20] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:21] CsdScheduleForever+0xad  [0x5eb454]
-  [0:22] CsdScheduler+0x16  [0x5eb385]
-  [0:23]   [0x5e939e]
-  [0:24] ConverseInit+0x32e  [0x5e985b]
-  [0:25] main+0x3f  [0x5142e2]
-  [0:26] __libc_start_main+0xf5  [0x7f8b6ca89ec5]
-  [0:27]   [0x4f01ff]
-Fatal error on PE 0> unknown signal
-=================================
-Testing mulsol.i.2.col
-================================
-Charmrun> started all node programs in 0.012 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
-101
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/mulsol.i.2.col
-Number of vertices = 101
-Testing coloring with 101 colors
-Grain-size = 91
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 100
-------------- Processor 0 Exiting: Caught Signal ------------
-Signal: segmentation violation
-Suggestion: Try running with '++debug', or linking with '-memory paranoid' (memory paranoid requires '+netpoll' at runtime).
-[0] Stack Traceback:
-  [0:0] +0x36c30  [0x7fa031bc2c30]
-  [0:1]   [0x509aaf]
-  [0:2] _ZN4Node24mergeRemovedVerticesBackESt5stackIiSt5dequeIiSaIiEEERSt6vectorI6vertexSaIS6_EE+0xc2  [0x509bf2]
-  [0:3] _ZN4Node12colorLocallyEv+0x16e  [0x509e6e]
-  [0:4] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:5] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:6] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:7] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:8]   [0x523d38]
-  [0:9]   [0x523e54]
-  [0:10]   [0x5250d3]
-  [0:11] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:12] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:13] CsdScheduleForever+0xad  [0x5eb454]
-  [0:14] CsdScheduler+0x16  [0x5eb385]
-  [0:15]   [0x5e939e]
-  [0:16] ConverseInit+0x32e  [0x5e985b]
-  [0:17] main+0x3f  [0x5142e2]
-  [0:18] __libc_start_main+0xf5  [0x7fa031badec5]
-  [0:19]   [0x4f01ff]
-Fatal error on PE 0> segmentation violation
-=================================
-Testing mulsol.i.3.col
-================================
-Charmrun> started all node programs in 0.010 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.001 seconds.
-102
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/mulsol.i.3.col
-Number of vertices = 102
-Testing coloring with 101 colors
-Grain-size = 92
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 102
-------------- Processor 0 Exiting: Caught Signal ------------
-Signal: segmentation violation
-Suggestion: Try running with '++debug', or linking with '-memory paranoid' (memory paranoid requires '+netpoll' at runtime).
-[0] Stack Traceback:
-  [0:0] +0x36c30  [0x7f610603fc30]
-  [0:1]   [0x509aaf]
-  [0:2] _ZN4Node24mergeRemovedVerticesBackESt5stackIiSt5dequeIiSaIiEEERSt6vectorI6vertexSaIS6_EE+0xc2  [0x509bf2]
-  [0:3] _ZN4Node12colorLocallyEv+0x89  [0x509d89]
-  [0:4] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:5] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:6] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:7] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:8]   [0x523d38]
-  [0:9]   [0x523e54]
-  [0:10]   [0x5250d3]
-  [0:11] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:12] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:13] CsdScheduleForever+0xad  [0x5eb454]
-  [0:14] CsdScheduler+0x16  [0x5eb385]
-  [0:15]   [0x5e939e]
-  [0:16] ConverseInit+0x32e  [0x5e985b]
-  [0:17] main+0x3f  [0x5142e2]
-  [0:18] __libc_start_main+0xf5  [0x7f610602aec5]
-  [0:19]   [0x4f01ff]
-Fatal error on PE 0> segmentation violation
-=================================
-Testing mulsol.i.4.col
-================================
-Charmrun> started all node programs in 0.010 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.008 seconds.
-103
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/mulsol.i.4.col
-Number of vertices = 103
-Testing coloring with 103 colors
-Grain-size = 93
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 103
-------------- Processor 0 Exiting: Caught Signal ------------
-Signal: segmentation violation
-Suggestion: Try running with '++debug', or linking with '-memory paranoid' (memory paranoid requires '+netpoll' at runtime).
-[0] Stack Traceback:
-  [0:0] +0x36c30  [0x7f2f6d30cc30]
-  [0:1]   [0x509aaf]
-  [0:2] _ZN4Node24mergeRemovedVerticesBackESt5stackIiSt5dequeIiSaIiEEERSt6vectorI6vertexSaIS6_EE+0xc2  [0x509bf2]
-  [0:3] _ZN4Node12colorLocallyEv+0x89  [0x509d89]
-  [0:4] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:5] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:6] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:7] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:8]   [0x523d38]
-  [0:9]   [0x523e54]
-  [0:10]   [0x5250d3]
-  [0:11] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:12] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:13] CsdScheduleForever+0xad  [0x5eb454]
-  [0:14] CsdScheduler+0x16  [0x5eb385]
-  [0:15]   [0x5e939e]
-  [0:16] ConverseInit+0x32e  [0x5e985b]
-  [0:17] main+0x3f  [0x5142e2]
-  [0:18] __libc_start_main+0xf5  [0x7f2f6d2f7ec5]
-  [0:19]   [0x4f01ff]
-Fatal error on PE 0> segmentation violation
-=================================
-Testing mulsol.i.5.col
-================================
-Charmrun> started all node programs in 0.012 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
-102
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/mulsol.i.5.col
-Number of vertices = 102
-Testing coloring with 101 colors
-Grain-size = 92
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 102
-------------- Processor 0 Exiting: Caught Signal ------------
-Signal: segmentation violation
-Suggestion: Try running with '++debug', or linking with '-memory paranoid' (memory paranoid requires '+netpoll' at runtime).
-[0] Stack Traceback:
-  [0:0] +0x36c30  [0x7f85d1985c30]
-  [0:1]   [0x509aaf]
-  [0:2] _ZN4Node24mergeRemovedVerticesBackESt5stackIiSt5dequeIiSaIiEEERSt6vectorI6vertexSaIS6_EE+0xc2  [0x509bf2]
-  [0:3] _ZN4Node12colorLocallyEv+0x89  [0x509d89]
-  [0:4] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:5] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:6] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:7] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:8]   [0x523d38]
-  [0:9]   [0x523e54]
-  [0:10]   [0x5250d3]
-  [0:11] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:12] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:13] CsdScheduleForever+0xad  [0x5eb454]
-  [0:14] CsdScheduler+0x16  [0x5eb385]
-  [0:15]   [0x5e939e]
-  [0:16] ConverseInit+0x32e  [0x5e985b]
-  [0:17] main+0x3f  [0x5142e2]
-  [0:18] __libc_start_main+0xf5  [0x7f85d1970ec5]
-  [0:19]   [0x4f01ff]
-Fatal error on PE 0> segmentation violation
-=================================
-Testing myciel2.col
+Testing queen10_10.col
 ================================
 Charmrun> started all node programs in 0.009 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
@@ -1090,271 +287,7 @@ Warning> Randomization of stack pointer is turned on in kernel, thread migration
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.005 seconds.
-0[0] Assertion "-1 != chromaticNum_" failed in file Main.cpp line 52.
-------------- Processor 0 Exiting: Called CmiAbort ------------
-Reason: 
-[0] Stack Traceback:
-  [0:0] CmiAbort+0x5b  [0x5e4254]
-  [0:1] __cmi_assert+0x42  [0x5ee515]
-  [0:2] _ZN4MainC1EP8CkArgMsg+0x488  [0x4fa2d8]
-  [0:3] _Z10_initCharmiPPc+0x99c  [0x519eb1]
-  [0:4]   [0x5e9380]
-  [0:5] ConverseInit+0x32e  [0x5e985b]
-  [0:6] main+0x3f  [0x5142e2]
-  [0:7] __libc_start_main+0xf5  [0x7fe8f4b57ec5]
-  [0:8]   [0x4f01ff]
-Fatal error on PE 0> 
-=================================
-Testing myciel3.col
-================================
-Charmrun> started all node programs in 0.007 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.006 seconds.
-10
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/myciel3.col
-Number of vertices = 10
-Testing coloring with 9 colors
-Grain-size = 0
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 10
-[0] Assertion "c < possible_colors_.size()" failed in file vertex.h line 36.
-------------- Processor 0 Exiting: Called CmiAbort ------------
-Reason: 
-[0] Stack Traceback:
-  [0:0] CmiAbort+0x5b  [0x5e4254]
-  [0:1] __cmi_assert+0x42  [0x5ee515]
-  [0:2]   [0x509a94]
-  [0:3] _ZN4Node24mergeRemovedVerticesBackESt5stackIiSt5dequeIiSaIiEEERSt6vectorI6vertexSaIS6_EE+0xc2  [0x509bf2]
-  [0:4] _ZN4Node12colorLocallyEv+0x89  [0x509d89]
-  [0:5] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:6] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:7] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:8] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:9]   [0x523d38]
-  [0:10]   [0x523e54]
-  [0:11]   [0x5250d3]
-  [0:12] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:13] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:14] CsdScheduleForever+0xad  [0x5eb454]
-  [0:15] CsdScheduler+0x16  [0x5eb385]
-  [0:16]   [0x5e939e]
-  [0:17] ConverseInit+0x32e  [0x5e985b]
-  [0:18] main+0x3f  [0x5142e2]
-  [0:19] __libc_start_main+0xf5  [0x7fbbbc1f2ec5]
-  [0:20]   [0x4f01ff]
-Fatal error on PE 0> 
-=================================
-Testing myciel4.col
-================================
-Charmrun> started all node programs in 0.008 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.004 seconds.
-22
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/myciel4.col
-Number of vertices = 22
-Testing coloring with 21 colors
-Grain-size = 12
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 22
-[0] Assertion "c < possible_colors_.size()" failed in file vertex.h line 36.
-------------- Processor 0 Exiting: Called CmiAbort ------------
-Reason: 
-[0] Stack Traceback:
-  [0:0] CmiAbort+0x5b  [0x5e4254]
-  [0:1] __cmi_assert+0x42  [0x5ee515]
-  [0:2]   [0x509a94]
-  [0:3] _ZN4Node24mergeRemovedVerticesBackESt5stackIiSt5dequeIiSaIiEEERSt6vectorI6vertexSaIS6_EE+0xc2  [0x509bf2]
-  [0:4] _ZN4Node12colorLocallyEv+0x89  [0x509d89]
-  [0:5] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:6] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:7] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:8] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:9]   [0x523d38]
-  [0:10]   [0x523e54]
-  [0:11]   [0x5250d3]
-  [0:12] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:13] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:14] CsdScheduleForever+0xad  [0x5eb454]
-  [0:15] CsdScheduler+0x16  [0x5eb385]
-  [0:16]   [0x5e939e]
-  [0:17] ConverseInit+0x32e  [0x5e985b]
-  [0:18] main+0x3f  [0x5142e2]
-  [0:19] __libc_start_main+0xf5  [0x7eff4629eec5]
-  [0:20]   [0x4f01ff]
-Fatal error on PE 0> 
-=================================
-Testing myciel5.col
-================================
-Charmrun> started all node programs in 0.013 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
-46
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/myciel5.col
-Number of vertices = 46
-Testing coloring with 45 colors
-Grain-size = 36
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 46
-Vertex removal step at root removed all nodes
-fail due to 0 and 1 has same color
-[0] Assertion "1 == isColoringValid(node_state_)" failed in file Node.cpp line 361.
-------------- Processor 0 Exiting: Called CmiAbort ------------
-Reason: 
-[0] Stack Traceback:
-  [0:0] CmiAbort+0x5b  [0x5e4254]
-  [0:1] __cmi_assert+0x42  [0x5ee515]
-  [0:2] _ZN4Node12colorLocallyEv+0x13f  [0x509e3f]
-  [0:3] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:4] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:5] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:6] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:7]   [0x523d38]
-  [0:8]   [0x523e54]
-  [0:9]   [0x5250d3]
-  [0:10] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:11] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:12] CsdScheduleForever+0xad  [0x5eb454]
-  [0:13] CsdScheduler+0x16  [0x5eb385]
-  [0:14]   [0x5e939e]
-  [0:15] ConverseInit+0x32e  [0x5e985b]
-  [0:16] main+0x3f  [0x5142e2]
-  [0:17] __libc_start_main+0xf5  [0x7f7e0e96eec5]
-  [0:18]   [0x4f01ff]
-Fatal error on PE 0> 
-=================================
-Testing myciel6.col
-================================
-Charmrun> started all node programs in 0.007 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
-94
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/myciel6.col
-Number of vertices = 94
-Testing coloring with 93 colors
-Grain-size = 84
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 94
-[0] Assertion "c < possible_colors_.size()" failed in file vertex.h line 36.
-------------- Processor 0 Exiting: Called CmiAbort ------------
-Reason: 
-[0] Stack Traceback:
-  [0:0] CmiAbort+0x5b  [0x5e4254]
-  [0:1] __cmi_assert+0x42  [0x5ee515]
-  [0:2]   [0x509a94]
-  [0:3] _ZN4Node24mergeRemovedVerticesBackESt5stackIiSt5dequeIiSaIiEEERSt6vectorI6vertexSaIS6_EE+0xc2  [0x509bf2]
-  [0:4] _ZN4Node12colorLocallyEv+0x89  [0x509d89]
-  [0:5] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:6] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:7] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:8] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:9]   [0x523d38]
-  [0:10]   [0x523e54]
-  [0:11]   [0x5250d3]
-  [0:12] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:13] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:14] CsdScheduleForever+0xad  [0x5eb454]
-  [0:15] CsdScheduler+0x16  [0x5eb385]
-  [0:16]   [0x5e939e]
-  [0:17] ConverseInit+0x32e  [0x5e985b]
-  [0:18] main+0x3f  [0x5142e2]
-  [0:19] __libc_start_main+0xf5  [0x7fea8b6b4ec5]
-  [0:20]   [0x4f01ff]
-Fatal error on PE 0> 
-=================================
-Testing myciel7.col
-================================
-Charmrun> started all node programs in 0.008 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
-190
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/myciel7.col
-Number of vertices = 190
-Testing coloring with 189 colors
-Grain-size = 180
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 190
-[0] Assertion "c < possible_colors_.size()" failed in file vertex.h line 36.
-------------- Processor 0 Exiting: Called CmiAbort ------------
-Reason: 
-[0] Stack Traceback:
-  [0:0] CmiAbort+0x5b  [0x5e4254]
-  [0:1] __cmi_assert+0x42  [0x5ee515]
-  [0:2]   [0x509a94]
-  [0:3] _ZN4Node24mergeRemovedVerticesBackESt5stackIiSt5dequeIiSaIiEEERSt6vectorI6vertexSaIS6_EE+0xc2  [0x509bf2]
-  [0:4] _ZN4Node12colorLocallyEv+0x89  [0x509d89]
-  [0:5] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:6] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:7] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:8] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:9]   [0x523d38]
-  [0:10]   [0x523e54]
-  [0:11]   [0x5250d3]
-  [0:12] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:13] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:14] CsdScheduleForever+0xad  [0x5eb454]
-  [0:15] CsdScheduler+0x16  [0x5eb385]
-  [0:16]   [0x5e939e]
-  [0:17] ConverseInit+0x32e  [0x5e985b]
-  [0:18] main+0x3f  [0x5142e2]
-  [0:19] __libc_start_main+0xf5  [0x7f74d300dec5]
-  [0:20]   [0x4f01ff]
-Fatal error on PE 0> 
-=================================
-Testing queen10_10.col
-================================
-Charmrun> started all node programs in 0.007 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.000 seconds.
+Charm++> cpu topology info is gathered in 0.001 seconds.
 100
 Run Configuration
 ====================================
@@ -1369,27 +302,27 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 100
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000790
+Program time (s) = 0.000611
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 100
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
 Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
+Chares Spawned On PE 1 = 0
+Leaf Chares On PE 1 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
 =================================
 Testing queen11_11.col
 ================================
-Charmrun> started all node programs in 0.012 seconds.
+Charmrun> started all node programs in 0.009 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.000 seconds.
+Charm++> cpu topology info is gathered in 0.002 seconds.
 121
 Run Configuration
 ====================================
@@ -1404,27 +337,27 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 121
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000646
+Program time (s) = 0.001237
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 121
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
 Chares Spawned On PE 1 = 0
+Leaf Chares On PE 1 = 0
 Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
-Leaf Chares On PE 1 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
 =================================
 Testing queen12_12.col
 ================================
-Charmrun> started all node programs in 0.014 seconds.
+Charmrun> started all node programs in 0.011 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
+Charm++> cpu topology info is gathered in 0.004 seconds.
 144
 Run Configuration
 ====================================
@@ -1439,17 +372,17 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 144
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.001102
+Program time (s) = 0.001093
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 144
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
 Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
+Chares Spawned On PE 1 = 0
+Leaf Chares On PE 1 = 0
 =================================
 Testing queen13_13.col
 ================================
@@ -1459,7 +392,7 @@ Warning> Randomization of stack pointer is turned on in kernel, thread migration
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.005 seconds.
+Charm++> cpu topology info is gathered in 0.001 seconds.
 169
 Run Configuration
 ====================================
@@ -1474,7 +407,7 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 169
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.001184
+Program time (s) = 0.001179
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 169
 Chares Spawned On PE 0 = 1
@@ -1488,7 +421,7 @@ Leaf Chares On PE 3 = 0
 =================================
 Testing queen14_14.col
 ================================
-Charmrun> started all node programs in 0.009 seconds.
+Charmrun> started all node programs in 0.008 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
@@ -1509,27 +442,27 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 196
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.002011
+Program time (s) = 0.002036
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 196
 Chares Spawned On PE 0 = 1
-Leaf Chares On PE 0 = 1
 Chares Spawned On PE 1 = 0
 Leaf Chares On PE 1 = 0
+Leaf Chares On PE 0 = 1
 Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
+Leaf Chares On PE 2 = 0
 =================================
 Testing queen15_15.col
 ================================
-Charmrun> started all node programs in 0.011 seconds.
+Charmrun> started all node programs in 0.009 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.008 seconds.
+Charm++> cpu topology info is gathered in 0.001 seconds.
 225
 Run Configuration
 ====================================
@@ -1544,27 +477,27 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 225
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.001688
+Program time (s) = 0.002552
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 225
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
 Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
+Chares Spawned On PE 1 = 0
+Leaf Chares On PE 1 = 0
 =================================
 Testing queen16_16.col
 ================================
-Charmrun> started all node programs in 0.010 seconds.
+Charmrun> started all node programs in 0.012 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
+Charm++> cpu topology info is gathered in 0.001 seconds.
 256
 Run Configuration
 ====================================
@@ -1579,21 +512,21 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 256
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.002978
+Program time (s) = 0.001915
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 256
+Chares Spawned On PE 2 = 0
+Leaf Chares On PE 2 = 0
+Chares Spawned On PE 3 = 0
+Leaf Chares On PE 3 = 0
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
 Chares Spawned On PE 1 = 0
 Leaf Chares On PE 1 = 0
-Chares Spawned On PE 2 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
-Leaf Chares On PE 2 = 0
 =================================
 Testing queen5_5.col
 ================================
-Charmrun> started all node programs in 0.010 seconds.
+Charmrun> started all node programs in 0.006 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
@@ -1614,27 +547,27 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 25
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000249
+Program time (s) = 0.000158
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 25
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
-Chares Spawned On PE 3 = 0
 Chares Spawned On PE 1 = 0
 Leaf Chares On PE 1 = 0
 Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
+Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
 =================================
 Testing queen6_6.col
 ================================
-Charmrun> started all node programs in 0.005 seconds.
+Charmrun> started all node programs in 0.007 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.000 seconds.
+Charm++> cpu topology info is gathered in 0.004 seconds.
 36
 Run Configuration
 ====================================
@@ -1649,27 +582,27 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 36
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000000
+Program time (s) = 0.000356
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 36
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
 Chares Spawned On PE 1 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
+Leaf Chares On PE 1 = 0
 Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
-Leaf Chares On PE 1 = 0
+Chares Spawned On PE 3 = 0
+Leaf Chares On PE 3 = 0
 =================================
 Testing queen7_7.col
 ================================
-Charmrun> started all node programs in 0.012 seconds.
+Charmrun> started all node programs in 0.011 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
+Charm++> cpu topology info is gathered in 0.001 seconds.
 49
 Run Configuration
 ====================================
@@ -1684,27 +617,27 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 49
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000302
+Program time (s) = 0.000436
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 49
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
 Chares Spawned On PE 1 = 0
 Leaf Chares On PE 1 = 0
-Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
+Chares Spawned On PE 2 = 0
+Leaf Chares On PE 2 = 0
 =================================
 Testing queen8_12.col
 ================================
-Charmrun> started all node programs in 0.007 seconds.
+Charmrun> started all node programs in 0.009 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.006 seconds.
+Charm++> cpu topology info is gathered in 0.002 seconds.
 96
 Run Configuration
 ====================================
@@ -1719,17 +652,17 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 96
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000514
+Program time (s) = 0.000000
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 96
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
 Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
+Chares Spawned On PE 1 = 0
+Leaf Chares On PE 1 = 0
 =================================
 Testing queen8_8.col
 ================================
@@ -1739,7 +672,7 @@ Warning> Randomization of stack pointer is turned on in kernel, thread migration
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.001 seconds.
+Charm++> cpu topology info is gathered in 0.003 seconds.
 64
 Run Configuration
 ====================================
@@ -1754,17 +687,17 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 64
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000348
+Program time (s) = 0.000472
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 64
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
+Chares Spawned On PE 1 = 0
+Leaf Chares On PE 1 = 0
 Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
 =================================
 Testing queen9_9.col
 ================================
@@ -1774,7 +707,7 @@ Warning> Randomization of stack pointer is turned on in kernel, thread migration
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
+Charm++> cpu topology info is gathered in 0.004 seconds.
 81
 Run Configuration
 ====================================
@@ -1789,7 +722,7 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 81
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000511
+Program time (s) = 0.000813
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 81
 Chares Spawned On PE 0 = 1
@@ -1800,250 +733,3 @@ Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
-=================================
-Testing school1.col
-================================
-Charmrun> started all node programs in 0.009 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
-375
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/school1.col
-Number of vertices = 375
-Testing coloring with 375 colors
-Grain-size = 365
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 375
-------------- Processor 0 Exiting: Caught Signal ------------
-Signal: segmentation violation
-Suggestion: Try running with '++debug', or linking with '-memory paranoid' (memory paranoid requires '+netpoll' at runtime).
-[0] Stack Traceback:
-  [0:0] +0x36c30  [0x7f1def192c30]
-  [0:1]   [0x509aaf]
-  [0:2] _ZN4Node24mergeRemovedVerticesBackESt5stackIiSt5dequeIiSaIiEEERSt6vectorI6vertexSaIS6_EE+0xc2  [0x509bf2]
-  [0:3] _ZN4Node12colorLocallyEv+0x89  [0x509d89]
-  [0:4] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:5] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:6] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:7] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:8]   [0x523d38]
-  [0:9]   [0x523e54]
-  [0:10]   [0x5250d3]
-  [0:11] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:12] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:13] CsdScheduleForever+0xad  [0x5eb454]
-  [0:14] CsdScheduler+0x16  [0x5eb385]
-  [0:15]   [0x5e939e]
-  [0:16] ConverseInit+0x32e  [0x5e985b]
-  [0:17] main+0x3f  [0x5142e2]
-  [0:18] __libc_start_main+0xf5  [0x7f1def17dec5]
-  [0:19]   [0x4f01ff]
-Fatal error on PE 0> segmentation violation
-=================================
-Testing school1_nsh.col
-================================
-Charmrun> started all node programs in 0.009 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.001 seconds.
-342
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/school1_nsh.col
-Number of vertices = 342
-Testing coloring with 341 colors
-Grain-size = 332
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 342
-------------- Processor 0 Exiting: Caught Signal ------------
-Signal: segmentation violation
-Suggestion: Try running with '++debug', or linking with '-memory paranoid' (memory paranoid requires '+netpoll' at runtime).
-[0] Stack Traceback:
-  [0:0] +0x36c30  [0x7f1143af1c30]
-  [0:1]   [0x509aaf]
-  [0:2] _ZN4Node24mergeRemovedVerticesBackESt5stackIiSt5dequeIiSaIiEEERSt6vectorI6vertexSaIS6_EE+0xc2  [0x509bf2]
-  [0:3] _ZN4Node12colorLocallyEv+0x89  [0x509d89]
-  [0:4] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:5] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:6] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:7] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:8]   [0x523d38]
-  [0:9]   [0x523e54]
-  [0:10]   [0x5250d3]
-  [0:11] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:12] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:13] CsdScheduleForever+0xad  [0x5eb454]
-  [0:14] CsdScheduler+0x16  [0x5eb385]
-  [0:15]   [0x5e939e]
-  [0:16] ConverseInit+0x32e  [0x5e985b]
-  [0:17] main+0x3f  [0x5142e2]
-  [0:18] __libc_start_main+0xf5  [0x7f1143adcec5]
-  [0:19]   [0x4f01ff]
-Fatal error on PE 0> segmentation violation
-=================================
-Testing zeroin.i.1.col
-================================
-Charmrun> started all node programs in 0.013 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
-91
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/zeroin.i.1.col
-Number of vertices = 91
-Testing coloring with 91 colors
-Grain-size = 81
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 72
-[0] Assertion "c != boost::dynamic_bitset<>::npos" failed in file stackNode.cpp line 147.
-------------- Processor 0 Exiting: Called CmiAbort ------------
-Reason: 
-[0] Stack Traceback:
-  [0:0] CmiAbort+0x5b  [0x5e4254]
-  [0:1] __cmi_assert+0x42  [0x5ee515]
-  [0:2] _ZN9stackNode24mergeRemovedVerticesBackERSt5stackIiSt5dequeIiSaIiEEE+0x121  [0x50f9e1]
-  [0:3] _ZN4Node24sequentialColoringHelperERbS0_RSt6vectorI6vertexSaIS2_EE+0x8d1  [0x506601]
-  [0:4] _ZN4Node18sequentialColoringERb+0x575  [0x506c45]
-  [0:5] _ZN4Node12colorLocallyEv+0xcf  [0x509dcf]
-  [0:6] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:7] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:8] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:9] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:10]   [0x523d38]
-  [0:11]   [0x523e54]
-  [0:12]   [0x5250d3]
-  [0:13] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:14] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:15] CsdScheduleForever+0xad  [0x5eb454]
-  [0:16] CsdScheduler+0x16  [0x5eb385]
-  [0:17]   [0x5e939e]
-  [0:18] ConverseInit+0x32e  [0x5e985b]
-  [0:19] main+0x3f  [0x5142e2]
-  [0:20] __libc_start_main+0xf5  [0x7f36c61c9ec5]
-  [0:21]   [0x4f01ff]
-Fatal error on PE 0> 
-=================================
-Testing zeroin.i.2.col
-================================
-Charmrun> started all node programs in 0.007 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.003 seconds.
-85
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/zeroin.i.2.col
-Number of vertices = 85
-Testing coloring with 85 colors
-Grain-size = 75
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 70
-[0] Assertion "vIndex!=-1" failed in file Node.cpp line 457.
-------------- Processor 0 Exiting: Called CmiAbort ------------
-Reason: 
-[0] Stack Traceback:
-  [0:0] CmiAbort+0x5b  [0x5e4254]
-  [0:1] __cmi_assert+0x42  [0x5ee515]
-  [0:2] _ZN4Node24sequentialColoringHelperERbS0_RSt6vectorI6vertexSaIS2_EE+0x811  [0x506541]
-  [0:3] _ZN4Node18sequentialColoringERb+0x575  [0x506c45]
-  [0:4] _ZN4Node12colorLocallyEv+0xcf  [0x509dcf]
-  [0:5] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:6] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:7] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:8] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:9]   [0x523d38]
-  [0:10]   [0x523e54]
-  [0:11]   [0x5250d3]
-  [0:12] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:13] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:14] CsdScheduleForever+0xad  [0x5eb454]
-  [0:15] CsdScheduler+0x16  [0x5eb385]
-  [0:16]   [0x5e939e]
-  [0:17] ConverseInit+0x32e  [0x5e985b]
-  [0:18] main+0x3f  [0x5142e2]
-  [0:19] __libc_start_main+0xf5  [0x7f4a7ae24ec5]
-  [0:20]   [0x4f01ff]
-Fatal error on PE 0> 
-=================================
-Testing zeroin.i.3.col
-================================
-Charmrun> started all node programs in 0.009 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.001 seconds.
-83
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/zeroin.i.3.col
-Number of vertices = 83
-Testing coloring with 83 colors
-Grain-size = 73
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 68
-terminate called after throwing an instance of 'std::bad_alloc'
-  what():  std::bad_alloc
-------------- Processor 0 Exiting: Caught Signal ------------
-Signal: unknown signal
-[0] Stack Traceback:
-  [0:0] +0x36c30  [0x7f0ca2df7c30]
-  [0:1] gsignal+0x39  [0x7f0ca2df7bb9]
-  [0:2] abort+0x148  [0x7f0ca2dfafc8]
-  [0:3] _ZN9__gnu_cxx27__verbose_terminate_handlerEv+0x155  [0x7f0ca37036b5]
-  [0:4] +0x5e836  [0x7f0ca3701836]
-  [0:5] +0x5e863  [0x7f0ca3701863]
-  [0:6] +0x5eaa2  [0x7f0ca3701aa2]
-  [0:7] +0xb0262  [0x7f0ca3753262]
-  [0:8]   [0x50ff92]
-  [0:9] _ZN4Node24sequentialColoringHelperERbS0_RSt6vectorI6vertexSaIS2_EE+0x8d1  [0x506601]
-  [0:10] _ZN4Node18sequentialColoringERb+0x575  [0x506c45]
-  [0:11] _ZN4Node12colorLocallyEv+0xcf  [0x509dcf]
-  [0:12] _ZN4Node3runEv+0x3d  [0x4f5fed]
-  [0:13] _ZN4NodeC1Ebi11CProxy_Node+0x932  [0x5084c2]
-  [0:14] _ZN12CkIndex_Node20_call_Node_marshall1EPvS0_+0x139  [0x4f13a9]
-  [0:15] CkDeliverMessageFree+0x4e  [0x523bf2]
-  [0:16]   [0x523d38]
-  [0:17]   [0x523e54]
-  [0:18]   [0x5250d3]
-  [0:19] _Z15_processHandlerPvP11CkCoreState+0x282  [0x525c52]
-  [0:20] CmiHandleMessage+0x4d  [0x5eb1d3]
-  [0:21] CsdScheduleForever+0xad  [0x5eb454]
-  [0:22] CsdScheduler+0x16  [0x5eb385]
-  [0:23]   [0x5e939e]
-  [0:24] ConverseInit+0x32e  [0x5e985b]
-  [0:25] main+0x3f  [0x5142e2]
-  [0:26] __libc_start_main+0xf5  [0x7f0ca2de2ec5]
-  [0:27]   [0x4f01ff]
-Fatal error on PE 0> unknown signal
