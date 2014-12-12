@@ -1,5 +1,6 @@
 OPTS= -O3 -std=c++11
-CHARMC=/home/acun2/charm/net-linux-x86_64/bin/charmc $(OPTS)
+#CHARMC=/home/acun2/charm/net-linux-x86_64/bin/charmc $(OPTS)
+CHARMC=~/charm/net-linux-x86_64/bin/charmc $(OPTS)
 TEST=graphColor
 INC=-I${ROOT}/python_kit/intel64/include/python2.7
 LDFLAGS=-lboost_program_options -lpython2.7 -L${ROOT}/python_kit/intel64/lib
@@ -17,10 +18,10 @@ $(TARGET): $(OBJS)
 Main.o: Main.cpp Module.decl.h graphColor.h vertex.h 
 	$(CHARMC) $(INC) -c Main.cpp
 
-Node.o: Node.cpp Module.decl.h graphColor.h
+Node.o: Node.cpp Module.decl.h graphColor.h vertex.h
 	$(CHARMC) -c Node.cpp
 
-stackNode.o: stackNode.cpp Module.decl.h graphColor.h
+stackNode.o: stackNode.cpp Module.decl.h graphColor.h vertex.h
 	$(CHARMC) -c stackNode.cpp
 
 Utils.o: Utils.cpp Utils.h vertex.h
