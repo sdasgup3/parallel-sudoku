@@ -1,0 +1,540 @@
+=================================
+Testing graph_files/le450_5b.col
+================================
+V=450 E=5734 Chromaticity Upper Bound=42
+Root finished reading the graph from file.
+Max runtime was 0.016248
+Max runtime was 0.016248
+Max runtime was 0.016248
+Max runtime was 0.016248
+Not all vertices have been coloredNot all vertices have been coloredNot all vertices have been coloredNot all vertices have been colored=================================
+Testing graph_files/fpsol2.i.3.col
+================================
+V=425 E=8688 Chromaticity Upper Bound=425
+Root finished reading the graph from file.
+Max runtime was 0.175790
+Max runtime was 0.175790
+Max runtime was 0.175790
+Max runtime was 0.175790
+=================================
+Testing graph_files/le450_15a.col
+================================
+V=450 E=8168 Chromaticity Upper Bound=99
+Root finished reading the graph from file.
+Max runtime was 0.041036
+Max runtime was 0.041036
+Max runtime was 0.041036
+Max runtime was 0.041036
+=================================
+Testing graph_files/myciel5.col
+================================
+V=47 E=236 Chromaticity Upper Bound=47
+Root finished reading the graph from file.
+Max runtime was 0.001921
+Max runtime was 0.001921
+Max runtime was 0.001921
+Max runtime was 0.001921
+=================================
+Testing graph_files/queen11_11.col
+================================
+V=121 E=3960 Chromaticity Upper Bound=121
+Root finished reading the graph from file.
+Max runtime was 0.005173
+Max runtime was 0.005173
+Max runtime was 0.005173
+Max runtime was 0.005173
+=================================
+Testing graph_files/le450_15c.col
+================================
+V=450 E=16680 Chromaticity Upper Bound=139
+Root finished reading the graph from file.
+Max runtime was 0.065275
+Max runtime was 0.065275
+Max runtime was 0.065275
+Max runtime was 0.065275
+=================================
+Testing graph_files/le450_25c.col
+================================
+V=450 E=17343 Chromaticity Upper Bound=179
+Root finished reading the graph from file.
+Max runtime was 0.088469
+Max runtime was 0.088469
+Max runtime was 0.088469
+Max runtime was 0.088469
+=================================
+Testing graph_files/huck.col
+================================
+V=74 E=602 Chromaticity Upper Bound=73
+Root finished reading the graph from file.
+Max runtime was 0.003459
+Max runtime was 0.003459
+Max runtime was 0.003459
+Max runtime was 0.003459
+=================================
+Testing graph_files/queen9_9.col
+================================
+V=81 E=2112 Chromaticity Upper Bound=81
+Root finished reading the graph from file.
+Max runtime was 0.004779
+Max runtime was 0.004779
+Max runtime was 0.004779
+Max runtime was 0.004779
+=================================
+Testing graph_files/school1.col
+================================
+V=385 E=19095 Chromaticity Upper Bound=385
+Root finished reading the graph from file.
+Max runtime was 0.163415
+Max runtime was 0.163415
+Max runtime was 0.163415
+Max runtime was 0.163415
+=================================
+Testing graph_files/myciel2.col
+================================
+V=0 E=0 Chromaticity Upper Bound=-1
+Root finished reading the graph from file.
+Max runtime was 0.000003
+Max runtime was 0.000003
+Max runtime was 0.000003
+Max runtime was 0.000003
+=================================
+Testing graph_files/games120.col
+================================
+V=120 E=1276 Chromaticity Upper Bound=119
+Root finished reading the graph from file.
+Max runtime was 0.008073
+Max runtime was 0.008073
+Max runtime was 0.008073
+Max runtime was 0.008073
+=================================
+Testing graph_files/homer.col
+================================
+V=561 E=3258 Chromaticity Upper Bound=561
+Root finished reading the graph from file.
+Max runtime was 0.300417
+Max runtime was 0.300417
+Max runtime was 0.300417
+Max runtime was 0.300417
+=================================
+Testing graph_files/mulsol.i.2.col
+================================
+V=188 E=3885 Chromaticity Upper Bound=187
+Root finished reading the graph from file.
+Max runtime was 0.022165
+Max runtime was 0.022165
+Max runtime was 0.022165
+Max runtime was 0.022165
+=================================
+Testing graph_files/school1_nsh.col
+================================
+V=352 E=14612 Chromaticity Upper Bound=351
+Root finished reading the graph from file.
+Max runtime was 0.125098
+Max runtime was 0.125098
+Max runtime was 0.125098
+Max runtime was 0.125098
+=================================
+Testing graph_files/miles750.col
+================================
+V=128 E=4226 Chromaticity Upper Bound=127
+Root finished reading the graph from file.
+Max runtime was 0.009448
+Max runtime was 0.009448
+Max runtime was 0.009448
+Max runtime was 0.009448
+=================================
+Testing graph_files/queen5_5.col
+================================
+V=25 E=320 Chromaticity Upper Bound=25
+Root finished reading the graph from file.
+Max runtime was 0.001863
+Max runtime was 0.001863
+Max runtime was 0.001863
+Max runtime was 0.001863
+=================================
+Testing graph_files/queen8_12.col
+================================
+V=96 E=2736 Chromaticity Upper Bound=95
+Root finished reading the graph from file.
+Max runtime was 0.004071
+Max runtime was 0.004071
+Max runtime was 0.004071
+Max runtime was 0.004071
+=================================
+Testing graph_files/le450_5d.col
+================================
+V=450 E=9757 Chromaticity Upper Bound=68
+Root finished reading the graph from file.
+Max runtime was 0.033894
+Max runtime was 0.033894
+Max runtime was 0.033894
+Max runtime was 0.033894
+Not all vertices have been coloredNot all vertices have been coloredNot all vertices have been coloredNot all vertices have been colored=================================
+Testing graph_files/DSJC1000.9.col
+================================
+V=1000 E=898898 Chromaticity Upper Bound=999
+Root finished reading the graph from file.
+Max runtime was 2.490352
+Max runtime was 2.490352
+Max runtime was 2.490352
+Max runtime was 2.490352
+=================================
+Testing graph_files/queen16_16.col
+================================
+V=256 E=12640 Chromaticity Upper Bound=255
+Root finished reading the graph from file.
+Max runtime was 0.049934
+Max runtime was 0.049934
+Max runtime was 0.049934
+Max runtime was 0.049934
+=================================
+Testing graph_files/queen8_8.col
+================================
+V=64 E=1456 Chromaticity Upper Bound=63
+Root finished reading the graph from file.
+Max runtime was 0.003490
+Max runtime was 0.003490
+Max runtime was 0.003490
+Max runtime was 0.003490
+=================================
+Testing graph_files/myciel7.col
+================================
+V=191 E=2360 Chromaticity Upper Bound=191
+Root finished reading the graph from file.
+Max runtime was 0.028869
+Max runtime was 0.028869
+Max runtime was 0.028869
+Max runtime was 0.028869
+=================================
+Testing graph_files/queen15_15.col
+================================
+V=225 E=10360 Chromaticity Upper Bound=225
+Root finished reading the graph from file.
+Max runtime was 0.041315
+Max runtime was 0.041315
+Max runtime was 0.041315
+Max runtime was 0.041315
+=================================
+Testing graph_files/inithx.i.3.col
+================================
+V=621 E=13969 Chromaticity Upper Bound=621
+Root finished reading the graph from file.
+Max runtime was 0.450089
+Max runtime was 0.450089
+Max runtime was 0.450089
+Max runtime was 0.450089
+=================================
+Testing graph_files/queen10_10.col
+================================
+V=100 E=2940 Chromaticity Upper Bound=99
+Root finished reading the graph from file.
+Max runtime was 0.005570
+Max runtime was 0.005570
+Max runtime was 0.005570
+Max runtime was 0.005570
+=================================
+Testing graph_files/miles1000.col
+================================
+V=128 E=6432 Chromaticity Upper Bound=127
+Root finished reading the graph from file.
+Max runtime was 0.007315
+Max runtime was 0.007315
+Max runtime was 0.007315
+Max runtime was 0.007315
+=================================
+Testing graph_files/fpsol2.i.2.col
+================================
+V=451 E=8691 Chromaticity Upper Bound=451
+Root finished reading the graph from file.
+Max runtime was 0.205980
+Max runtime was 0.205980
+Max runtime was 0.205980
+Max runtime was 0.205980
+=================================
+Testing graph_files/miles1500.col
+================================
+V=128 E=10396 Chromaticity Upper Bound=127
+Root finished reading the graph from file.
+Max runtime was 0.007064
+Max runtime was 0.007064
+Max runtime was 0.007064
+Max runtime was 0.007064
+=================================
+Testing graph_files/queen13_13.col
+================================
+V=169 E=6656 Chromaticity Upper Bound=169
+Root finished reading the graph from file.
+Max runtime was 0.019299
+Max runtime was 0.019299
+Max runtime was 0.019299
+Max runtime was 0.019299
+=================================
+Testing graph_files/mulsol.i.5.col
+================================
+V=186 E=3973 Chromaticity Upper Bound=185
+Root finished reading the graph from file.
+Max runtime was 0.026460
+Max runtime was 0.026460
+Max runtime was 0.026460
+Max runtime was 0.026460
+=================================
+Testing graph_files/mulsol.i.3.col
+================================
+V=184 E=3916 Chromaticity Upper Bound=183
+Root finished reading the graph from file.
+Max runtime was 0.046621
+Max runtime was 0.046621
+Max runtime was 0.046621
+Max runtime was 0.046621
+=================================
+Testing graph_files/queen6_6.col
+================================
+V=36 E=580 Chromaticity Upper Bound=35
+Root finished reading the graph from file.
+Max runtime was 0.002354
+Max runtime was 0.002354
+Max runtime was 0.002354
+Max runtime was 0.002354
+=================================
+Testing graph_files/queen7_7.col
+================================
+V=49 E=952 Chromaticity Upper Bound=49
+Root finished reading the graph from file.
+Max runtime was 0.002704
+Max runtime was 0.002704
+Max runtime was 0.002704
+Max runtime was 0.002704
+=================================
+Testing graph_files/le450_25d.col
+================================
+V=450 E=17425 Chromaticity Upper Bound=157
+Root finished reading the graph from file.
+Max runtime was 0.073073
+Max runtime was 0.073073
+Max runtime was 0.073073
+Max runtime was 0.073073
+=================================
+Testing graph_files/le450_25a.col
+================================
+V=450 E=8260 Chromaticity Upper Bound=128
+Root finished reading the graph from file.
+Max runtime was 0.095009
+Max runtime was 0.095009
+Max runtime was 0.095009
+Max runtime was 0.095009
+=================================
+Testing graph_files/zeroin.i.2.col
+================================
+V=211 E=3541 Chromaticity Upper Bound=211
+Root finished reading the graph from file.
+Max runtime was 0.029857
+Max runtime was 0.029857
+Max runtime was 0.029857
+Max runtime was 0.029857
+=================================
+Testing graph_files/inithx.i.2.col
+================================
+V=645 E=13979 Chromaticity Upper Bound=645
+Root finished reading the graph from file.
+Max runtime was 0.614241
+Max runtime was 0.614241
+Max runtime was 0.614241
+Max runtime was 0.614241
+=================================
+Testing graph_files/david.col
+================================
+V=87 E=812 Chromaticity Upper Bound=87
+Root finished reading the graph from file.
+Max runtime was 0.010706
+Max runtime was 0.010706
+Max runtime was 0.010706
+Max runtime was 0.010706
+=================================
+Testing graph_files/jean.col
+================================
+V=80 E=508 Chromaticity Upper Bound=79
+Root finished reading the graph from file.
+Max runtime was 0.005367
+Max runtime was 0.005367
+Max runtime was 0.005367
+Max runtime was 0.005367
+=================================
+Testing graph_files/zeroin.i.3.col
+================================
+V=206 E=3540 Chromaticity Upper Bound=205
+Root finished reading the graph from file.
+Max runtime was 0.057929
+Max runtime was 0.057929
+Max runtime was 0.057929
+Max runtime was 0.057929
+=================================
+Testing graph_files/queen14_14.col
+================================
+V=196 E=8372 Chromaticity Upper Bound=195
+Root finished reading the graph from file.
+Max runtime was 0.023006
+Max runtime was 0.023006
+Max runtime was 0.023006
+Max runtime was 0.023006
+=================================
+Testing graph_files/myciel3.col
+================================
+V=11 E=20 Chromaticity Upper Bound=11
+Root finished reading the graph from file.
+Max runtime was 0.001232
+Max runtime was 0.001232
+Max runtime was 0.001232
+Max runtime was 0.001232
+=================================
+Testing graph_files/fpsol2.i.1.col
+================================
+V=496 E=11654 Chromaticity Upper Bound=495
+Root finished reading the graph from file.
+Max runtime was 0.271375
+Max runtime was 0.271375
+Max runtime was 0.271375
+Max runtime was 0.271375
+=================================
+Testing graph_files/le450_15d.col
+================================
+V=450 E=16750 Chromaticity Upper Bound=138
+Root finished reading the graph from file.
+Max runtime was 0.061817
+Max runtime was 0.061817
+Max runtime was 0.061817
+Max runtime was 0.061817
+=================================
+Testing graph_files/le450_5a.col
+================================
+V=450 E=5714 Chromaticity Upper Bound=42
+Root finished reading the graph from file.
+Max runtime was 0.034184
+Max runtime was 0.034184
+Max runtime was 0.034184
+Max runtime was 0.034184
+=================================
+Testing graph_files/miles250.col
+================================
+V=128 E=774 Chromaticity Upper Bound=127
+Root finished reading the graph from file.
+Max runtime was 0.029190
+Max runtime was 0.029190
+Max runtime was 0.029190
+Max runtime was 0.029190
+=================================
+Testing graph_files/anna.col
+================================
+V=138 E=986 Chromaticity Upper Bound=137
+Root finished reading the graph from file.
+Max runtime was 0.006643
+Max runtime was 0.006643
+Max runtime was 0.006643
+Max runtime was 0.006643
+=================================
+Testing graph_files/mulsol.i.4.col
+================================
+V=185 E=3946 Chromaticity Upper Bound=185
+Root finished reading the graph from file.
+Max runtime was 0.023194
+Max runtime was 0.023194
+Max runtime was 0.023194
+Max runtime was 0.023194
+=================================
+Testing graph_files/miles500.col
+================================
+V=128 E=2340 Chromaticity Upper Bound=127
+Root finished reading the graph from file.
+Max runtime was 0.006124
+Max runtime was 0.006124
+Max runtime was 0.006124
+Max runtime was 0.006124
+=================================
+Testing graph_files/mulsol.i.1.col
+================================
+V=197 E=3925 Chromaticity Upper Bound=197
+Root finished reading the graph from file.
+Max runtime was 0.030957
+Max runtime was 0.030957
+Max runtime was 0.030957
+Max runtime was 0.030957
+=================================
+Testing graph_files/flat1000_76_0.col
+================================
+V=1000 E=246708 Chromaticity Upper Bound=999
+Root finished reading the graph from file.
+Max runtime was 4.199373
+Max runtime was 4.199373
+Max runtime was 4.199373
+Max runtime was 4.199373
+=================================
+Testing graph_files/le450_5c.col
+================================
+V=450 E=9803 Chromaticity Upper Bound=66
+Root finished reading the graph from file.
+Max runtime was 0.043186
+Max runtime was 0.043186
+Max runtime was 0.043186
+Max runtime was 0.043186
+Not all vertices have been coloredNot all vertices have been coloredNot all vertices have been coloredNot all vertices have been colored=================================
+Testing graph_files/inithx.i.1.col
+================================
+V=864 E=18707 Chromaticity Upper Bound=863
+Root finished reading the graph from file.
+Max runtime was 1.617817
+Max runtime was 1.617817
+Max runtime was 1.617817
+Max runtime was 1.617817
+=================================
+Testing graph_files/queen12_12.col
+================================
+V=144 E=5192 Chromaticity Upper Bound=143
+Root finished reading the graph from file.
+Max runtime was 0.013117
+Max runtime was 0.013117
+Max runtime was 0.013117
+Max runtime was 0.013117
+=================================
+Testing graph_files/le450_25b.col
+================================
+V=450 E=8263 Chromaticity Upper Bound=111
+Root finished reading the graph from file.
+Max runtime was 0.070635
+Max runtime was 0.070635
+Max runtime was 0.070635
+Max runtime was 0.070635
+=================================
+Testing graph_files/myciel6.col
+================================
+V=95 E=755 Chromaticity Upper Bound=95
+Root finished reading the graph from file.
+Max runtime was 0.005719
+Max runtime was 0.005719
+Max runtime was 0.005719
+Max runtime was 0.005719
+=================================
+Testing graph_files/zeroin.i.1.col
+================================
+V=211 E=4100 Chromaticity Upper Bound=211
+Root finished reading the graph from file.
+Max runtime was 0.031266
+Max runtime was 0.031266
+Max runtime was 0.031266
+Max runtime was 0.031266
+=================================
+Testing graph_files/myciel4.col
+================================
+V=23 E=71 Chromaticity Upper Bound=23
+Root finished reading the graph from file.
+Max runtime was 0.003364
+Max runtime was 0.003364
+Max runtime was 0.003364
+Max runtime was 0.003364
+=================================
+Testing graph_files/le450_15b.col
+================================
+V=450 E=8169 Chromaticity Upper Bound=94
+Root finished reading the graph from file.
+Max runtime was 0.070275
+Max runtime was 0.070275
+Max runtime was 0.070275
+Max runtime was 0.070275
