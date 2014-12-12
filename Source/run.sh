@@ -7,11 +7,13 @@ TARGET=gc
 # options
 NG='--newGraph=yes'
 #PROGRAM_OPTIONS='--timeout=5 --grain-size=90 --do-priority=true --num-colors=5'
-PROGRAM_OPTIONS='--timeout=5  --do-priority=true --do-subgraph=true  --filename=/home/dsand/ParallelSudoku/MpiVersion/graph_files/anna.col'
+PROGRAM_OPTIONS='--timeout=5  --do-priority=true --do-subgraph=true'  
 #set -x
 runreg=false
 
-while getopts ":r:f" opt; do
+#opt m: for running mpi cases
+
+while getopts ":r:f:m" opt; do
   case $opt in
     r)
       for file in $( find ../Tests/ -name "*json" ); do
@@ -31,6 +33,16 @@ while getopts ":r:f" opt; do
         ./charmrun +p4 $TARGET --newGraph=no $PROGRAM_OPTIONS ++local
         runreg=true
       ;;
+    m)
+      for file in $(cat ../MpiVersion/graph_files/filelist); do
+        echo =================================
+        echo Testing $file
+        echo ================================
+        ./charmrun +p4 $TARGET --newGraph=no $PROGRAM_OPTIONS --filename=../MpiVersion/graph_files/$file ++local
+      done
+        runreg=true  
+      ;;
+      
    \?)
       echo "Invalid option: -$OPTARG" >&2
       ;;

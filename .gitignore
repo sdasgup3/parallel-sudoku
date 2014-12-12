@@ -3,4 +3,5 @@ scripts/__init__.pyc
 scripts/graphClass.pyc
 scripts/graphGenClass.pyc
 Source/coloredGraph.txt
-MpiVersion/graph_files/*.output
+MpiVersion/graphcoloring
+MpiVersion/graphcoloring.o
