@@ -1,18 +1,19 @@
-To compile and build executables do
 
+
+Fix the input and output paths in graphcoloring.c as per your requirement
+
+```
 make
+mpirun -np 4 ./graphcoloring ../graph_file/anna.col   ../graph_file/anna.col.output
 
-Code for problem 2 is in graphcoloring.c
+or
+./run.sh // This will run all the .col files in ../graph_file/
+```
 
-Run it with
-
-mpirun -np xyz ./graphcoloring input_filename output_filename
-
-where the input_filename is one of the given files representing a graph and
-the output_filename contains the color assigned by Jones-Plassmann to each
+output_filename contains the color assigned by Jones-Plassmann to each
 vertex as well as the largest color assigned.
 
-Notice that some of the files are in a binary format. I used the translation code
+Notice that some of the files are in a binary format. They used the translation code
 provided by cmu to translate those to the normal format.
 
 For example DSJC1000.9.col.b was converted to DSJC1000.9.col and similarly
