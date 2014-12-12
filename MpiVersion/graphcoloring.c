@@ -10,8 +10,8 @@ typedef int bool;
 #define DEBUG_VERTEX_DISTRIBUTION 0
 #define DEBUG_JONES_PLASSMANN 0
 
-char * INPUT_PATH = "/home/dsand/MpiProgramming//";
-char * OUTPUT_PATH = "/home/dsand/MpiProgramming/";
+char * INPUT_PATH = "/home/dsand/ParallelSudoku/MpiVersion";
+char * OUTPUT_PATH = "/home/dsand/ParallelSudoku/MpiVersion";
 char * ws;//weak/strong indicator
 int rank,npes, root =0; 
 int V,E;//number of vertices and edges

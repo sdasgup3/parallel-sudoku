@@ -7,7 +7,7 @@ TARGET=gc
 # options
 NG='--newGraph=yes'
 #PROGRAM_OPTIONS='--timeout=5 --grain-size=90 --do-priority=true --num-colors=5'
-PROGRAM_OPTIONS='--timeout=5  --do-priority=true --do-subgraph=true  --filename=/home/dsand/MpiProgramming/graph_files/anna.col'
+PROGRAM_OPTIONS='--timeout=5  --do-priority=true --do-subgraph=true  --filename=/home/dsand/ParallelSudoku/MpiVersion/graph_files/anna.col'
 #set -x
 runreg=false
 
