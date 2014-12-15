@@ -1,6 +1,8 @@
 c FILE: huck.col
 c Translated from Stanford GraphBase File: huck.gb
 c Stanford GraphBase ID: book(?huck?,74,0,1,43,0,0,0)
+c chromatic_upper_bound :13  
+c optimal_color :11  
 p edge 74 602
 e 1 44
 e 1 4

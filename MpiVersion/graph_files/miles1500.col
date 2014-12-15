@@ -1,6 +1,8 @@
 c FILE: miles1500.col
 c Translated from Stanford GraphBase File: miles1500.gb
 c Stanford GraphBase ID: miles(128,0,0,0,1500,127,0)
+c chromatic_upper_bound :91  
+c optimal_color :74   
 p edge 128 10396
 e 1 128
 e 1 127

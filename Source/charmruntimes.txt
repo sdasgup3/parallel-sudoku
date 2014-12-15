@@ -1,19 +1,19 @@
 =================================
 Testing anna.col
 ================================
-Charmrun> started all node programs in 0.013 seconds.
+Charmrun> started all node programs in 0.012 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.008 seconds.
+Charm++> cpu topology info is gathered in 0.002 seconds.
 138
 Run Configuration
 ====================================
 filename = ../MpiVersion/graph_files/anna.col
 Number of vertices = 138
-Testing coloring with 137 colors
+Testing coloring with 11 colors
 Grain-size = 128
 Sequential Algorithm Timeout = 5
 doPriority = 1
@@ -22,33 +22,33 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 138
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000500
+Program time (s) = 0.000920
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 138
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
 Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
+Chares Spawned On PE 1 = 0
+Leaf Chares On PE 1 = 0
 =================================
 Testing david.col
 ================================
-Charmrun> started all node programs in 0.011 seconds.
+Charmrun> started all node programs in 0.012 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.006 seconds.
+Charm++> cpu topology info is gathered in 0.002 seconds.
 87
 Run Configuration
 ====================================
 filename = ../MpiVersion/graph_files/david.col
 Number of vertices = 87
-Testing coloring with 87 colors
+Testing coloring with 12 colors
 Grain-size = 77
 Sequential Algorithm Timeout = 5
 doPriority = 1
@@ -57,33 +57,33 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 87
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.001515
+Program time (s) = 0.000440
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 87
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
 Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
+Chares Spawned On PE 1 = 0
+Leaf Chares On PE 1 = 0
+Chares Spawned On PE 3 = 0
+Leaf Chares On PE 3 = 0
 =================================
 Testing games120.col
 ================================
-Charmrun> started all node programs in 0.007 seconds.
+Charmrun> started all node programs in 0.008 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.005 seconds.
+Charm++> cpu topology info is gathered in 0.001 seconds.
 120
 Run Configuration
 ====================================
 filename = ../MpiVersion/graph_files/games120.col
 Number of vertices = 120
-Testing coloring with 119 colors
+Testing coloring with 9 colors
 Grain-size = 110
 Sequential Algorithm Timeout = 5
 doPriority = 1
@@ -92,33 +92,33 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 120
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000538
+Program time (s) = 0.000627
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 120
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
+Chares Spawned On PE 1 = 0
+Leaf Chares On PE 1 = 0
 Chares Spawned On PE 2 = 0
 Leaf Chares On PE 2 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
 =================================
 Testing huck.col
 ================================
-Charmrun> started all node programs in 0.011 seconds.
+Charmrun> started all node programs in 0.010 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.005 seconds.
+Charm++> cpu topology info is gathered in 0.002 seconds.
 74
 Run Configuration
 ====================================
 filename = ../MpiVersion/graph_files/huck.col
 Number of vertices = 74
-Testing coloring with 73 colors
+Testing coloring with 11 colors
 Grain-size = 64
 Sequential Algorithm Timeout = 5
 doPriority = 1
@@ -127,19 +127,54 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 74
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000396
+Program time (s) = 0.000000
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 74
 Chares Spawned On PE 0 = 1
 Leaf Chares On PE 0 = 1
-Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
 Chares Spawned On PE 1 = 0
 Leaf Chares On PE 1 = 0
 Chares Spawned On PE 3 = 0
 Leaf Chares On PE 3 = 0
+Chares Spawned On PE 2 = 0
+Leaf Chares On PE 2 = 0
 =================================
 Testing miles1000.col
+================================
+Charmrun> started all node programs in 0.010 seconds.
+Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
+Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
+Charm++> scheduler running in netpoll mode.
+CharmLB> Load balancer assumes all CPUs are same.
+Charm++> Running on 1 unique compute nodes (4-way SMP).
+Charm++> cpu topology info is gathered in 0.000 seconds.
+128
+Run Configuration
+====================================
+filename = ../MpiVersion/graph_files/miles1000.col
+Number of vertices = 128
+Testing coloring with 45 colors
+Grain-size = 118
+Sequential Algorithm Timeout = 5
+doPriority = 1
+doSubgraph = 1
+====================================
+Vertices removed by vertex removal in [MainChare] = 128
+Vertex removal step at root removed all nodes
+Valid Coloring found. Hurray! Printing stats.
+Program time (s) = 0.003537
+Vertices removed by [Vertex Removal Local] = 0
+Vertices removed by [Vertex Removal Remote] = 128
+Chares Spawned On PE 0 = 1
+Leaf Chares On PE 0 = 1
+Chares Spawned On PE 1 = 0
+Leaf Chares On PE 1 = 0
+Chares Spawned On PE 2 = 0
+Leaf Chares On PE 2 = 0
+Chares Spawned On PE 3 = 0
+Leaf Chares On PE 3 = 0
+=================================
+Testing miles1500.col
 ================================
 Charmrun> started all node programs in 0.011 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
@@ -151,44 +186,9 @@ Charm++> cpu topology info is gathered in 0.001 seconds.
 128
 Run Configuration
 ====================================
-filename = ../MpiVersion/graph_files/miles1000.col
-Number of vertices = 128
-Testing coloring with 127 colors
-Grain-size = 118
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 128
-Vertex removal step at root removed all nodes
-Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.001508
-Vertices removed by [Vertex Removal Local] = 0
-Vertices removed by [Vertex Removal Remote] = 128
-Chares Spawned On PE 0 = 1
-Chares Spawned On PE 2 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
-Leaf Chares On PE 0 = 1
-Leaf Chares On PE 2 = 0
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
-=================================
-Testing miles1500.col
-================================
-Charmrun> started all node programs in 0.011 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
-128
-Run Configuration
-====================================
 filename = ../MpiVersion/graph_files/miles1500.col
 Number of vertices = 128
-Testing coloring with 127 colors
+Testing coloring with 74 colors
 Grain-size = 118
 Sequential Algorithm Timeout = 5
 doPriority = 1
@@ -197,7 +197,7 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 128
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.003139
+Program time (s) = 0.006309
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 128
 Chares Spawned On PE 0 = 1
@@ -211,7 +211,7 @@ Leaf Chares On PE 1 = 0
 =================================
 Testing miles500.col
 ================================
-Charmrun> started all node programs in 0.013 seconds.
+Charmrun> started all node programs in 0.015 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
@@ -223,7 +223,7 @@ Run Configuration
 ====================================
 filename = ../MpiVersion/graph_files/miles500.col
 Number of vertices = 128
-Testing coloring with 127 colors
+Testing coloring with 23 colors
 Grain-size = 118
 Sequential Algorithm Timeout = 5
 doPriority = 1
@@ -232,7 +232,7 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 128
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000000
+Program time (s) = 0.002194
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 128
 Chares Spawned On PE 0 = 1
@@ -246,19 +246,19 @@ Leaf Chares On PE 3 = 0
 =================================
 Testing miles750.col
 ================================
-Charmrun> started all node programs in 0.011 seconds.
+Charmrun> started all node programs in 0.009 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.003 seconds.
+Charm++> cpu topology info is gathered in 0.001 seconds.
 128
 Run Configuration
 ====================================
 filename = ../MpiVersion/graph_files/miles750.col
 Number of vertices = 128
-Testing coloring with 127 colors
+Testing coloring with 32 colors
 Grain-size = 118
 Sequential Algorithm Timeout = 5
 doPriority = 1
@@ -267,7 +267,7 @@ doSubgraph = 1
 Vertices removed by vertex removal in [MainChare] = 128
 Vertex removal step at root removed all nodes
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000752
+Program time (s) = 0.002487
 Vertices removed by [Vertex Removal Local] = 0
 Vertices removed by [Vertex Removal Remote] = 128
 Chares Spawned On PE 0 = 1
@@ -281,42 +281,41 @@ Leaf Chares On PE 2 = 0
 =================================
 Testing queen10_10.col
 ================================
-Charmrun> started all node programs in 0.009 seconds.
+Charmrun> started all node programs in 0.006 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.001 seconds.
+Charm++> cpu topology info is gathered in 0.000 seconds.
 100
 Run Configuration
 ====================================
 filename = ../MpiVersion/graph_files/queen10_10.col
 Number of vertices = 100
-Testing coloring with 99 colors
+Testing coloring with 14 colors
 Grain-size = 90
 Sequential Algorithm Timeout = 5
 doPriority = 1
 doSubgraph = 1
 ====================================
-Vertices removed by vertex removal in [MainChare] = 100
-Vertex removal step at root removed all nodes
+Vertices removed by vertex removal in [MainChare] = 0
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000611
-Vertices removed by [Vertex Removal Local] = 0
-Vertices removed by [Vertex Removal Remote] = 100
-Chares Spawned On PE 0 = 1
-Leaf Chares On PE 0 = 1
-Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
+Program time (s) = 0.356172
+Vertices removed by [Vertex Removal Local] = 5
+Vertices removed by [Vertex Removal Remote] = 0
+Chares Spawned On PE 0 = 32
+Leaf Chares On PE 0 = 7
+Chares Spawned On PE 2 = 21
+Leaf Chares On PE 2 = 7
+Chares Spawned On PE 1 = 19
+Leaf Chares On PE 1 = 7
+Chares Spawned On PE 3 = 21
+Leaf Chares On PE 3 = 8
 =================================
 Testing queen11_11.col
 ================================
-Charmrun> started all node programs in 0.009 seconds.
+Charmrun> started all node programs in 0.010 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
@@ -328,238 +327,61 @@ Run Configuration
 ====================================
 filename = ../MpiVersion/graph_files/queen11_11.col
 Number of vertices = 121
-Testing coloring with 121 colors
+Testing coloring with 16 colors
 Grain-size = 111
 Sequential Algorithm Timeout = 5
 doPriority = 1
 doSubgraph = 1
 ====================================
-Vertices removed by vertex removal in [MainChare] = 121
-Vertex removal step at root removed all nodes
+Vertices removed by vertex removal in [MainChare] = 0
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.001237
-Vertices removed by [Vertex Removal Local] = 0
-Vertices removed by [Vertex Removal Remote] = 121
-Chares Spawned On PE 0 = 1
-Leaf Chares On PE 0 = 1
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
-Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
+Program time (s) = 0.234211
+Vertices removed by [Vertex Removal Local] = 10
+Vertices removed by [Vertex Removal Remote] = 0
+Chares Spawned On PE 0 = 27
+Leaf Chares On PE 0 = 2
+Chares Spawned On PE 1 = 21
+Leaf Chares On PE 1 = 3
+Chares Spawned On PE 2 = 18
+Leaf Chares On PE 2 = 3
+Chares Spawned On PE 3 = 16
+Leaf Chares On PE 3 = 3
 =================================
 Testing queen12_12.col
 ================================
-Charmrun> started all node programs in 0.011 seconds.
+Charmrun> started all node programs in 0.007 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.004 seconds.
+Charm++> cpu topology info is gathered in 0.006 seconds.
 144
 Run Configuration
 ====================================
 filename = ../MpiVersion/graph_files/queen12_12.col
 Number of vertices = 144
-Testing coloring with 143 colors
+Testing coloring with 19 colors
 Grain-size = 134
 Sequential Algorithm Timeout = 5
 doPriority = 1
 doSubgraph = 1
 ====================================
-Vertices removed by vertex removal in [MainChare] = 144
-Vertex removal step at root removed all nodes
+Vertices removed by vertex removal in [MainChare] = 0
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.001093
-Vertices removed by [Vertex Removal Local] = 0
-Vertices removed by [Vertex Removal Remote] = 144
-Chares Spawned On PE 0 = 1
-Leaf Chares On PE 0 = 1
-Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
+Program time (s) = 1.054795
+Vertices removed by [Vertex Removal Local] = 21
+Vertices removed by [Vertex Removal Remote] = 0
+Chares Spawned On PE 0 = 22
+Leaf Chares On PE 0 = 7
+Chares Spawned On PE 2 = 20
+Leaf Chares On PE 2 = 8
+Chares Spawned On PE 1 = 21
+Leaf Chares On PE 1 = 8
+Chares Spawned On PE 3 = 20
+Leaf Chares On PE 3 = 9
 =================================
 Testing queen13_13.col
-================================
-Charmrun> started all node programs in 0.009 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.001 seconds.
-169
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/queen13_13.col
-Number of vertices = 169
-Testing coloring with 169 colors
-Grain-size = 159
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 169
-Vertex removal step at root removed all nodes
-Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.001179
-Vertices removed by [Vertex Removal Local] = 0
-Vertices removed by [Vertex Removal Remote] = 169
-Chares Spawned On PE 0 = 1
-Leaf Chares On PE 0 = 1
-Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
-=================================
-Testing queen14_14.col
-================================
-Charmrun> started all node programs in 0.008 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.001 seconds.
-196
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/queen14_14.col
-Number of vertices = 196
-Testing coloring with 195 colors
-Grain-size = 186
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 196
-Vertex removal step at root removed all nodes
-Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.002036
-Vertices removed by [Vertex Removal Local] = 0
-Vertices removed by [Vertex Removal Remote] = 196
-Chares Spawned On PE 0 = 1
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
-Leaf Chares On PE 0 = 1
-Chares Spawned On PE 2 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
-Leaf Chares On PE 2 = 0
-=================================
-Testing queen15_15.col
-================================
-Charmrun> started all node programs in 0.009 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.001 seconds.
-225
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/queen15_15.col
-Number of vertices = 225
-Testing coloring with 225 colors
-Grain-size = 215
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 225
-Vertex removal step at root removed all nodes
-Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.002552
-Vertices removed by [Vertex Removal Local] = 0
-Vertices removed by [Vertex Removal Remote] = 225
-Chares Spawned On PE 0 = 1
-Leaf Chares On PE 0 = 1
-Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
-=================================
-Testing queen16_16.col
-================================
-Charmrun> started all node programs in 0.012 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.001 seconds.
-256
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/queen16_16.col
-Number of vertices = 256
-Testing coloring with 255 colors
-Grain-size = 246
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 256
-Vertex removal step at root removed all nodes
-Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.001915
-Vertices removed by [Vertex Removal Local] = 0
-Vertices removed by [Vertex Removal Remote] = 256
-Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
-Chares Spawned On PE 0 = 1
-Leaf Chares On PE 0 = 1
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
-=================================
-Testing queen5_5.col
-================================
-Charmrun> started all node programs in 0.006 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.002 seconds.
-25
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/queen5_5.col
-Number of vertices = 25
-Testing coloring with 25 colors
-Grain-size = 15
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 25
-Vertex removal step at root removed all nodes
-Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000158
-Vertices removed by [Vertex Removal Local] = 0
-Vertices removed by [Vertex Removal Remote] = 25
-Chares Spawned On PE 0 = 1
-Leaf Chares On PE 0 = 1
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
-Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
-=================================
-Testing queen6_6.col
 ================================
 Charmrun> started all node programs in 0.007 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
@@ -568,168 +390,104 @@ Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
 Charm++> cpu topology info is gathered in 0.004 seconds.
-36
+169
 Run Configuration
 ====================================
-filename = ../MpiVersion/graph_files/queen6_6.col
-Number of vertices = 36
-Testing coloring with 35 colors
-Grain-size = 26
+filename = ../MpiVersion/graph_files/queen13_13.col
+Number of vertices = 169
+Testing coloring with 19 colors
+Grain-size = 159
 Sequential Algorithm Timeout = 5
 doPriority = 1
 doSubgraph = 1
 ====================================
-Vertices removed by vertex removal in [MainChare] = 36
-Vertex removal step at root removed all nodes
+Vertices removed by vertex removal in [MainChare] = 0
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000356
-Vertices removed by [Vertex Removal Local] = 0
-Vertices removed by [Vertex Removal Remote] = 36
-Chares Spawned On PE 0 = 1
-Leaf Chares On PE 0 = 1
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
-Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
+Program time (s) = 1.370964
+Vertices removed by [Vertex Removal Local] = 15
+Vertices removed by [Vertex Removal Remote] = 0
+Chares Spawned On PE 0 = 19
+Leaf Chares On PE 0 = 7
+Chares Spawned On PE 2 = 19
+Leaf Chares On PE 2 = 8
+Chares Spawned On PE 1 = 18
+Leaf Chares On PE 1 = 9
+Chares Spawned On PE 3 = 23
+Leaf Chares On PE 3 = 11
 =================================
-Testing queen7_7.col
+Testing queen14_14.col
 ================================
-Charmrun> started all node programs in 0.011 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.001 seconds.
-49
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/queen7_7.col
-Number of vertices = 49
-Testing coloring with 49 colors
-Grain-size = 39
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 49
-Vertex removal step at root removed all nodes
-Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000436
-Vertices removed by [Vertex Removal Local] = 0
-Vertices removed by [Vertex Removal Remote] = 49
-Chares Spawned On PE 0 = 1
-Leaf Chares On PE 0 = 1
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
-Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
-=================================
-Testing queen8_12.col
-================================
-Charmrun> started all node programs in 0.009 seconds.
+Charmrun> started all node programs in 0.006 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
 Charm++> cpu topology info is gathered in 0.002 seconds.
-96
+196
 Run Configuration
 ====================================
-filename = ../MpiVersion/graph_files/queen8_12.col
-Number of vertices = 96
-Testing coloring with 95 colors
-Grain-size = 86
+filename = ../MpiVersion/graph_files/queen14_14.col
+Number of vertices = 196
+Testing coloring with 20 colors
+Grain-size = 186
 Sequential Algorithm Timeout = 5
 doPriority = 1
 doSubgraph = 1
 ====================================
-Vertices removed by vertex removal in [MainChare] = 96
-Vertex removal step at root removed all nodes
+Vertices removed by vertex removal in [MainChare] = 0
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000000
-Vertices removed by [Vertex Removal Local] = 0
-Vertices removed by [Vertex Removal Remote] = 96
-Chares Spawned On PE 0 = 1
-Leaf Chares On PE 0 = 1
-Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
+Program time (s) = 1.215122
+Vertices removed by [Vertex Removal Local] = 12
+Vertices removed by [Vertex Removal Remote] = 0
+Chares Spawned On PE 0 = 13
+Leaf Chares On PE 0 = 4
+Chares Spawned On PE 2 = 14
+Leaf Chares On PE 2 = 5
+Chares Spawned On PE 1 = 14
+Leaf Chares On PE 1 = 5
+Chares Spawned On PE 3 = 13
+Leaf Chares On PE 3 = 5
 =================================
-Testing queen8_8.col
+Testing queen15_15.col
 ================================
-Charmrun> started all node programs in 0.009 seconds.
+Charmrun> started all node programs in 0.015 seconds.
 Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
 Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
 Charm++> scheduler running in netpoll mode.
 CharmLB> Load balancer assumes all CPUs are same.
 Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.003 seconds.
-64
+Charm++> cpu topology info is gathered in 0.006 seconds.
+225
 Run Configuration
 ====================================
-filename = ../MpiVersion/graph_files/queen8_8.col
-Number of vertices = 64
-Testing coloring with 63 colors
-Grain-size = 54
+filename = ../MpiVersion/graph_files/queen15_15.col
+Number of vertices = 225
+Testing coloring with 22 colors
+Grain-size = 215
 Sequential Algorithm Timeout = 5
 doPriority = 1
 doSubgraph = 1
 ====================================
-Vertices removed by vertex removal in [MainChare] = 64
-Vertex removal step at root removed all nodes
+Vertices removed by vertex removal in [MainChare] = 0
 Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000472
-Vertices removed by [Vertex Removal Local] = 0
-Vertices removed by [Vertex Removal Remote] = 64
-Chares Spawned On PE 0 = 1
-Leaf Chares On PE 0 = 1
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
-Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0
-=================================
-Testing queen9_9.col
+Program time (s) = 12.263718
+Vertices removed by [Vertex Removal Local] = 17
+Vertices removed by [Vertex Removal Remote] = 0
+Chares Spawned On PE 2 = 48
+Leaf Chares On PE 2 = 39
+Chares Spawned On PE 3 = 57
+Leaf Chares On PE 3 = 45
+Chares Spawned On PE 0 = 17
+Leaf Chares On PE 0 = 8
+Chares Spawned On PE 1 = 48
+Leaf Chares On PE 1 = 35
+Perm Denied (soln found)
+1Perm Denied (soln found)
+1Perm Denied (soln found)
+1Perm Denied (soln found)
+1Perm Denied (soln found)
+1Perm Denied (soln found)
+1=================================
+Testing queen16_16.col
 ================================
-Charmrun> started all node programs in 0.012 seconds.
-Converse/Charm++ Commit ID: v6.6.0-15-g2347d5e
-Warning> Randomization of stack pointer is turned on in kernel, thread migration may not work! Run 'echo 0 > /proc/sys/kernel/randomize_va_space' as root to disable it, or try run with '+isomalloc_sync'.  
-Charm++> scheduler running in netpoll mode.
-CharmLB> Load balancer assumes all CPUs are same.
-Charm++> Running on 1 unique compute nodes (4-way SMP).
-Charm++> cpu topology info is gathered in 0.004 seconds.
-81
-Run Configuration
-====================================
-filename = ../MpiVersion/graph_files/queen9_9.col
-Number of vertices = 81
-Testing coloring with 81 colors
-Grain-size = 71
-Sequential Algorithm Timeout = 5
-doPriority = 1
-doSubgraph = 1
-====================================
-Vertices removed by vertex removal in [MainChare] = 81
-Vertex removal step at root removed all nodes
-Valid Coloring found. Hurray! Printing stats.
-Program time (s) = 0.000813
-Vertices removed by [Vertex Removal Local] = 0
-Vertices removed by [Vertex Removal Remote] = 81
-Chares Spawned On PE 0 = 1
-Leaf Chares On PE 0 = 1
-Chares Spawned On PE 1 = 0
-Leaf Chares On PE 1 = 0
-Chares Spawned On PE 2 = 0
-Leaf Chares On PE 2 = 0
-Chares Spawned On PE 3 = 0
-Leaf Chares On PE 3 = 0

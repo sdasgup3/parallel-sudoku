@@ -1,6 +1,8 @@
 c FILE: anna.col
 c Translated from Stanford GraphBase File: anna.gb
 c Stanford GraphBase ID: book(?anna?,138,0,1,239,0,0,0)
+c chromatic_upper_bound :20  
+c optimal_color :11  
 p edge 138 986
 e 1 36
 e 2 45

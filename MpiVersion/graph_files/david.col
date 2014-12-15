@@ -1,6 +1,8 @@
 c FILE: david.col
 c Translated from Stanford GraphBase File: david.gb
 c Stanford GraphBase ID: book(?david?,87,0,1,64,0,0,0)
+c chromatic_upper_bound :21
+c optimal_color :12
 p edge 87 812
 e 1 20
 e 1 14

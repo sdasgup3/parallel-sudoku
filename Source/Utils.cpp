@@ -21,7 +21,7 @@ void parseInputFile(string filename)
   for (; std::getline(fin, str);) {
 
     stringstream ss(str); 
-    if(std::string::npos != str.find("max degree"))  {
+    if(std::string::npos != str.find("optimal_color"))  {
 
       char * cstr = new char [str.length()+1];
       std::strcpy (cstr, str.c_str());

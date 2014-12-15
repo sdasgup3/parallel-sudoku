@@ -10,8 +10,8 @@ typedef int bool;
 #define DEBUG_VERTEX_DISTRIBUTION 0
 #define DEBUG_JONES_PLASSMANN 0
 
-char * INPUT_PATH = "/home/dsand/ParallelSudoku/MpiVersion/";
-char * OUTPUT_PATH = "/home/dsand/ParallelSudoku/MpiVersion/";
+char * INPUT_PATH = "/home/dsand/ParallelSudoku/MpiVersion/graph_files/";
+char * OUTPUT_PATH = "/home/dsand/ParallelSudoku/MpiVersion/graph_files/";
 char * ws;//weak/strong indicator
 int rank,npes, root =0; 
 int V,E;//number of vertices and edges
@@ -57,7 +57,14 @@ void read_graph(char *filename)
       strtok(line,":");
       token = (char *)strtok(NULL,":");
       max_degree = atoi(token);
-      chromaticity_upper = max_degree;
+      chromaticity_upper = max_degree ;
+    }
+
+    if (strstr(line,"chromatic_upper_bound") != NULL) {
+      strtok(line,":");
+      token = (char *)strtok(NULL,":");
+      max_degree = atoi(token);
+      chromaticity_upper = max_degree ;
     }
 
     //tokenize line

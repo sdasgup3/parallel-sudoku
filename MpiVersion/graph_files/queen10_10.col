@@ -1,6 +1,8 @@
 c FILE: queen10_10.col
 c Translated from Stanford GraphBase File: queen10_10.gb
 c Stanford GraphBase ID: gunion(board(10,10,0,0,-1,0,0),board(10,10,0,0,-2,0,0),0,0)
+c chromatic_upper_bound :40
+c optimal_color :14 
 p edge 100 2940
 e 1 12
 e 1 23
